@@ -14,19 +14,20 @@ public class MainWindow extends JFrame {
         // Painel principal
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 1, 10, 10));
+        
+        JButton swissButton = new JButton("Torneio Suíço");
+        JButton knockoutButton = new JButton("Mata-Mata");
+        JButton roundRobbinButton = new JButton("Pontos Corridos");
 
-        JButton btnSuico = new JButton("Torneio Suíço");
-        JButton btnMataMata = new JButton("Mata-Mata");
-        JButton btnPontosCorridos = new JButton("Pontos Corridos");
-
-        btnSuico.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modo Suíço selecionado!"));
-        btnMataMata.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modo Mata-Mata selecionado!"));
-        btnPontosCorridos.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modo Pontos Corridos selecionado!"));
+        //criando botões ao clicar um botão:
+        swissButton.addActionListener(e -> new SwissWindow());
+        knockoutButton.addActionListener(e -> new KnockoutWindow());
+        roundRobbinButton.addActionListener(e -> new RoundRobbinWindow());
 
         // Adiciona os botões ao painel
-        panel.add(btnSuico);
-        panel.add(btnMataMata);
-        panel.add(btnPontosCorridos);
+        panel.add(swissButton);
+        panel.add(knockoutButton);
+        panel.add(roundRobbinButton);
 
         add(panel);
     }
