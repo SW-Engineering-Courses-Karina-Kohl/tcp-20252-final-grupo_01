@@ -31,10 +31,4 @@ public class MainWindow extends JFrame {
 
         add(panel);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainWindow().setVisible(true);
-        });
-    }
 }
