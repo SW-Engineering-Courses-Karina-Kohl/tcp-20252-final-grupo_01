@@ -8,7 +8,7 @@ public final class Person extends Competitor {
     private String phone;
     private LocalDate birthDate;
 
-    private Person(String name) {
+    public Person(String name) {
         super(name);
     }
 

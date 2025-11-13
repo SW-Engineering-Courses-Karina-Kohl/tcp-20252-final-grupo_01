@@ -25,7 +25,6 @@ public final class Match<T extends Competitor> {
         this.competitorB = b;
     }
 
-    // Factories
     public static Match<Person> betweenPeople(Person a, Person b) {
         return new Match<>(a, b);
     }
