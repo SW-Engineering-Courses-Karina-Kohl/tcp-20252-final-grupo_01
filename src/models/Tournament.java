@@ -1,10 +1,15 @@
-package model;
+package models;
+
+import models.competitors.Competitor;
+import models.competitors.Person;
+import models.competitors.Team;
+import services.pairings.Pairing;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 // competidores do mesmo tipo, Construtor privado
-
 public final class Tournament<T extends Competitor> {
 
     private static int nextId = 1;
@@ -12,7 +17,7 @@ public final class Tournament<T extends Competitor> {
     private String name;
     private final ArrayList<T> participants;
     private final Pairing<T> pairing;
-    private TournamentStatus status = TournamentStatus.PLANNING;
+    private EventStatus status = EventStatus.PLANNING;
     private final ArrayList<Match<T>> matches = new ArrayList<>();
 
     private Tournament(String name, Pairing<T> pairing, ArrayList<T> participants) {
@@ -32,14 +37,14 @@ public final class Tournament<T extends Competitor> {
     public int getId() { return id; }
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-    public TournamentStatus getStatus() { return status; }
-    public void setStatus(TournamentStatus status) { this.status = status; }
-    public ArrayList<T> getParticipants() { return Collections.unmodifiableList(participants); }
-    public ArrayList<Match<T>> getMatches() { return Collections.unmodifiableList(matches); }
+    public EventStatus getStatus() { return status; }
+    public void setStatus(EventStatus status) { this.status = status; }
+    public List<T> getParticipants() { return Collections.unmodifiableList(participants); }
+    public List<Match<T>> getMatches() { return Collections.unmodifiableList(matches); }
 
     public void nextRound() {
         ArrayList<Match<T>> round = pairing.generateNextRound(participants, matches);
         matches.addAll(round);
-        status = TournamentStatus.RUNNING;
+        status = EventStatus.RUNNING;
     }
 }

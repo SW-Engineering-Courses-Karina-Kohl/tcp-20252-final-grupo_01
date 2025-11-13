@@ -1,4 +1,4 @@
-package model;
+package models.competitors;
 
 import java.time.LocalDate;
 
@@ -11,10 +11,6 @@ public final class Person extends Competitor {
     private Person(String name) {
         super(name);
     }
-
-    // public static Person of(String id, String name) {
-    //     return new Person(id, name);
-    // }
 
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }
