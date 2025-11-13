@@ -1,7 +1,6 @@
-package model;
+package models.competitors;
 
 public abstract class Competitor {
-
     private static int nextId = 1;
     private final int id = nextId++;
     private String name;

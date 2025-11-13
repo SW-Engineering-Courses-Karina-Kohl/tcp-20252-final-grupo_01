@@ -1,15 +1,15 @@
-package model;
+package models;
 
 public class Place {
     private static int nextId = 1;
     private final int id = nextId++;
     private String name;
-    private String adress;
+    private String address;
     private int capacity;
 
-    public Place(String name, String adress, int max) {
+    public Place(String name, String address, int max) {
         this.name = name;
-        this.adress = adress;
+        this.address = address;
         this.capacity = max;
     }
 
@@ -21,12 +21,12 @@ public class Place {
         this.name = newName;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String newAdress) {
-        this.adress = newAdress;
+    public void setAddress(String newAdress) {
+        this.address = newAdress;
     }
 
     public int getCapacity() {

@@ -1,4 +1,4 @@
-package model;
+package models.competitors;
 
 import java.util.ArrayList;
 

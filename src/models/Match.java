@@ -1,4 +1,8 @@
-package model;
+package models;
+
+import models.competitors.Competitor;
+import models.competitors.Person;
+import models.competitors.Team;
 
 import java.time.LocalDateTime;
 
@@ -7,18 +11,18 @@ public final class Match<T extends Competitor> {
 
     private static int nextId = 1;
     private final int id = nextId++;
-    private T competitorA;
-    private T competitorB;
+    private final T competitorA;
+    private final T competitorB;
     private int scoreA;
     private int scoreB;
     private LocalDateTime startTime;
     private T winner;
-    private TournamentStatus status = TournamentStatus.PLANNING;
+    private EventStatus status = EventStatus.PLANNING;
     private Place place;
 
     private Match(T a, T b) {
         this.competitorA = a;
-        this.competitorB = b
+        this.competitorB = b;
     }
 
     // Factories
@@ -46,8 +50,8 @@ public final class Match<T extends Competitor> {
     public T getWinner() { return winner; }
     public void setWinner(T winner) { this.winner = winner; }
 
-    public TournamentStatus getStatus() { return status; }
-    public void setStatus(TournamentStatus status) { this.status = status; }
+    public EventStatus getStatus() { return status; }
+    public void setStatus(EventStatus status) { this.status = status; }
 
     public Place getPlace() { return place; }
     public void setPlace(Place place) { this.place = place; }
@@ -55,6 +59,6 @@ public final class Match<T extends Competitor> {
     public void decideWinnerByScore() {
         // if (scoreA == scoreB) throw new IllegalStateException("tie score, cannot decide");
         winner = scoreA > scoreB ? competitorA : competitorB;
-        status = TournamentStatus.FINISHED;
+        status = EventStatus.FINISHED;
     }
 }

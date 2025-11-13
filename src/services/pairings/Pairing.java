@@ -1,4 +1,7 @@
-package model;
+package services.pairings;
+
+import models.competitors.Competitor;
+import models.Match;
 
 import java.util.ArrayList;
 

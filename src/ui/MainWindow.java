@@ -1,7 +1,7 @@
+package ui;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainWindow extends JFrame {
 
@@ -30,11 +30,5 @@ public class MainWindow extends JFrame {
         panel.add(roundRobbinButton);
 
         add(panel);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainWindow().setVisible(true);
-        });
     }
 }
