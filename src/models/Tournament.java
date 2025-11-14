@@ -18,7 +18,8 @@ public final class Tournament<T extends Competitor> {
     private final ArrayList<T> participants;
     private final Pairing<T> pairing;
     private EventStatus status = EventStatus.PLANNING;
-    private final ArrayList<Match<T>> matches = new ArrayList<>();
+
+    private final List<List<Match<T>>> rounds = new ArrayList<>();
 
     private Tournament(String name, Pairing<T> pairing, ArrayList<T> participants) {
         this.name = name;
@@ -40,11 +41,24 @@ public final class Tournament<T extends Competitor> {
     public EventStatus getStatus() { return status; }
     public void setStatus(EventStatus status) { this.status = status; }
     public List<T> getParticipants() { return Collections.unmodifiableList(participants); }
-    public List<Match<T>> getMatches() { return Collections.unmodifiableList(matches); }
 
-    public void nextRound() {
-        ArrayList<Match<T>> round = pairing.generateNextRound(participants, matches);
-        matches.addAll(round);
-        status = EventStatus.RUNNING;
+    public List<List<Match<T>>> getRounds() {
+        return Collections.unmodifiableList(rounds);
+    }
+
+    /**
+     * Gera ou atualiza a tabela de jogos do torneio.
+     * Passa os participantes e as rodadas atuais para a estratégia de Pairing
+     * e substitui as rodadas do torneio pelo resultado.
+     */
+    public void generateNextMatches() {
+        List<List<Match<T>>> generatedRounds = pairing.generateRounds(participants, rounds);
+
+        this.rounds.clear();
+        this.rounds.addAll(generatedRounds);
+
+        if (status == EventStatus.PLANNING && !rounds.isEmpty()) {
+            status = EventStatus.RUNNING;
+        }
     }
 }

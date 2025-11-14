@@ -6,13 +6,9 @@ public final class Team extends Competitor {
     private final ArrayList<Person> players = new ArrayList<>();
     private Person coach;
 
-    private Team(String name) {
+    public Team(String name) {
         super(name);
     }
-
-    // public static Team of(String name) {
-    //     return new Team(name);
-    // }
 
     public ArrayList<Person> getPlayers() { return new ArrayList<>(players); }
 
