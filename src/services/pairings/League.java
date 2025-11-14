@@ -59,7 +59,7 @@ public class League<T extends Competitor> implements Pairing<T> {
             firstLeg.add(current);
 
             // Rotaciona (mantém o primeiro fixo)
-            T fixed = players.getFirst();
+            T fixed = players.get(0);
             List<T> rotated = new ArrayList<>(players.subList(1, n));
             Collections.rotate(rotated, 1);
             players.clear();
