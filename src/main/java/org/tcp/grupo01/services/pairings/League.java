@@ -10,8 +10,9 @@ import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 /**
- * Liga (pontos corridos) com geração de rodadas usando algoritmo de Berger.
- * Suporta turno único ou turno e returno, e trata número ímpar de participantes com "bye".
+ * League (round-robin) with round generation using Berger's algorithm.
+ * Supports single round-robin or double round-robin, and handles an odd number of
+ * participants with a "bye".
  */
 public class League<T extends Competitor> implements Pairing<T> {
     private final boolean doubleRound;
@@ -28,8 +29,6 @@ public class League<T extends Competitor> implements Pairing<T> {
             return previousRounds;
         }
 
-        // 2. GERAÇÃO (CASO DE BORDA):
-        // Se a lista de participantes estiver vazia, retorna lista vazia.
         if (participants == null || participants.isEmpty()) {
             return List.of();
         }
@@ -37,9 +36,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         return generateAllMatches(participants);
     }
 
-    /**
-     * Gera todas as rodadas (turno e opcionalmente returno).
-     */
     private List<List<Match<T>>> generateAllMatches(List<T> participants) {
         if (participants == null || participants.isEmpty()) {
             return List.of();
@@ -63,7 +59,7 @@ public class League<T extends Competitor> implements Pairing<T> {
     }
 
     /**
-     * Garante que a lista tenha número par de competidores (inserindo "bye" caso necessário).
+     * Ensures the list has an even number of competitors (inserting a "bye" if necessary).
      */
     private List<T> preparePlayers(List<T> participants) {
         List<T> players = new ArrayList<>(participants);
@@ -74,7 +70,7 @@ public class League<T extends Competitor> implements Pairing<T> {
     }
 
     /**
-     * Gera apenas o turno único usando o algoritmo de Berger.
+     * Generates the first leg (single round) using Berger's algorithm.
      */
     private List<List<Match<T>>> generateFirstLeg(List<T> players) {
         int n = players.size();
@@ -93,7 +89,7 @@ public class League<T extends Competitor> implements Pairing<T> {
     }
 
     /**
-     * Gera uma rodada do algoritmo de Berger.
+     * Generates a single round for the Berger algorithm.
      */
     private List<Match<T>> generateSingleRound(List<T> players) {
         List<Match<T>> matches = new ArrayList<>();
@@ -112,7 +108,7 @@ public class League<T extends Competitor> implements Pairing<T> {
     }
 
     /**
-     * Rotação clássica do algoritmo de Berger (fixando o primeiro jogador).
+     * Classic rotation for Berger's algorithm (fixing the first player).
      */
     private void rotatePlayers(List<T> players) {
         T fixed = players.getFirst();
@@ -125,7 +121,7 @@ public class League<T extends Competitor> implements Pairing<T> {
     }
 
     /**
-     * Gera o returno (inversão de mandos das partidas).
+     * Generates the second leg (inverting the match pairings).
      */
     private List<List<Match<T>>> generateSecondLeg(List<List<Match<T>>> firstLeg) {
         return firstLeg.stream()

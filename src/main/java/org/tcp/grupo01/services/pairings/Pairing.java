@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface Pairing<T extends Competitor> {
     /**
-     * Gera uma ou mais rodadas de partidas, com base nos participantes e nas partidas já realizadas.
+     * Generates one or more rounds of matches, based on the participants
+     * and the matches already played.
      *
-     * @param participants lista de competidores ainda ativos no torneio
-     * @param previousRounds lista de rodadas anteriores (cada rodada = lista de partidas)
-     * @return lista de rodadas atualizada com os novos confrontos
+     * @param participants list of competitors in the tournament
+     * @param previousRounds list of previous rounds (each round = list of matches)
+     * @return updated list of rounds with the new pairings
      */
     List<List<Match<T>>> generateRounds(
             List<T> participants,
