@@ -1,4 +1,4 @@
-package models.competitors;
+package org.tcp.grupo01.models.competitors;
 
 public abstract class Competitor {
     private static int nextId = 1;

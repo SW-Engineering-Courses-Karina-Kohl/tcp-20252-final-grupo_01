@@ -1,4 +1,4 @@
-package models;
+package org.tcp.grupo01.models;
 
 public class Place {
     private static int nextId = 1;

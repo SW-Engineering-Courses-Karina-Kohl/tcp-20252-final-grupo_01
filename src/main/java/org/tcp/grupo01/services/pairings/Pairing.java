@@ -1,7 +1,8 @@
-package services.pairings;
+package org.tcp.grupo01.services.pairings;
 
-import models.competitors.Competitor;
-import models.Match;
+
+import org.tcp.grupo01.models.Match;
+import org.tcp.grupo01.models.competitors.Competitor;
 
 import java.util.List;
 

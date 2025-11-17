@@ -1,9 +1,11 @@
-import models.Match;
-import models.competitors.Person;
-import services.pairings.League;
-import ui.MainWindow;
+package org.tcp.grupo01;
 
-import javax.swing.SwingUtilities;
+import org.tcp.grupo01.models.Match;
+import org.tcp.grupo01.models.competitors.Person;
+import org.tcp.grupo01.services.pairings.League;
+import org.tcp.grupo01.ui.MainWindow;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 

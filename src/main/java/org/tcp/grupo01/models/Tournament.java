@@ -1,9 +1,9 @@
-package models;
+package org.tcp.grupo01.models;
 
-import models.competitors.Competitor;
-import models.competitors.Person;
-import models.competitors.Team;
-import services.pairings.Pairing;
+import org.tcp.grupo01.models.competitors.Competitor;
+import org.tcp.grupo01.models.competitors.Person;
+import org.tcp.grupo01.models.competitors.Team;
+import org.tcp.grupo01.services.pairings.Pairing;
 
 import java.util.ArrayList;
 import java.util.Collections;
