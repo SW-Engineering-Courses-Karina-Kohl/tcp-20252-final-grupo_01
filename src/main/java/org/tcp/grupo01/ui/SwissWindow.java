@@ -1,11 +1,11 @@
-package ui;
+package org.tcp.grupo01.ui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class KnockoutWindow extends JFrame {
-    public KnockoutWindow() {
-        super("Modo Mata-Mata:");
+public class SwissWindow extends JFrame {
+    public SwissWindow() {
+        super("Modo Suíço:");
         setSize(400, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Centraliza na tela
@@ -18,8 +18,8 @@ public class KnockoutWindow extends JFrame {
         JButton b2 = new JButton("Botão 2");
         JButton b3 = new JButton("Voltar");
 
-        b1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 1 do modo mata-mata"));
-        b2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 2 do modo mata-mata"));
+        b1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 1 do modo suíço"));
+        b2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 2 do modo suíço"));
         b3.addActionListener(e -> dispose());
 
         panel.add(b1);
@@ -30,3 +30,5 @@ public class KnockoutWindow extends JFrame {
         setVisible(true);
     }
 }
+
+

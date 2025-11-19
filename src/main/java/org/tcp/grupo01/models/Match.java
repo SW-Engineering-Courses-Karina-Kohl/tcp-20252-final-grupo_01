@@ -1,8 +1,8 @@
-package models;
+package org.tcp.grupo01.models;
 
-import models.competitors.Competitor;
-import models.competitors.Person;
-import models.competitors.Team;
+import org.tcp.grupo01.models.competitors.Competitor;
+import org.tcp.grupo01.models.competitors.Person;
+import org.tcp.grupo01.models.competitors.Team;
 
 import java.time.LocalDateTime;
 

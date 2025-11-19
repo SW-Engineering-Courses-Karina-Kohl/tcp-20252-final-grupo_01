@@ -1,7 +1,7 @@
-package services.pairings;
+package org.tcp.grupo01.services.pairings;
 
-import models.Match;
-import models.competitors.Competitor;
+import org.tcp.grupo01.models.Match;
+import org.tcp.grupo01.models.competitors.Competitor;
 
 import java.util.*;
 import java.util.function.BiFunction;

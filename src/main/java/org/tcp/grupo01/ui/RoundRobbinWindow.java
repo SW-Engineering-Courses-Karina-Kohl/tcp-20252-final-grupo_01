@@ -1,11 +1,11 @@
-package ui;
+package org.tcp.grupo01.ui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class SwissWindow extends JFrame {
-    public SwissWindow() {
-        super("Modo Suíço:");
+public class RoundRobbinWindow extends JFrame {
+    public RoundRobbinWindow() {
+        super("Modo Pontos Corridos:");
         setSize(400, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Centraliza na tela
@@ -18,8 +18,8 @@ public class SwissWindow extends JFrame {
         JButton b2 = new JButton("Botão 2");
         JButton b3 = new JButton("Voltar");
 
-        b1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 1 do modo suíço"));
-        b2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 2 do modo suíço"));
+        b1.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 1 do modo pontos corridos"));
+        b2.addActionListener(e -> JOptionPane.showMessageDialog(this, "Você clicou no botão 2 do modo pontos corridos"));
         b3.addActionListener(e -> dispose());
 
         panel.add(b1);
@@ -30,5 +30,3 @@ public class SwissWindow extends JFrame {
         setVisible(true);
     }
 }
-
-

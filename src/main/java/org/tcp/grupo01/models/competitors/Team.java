@@ -1,4 +1,4 @@
-package models.competitors;
+package org.tcp.grupo01.models.competitors;
 
 import java.util.ArrayList;
 
