@@ -3,6 +3,7 @@ package org.tcp.grupo01;
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.services.pairings.League;
+import org.tcp.grupo01.services.pairings.Swiss;
 import org.tcp.grupo01.ui.MainWindow;
 
 import javax.swing.*;
@@ -20,13 +21,12 @@ public class Main {
         players.add(new Person("Alice"));
         players.add(new Person("Bob"));
         players.add(new Person("Carol"));
+        players.add(new Person("David"));
 
         League<Person> league = new League<>(
                 true,
                 Match::betweenPeople
         );
-
-
 
         System.out.println("Gerando tabela para " + players.size() + " participantes...\n");
         List<List<Match<Person>>> allRounds = league.generateRounds(players, new ArrayList<>());
@@ -43,6 +43,12 @@ public class Main {
             roundNumber++;
         }
         System.out.println("Total de rodadas geradas: " + allRounds.size());
+
+
+        Swiss<Person> swiss = new Swiss<>(
+                2,
+                2,
+                Match::betweenPeople
+        );
     }
 }
-
