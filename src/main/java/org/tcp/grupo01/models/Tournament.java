@@ -28,11 +28,11 @@ public final class Tournament<T extends Competitor> {
     }
 
     // Factories
-    public static Tournament<Person> createForPeople(UUID id, String name, Pairing<Person> pairing, ArrayList<Person> participants) {
-        return new Tournament<>(id, name, pairing, participants);
+    public static Tournament<Person> createForPeople(String name, Pairing<Person> pairing, ArrayList<Person> participants) {
+        return new Tournament<>(null, name, pairing, participants);
     }
-    public static Tournament<Team> createForTeams(UUID id, String name, Pairing<Team> pairing, ArrayList<Team> participants) {
-        return new Tournament<>(id, name, pairing, participants);
+    public static Tournament<Team> createForTeams(String name, Pairing<Team> pairing, ArrayList<Team> participants) {
+        return new Tournament<>(null, name, pairing, participants);
     }
 
     // Used by service
