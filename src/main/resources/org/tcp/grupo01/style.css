@@ -19,16 +19,33 @@
     -fx-background-color: -color-white;
 }
 
-.titulo-principal {
+.main-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
     -fx-text-fill: -color-text-dark;
 }
 
-.sub-titulo {
+.subtitle {
     -fx-font-size: 16px;
     -fx-text-fill: -color-text-light;
     -fx-padding: 0 0 10px 0;
+}
+
+.header-wrapper {
+    /* Adiciona a linha divisória inferior */
+    -fx-border-color: #e0e0e0; /* Cinza bem claro e discreto */
+    -fx-border-width: 0 0 1px 0; /* Borda apenas na parte inferior */
+}
+
+/* 2. Estilo para o ScrollPane e seu Viewport (Remove o cinza) */
+.scroll-content {
+    -fx-background-color: transparent; /* Remove background do próprio ScrollPane */
+    -fx-border-color: transparent; /* Remove borda, caso haja */
+}
+
+/* O viewport é o container interno do ScrollPane. SEMPRE precisa ser ajustado */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
 }
 
 /* ------------------ BOTÕES ------------------ */
@@ -41,18 +58,18 @@
     -fx-font-weight: bold;
 }
 
-.botao-primario {
+.primary-button {
     -fx-background-color: -color-primary;
     -fx-text-fill: -color-white;
 }
 
-.botao-primario:hover {
+.primary-button:hover {
     -fx-background-color: #7a0000; /* Vermelho mais escuro no hover */
 }
 
 /* ------------------ CARDS (Componente principal da tela) ------------------ */
 
-.card-campeonato {
+.tournament-card {
     -fx-background-color: -color-white;
     -fx-border-color: -color-secondary;
     -fx-border-radius: 6px;
@@ -62,7 +79,7 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.0, 0.0, 2.0);
 }
 
-.card-titulo {
+.card-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
     -fx-text-fill: -color-text-dark;
@@ -76,7 +93,7 @@
 }
 
 /* Adicione esta classe para um feedback visual de que é clicável */
-.card-campeonato:hover {
+.tournament-card:hover {
     -fx-border-color: -color-primary; /* Borda vermelha no hover */
     -fx-cursor: hand;
 }

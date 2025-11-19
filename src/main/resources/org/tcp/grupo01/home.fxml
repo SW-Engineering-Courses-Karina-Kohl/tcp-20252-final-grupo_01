@@ -8,39 +8,43 @@
 <BorderPane xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="org.tcp.grupo01.controller.HomeController"
-            styleClass="main-background"> <padding>
-    <Insets top="40" right="60" bottom="40" left="60" />
-</padding>
-
+            styleClass="main-background">
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="20">
-            <Label text="Campeonatos" styleClass="titulo-principal">
-                <font>
-                    <Font size="24.0" />
-                </font>
-            </Label>
+        <VBox styleClass="header-wrapper">
 
-            <Pane HBox.hgrow="ALWAYS" />
+            <padding>
+                <Insets top="40" right="60" bottom="20" left="60" /> </padding>
 
-            <Button text="+ Novo Campeonato"
-                    onAction="#handleNovoCampeonato"
-                    styleClass="botao-primario"/>
-        </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <VBox>
+                    <Label text="Campeonatos" styleClass="main-title">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Label>
+                    <Label text="Selecione um campeonato ou crie um novo" styleClass="subtitle"/>
+                </VBox>
+
+                <Pane HBox.hgrow="ALWAYS" />
+
+                <Button text="+ Novo Campeonato"
+                        onAction="#handleNovoCampeonato"
+                        styleClass="primary-button"/>
+            </HBox>
+        </VBox>
     </top>
 
     <center>
-        <VBox spacing="30">
-            <Label text="Selecione um campeonato ou crie um novo" styleClass="sub-titulo"/>
-
-            <FlowPane fx:id="containerCards" hgap="30" vgap="30" prefWrapLength="1000">
-                <VBox styleClass="card-campeonato" prefHeight="220.0" prefWidth="300.0">
-                    <padding><Insets top="20" right="20" bottom="20" left="20" /></padding>
-                    <Label text="Campeonato Nacional" styleClass="card-titulo"/>
-                    <Label text="Espanha" styleClass="card-info"/>
-                    <Label text="20 participantes" styleClass="card-info"/>
-                </VBox>
-            </FlowPane>
-        </VBox>
+        <ScrollPane fitToWidth="true" styleClass="scroll-content">
+            <VBox spacing="30">
+                <padding>
+                    <Insets top="20" right="60" bottom="40" left="60"/>
+                </padding>
+                <FlowPane fx:id="containerCards"
+                          hgap="30" vgap="30"
+                          VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </ScrollPane>
     </center>
 
 </BorderPane>
