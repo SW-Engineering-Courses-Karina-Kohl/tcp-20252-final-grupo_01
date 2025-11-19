@@ -12,10 +12,9 @@ import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
 import org.tcp.grupo01.models.competitors.Person;
-import org.tcp.grupo01.models.competitors.Team;
 import org.tcp.grupo01.services.pairing.League;
 import org.tcp.grupo01.services.tournament.TournamentService;
-import org.tcp.grupo01.services.tournament.TournamentServiceIM; // Importe a implementação
+import org.tcp.grupo01.services.tournament.TournamentServiceIM;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -41,11 +40,11 @@ public class HomeController implements Initializable {
         service.add(Tournament.createForPeople("Torneio 3", league, players));
     }
 
-    // Injeta o FlowPane do FXML (fx:id="containerCards")
+    // Injects FXML FlowPane (fx:id="containerCards")
     @FXML
     private FlowPane containerCards;
 
-    // Método chamado automaticamente após o FXML ser carregado
+    // JavaFX calls initialize to open the new window
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<Tournament<? extends Competitor>> tournaments = service.getAll();
@@ -68,17 +67,14 @@ public class HomeController implements Initializable {
         VBox card = new VBox(10);
         card.setPadding(new Insets(20));
 
-        // 1. Definição de limites flexíveis (melhor que tamanho fixo)
         card.setMinWidth(280);
         card.setMaxWidth(350);
-        card.setPrefWidth(300); // Define uma largura preferencial como ponto de partida
+        card.setPrefWidth(300);
 
-        // Altura (A altura deve ser definida pelo conteúdo, mas podemos dar um mínimo)
         card.setMinHeight(180);
 
         card.getStyleClass().add("tournament-card");
 
-        // Conteúdo
         Label nomeLabel = new Label(tournament.getName());
         nomeLabel.getStyleClass().add("card-title");
 
@@ -93,7 +89,6 @@ public class HomeController implements Initializable {
 
         card.getChildren().addAll(nomeLabel, statusLabel, participantesLabel, spacer);
 
-        // ... (evento de clique) ...
         card.setOnMouseClicked(event -> {
             System.out.println("Clicked on: " + tournament.getName());
         });
