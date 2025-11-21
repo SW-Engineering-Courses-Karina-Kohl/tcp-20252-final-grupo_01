@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.tcp.grupo01.controller.HomeController"
+            styleClass="main-background">
+    <top>
+        <VBox styleClass="header-wrapper">
+
+            <padding>
+                <Insets top="40" right="60" bottom="20" left="60" /> </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <VBox>
+                    <Label text="Campeonatos" styleClass="main-title">
+                        <font>
+                            <Font size="24.0" />
+                        </font>
+                    </Label>
+                    <Label text="Selecione um campeonato ou crie um novo" styleClass="subtitle"/>
+                </VBox>
+
+                <Pane HBox.hgrow="ALWAYS" />
+
+                <Button text="+ Novo Campeonato"
+                        onAction="#handleNovoCampeonato"
+                        styleClass="primary-button"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-content">
+            <VBox spacing="30">
+                <padding>
+                    <Insets top="20" right="60" bottom="40" left="60"/>
+                </padding>
+                <FlowPane fx:id="containerCards"
+                          hgap="30" vgap="30"
+                          VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

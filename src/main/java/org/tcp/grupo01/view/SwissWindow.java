@@ -1,4 +1,4 @@
-package org.tcp.grupo01.ui;
+package org.tcp.grupo01.view;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package org.tcp.grupo01.services.pairings;
+package org.tcp.grupo01.services.pairing;
 
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.competitors.Competitor;

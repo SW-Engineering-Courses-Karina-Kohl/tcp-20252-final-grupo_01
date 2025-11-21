@@ -1,0 +1,99 @@
+/* Definições de Cores e Fontes Globais (Root) */
+.root {
+    /* Cores */
+    -color-primary: #a10000; /* Vermelho/Vinculo forte */
+    -color-secondary: #f0f0f0; /* Cinza claro para backgrounds secundários */
+    -color-text-dark: #333333;
+    -color-text-light: #555555;
+    -color-white: #FFFFFF;
+
+    /* Fontes */
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* ------------------ BACKGROUNDS E TITULOS ------------------ */
+
+/* Fundo Principal */
+.main-background {
+    -fx-background-color: -color-white;
+}
+
+.main-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-dark;
+}
+
+.subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: -color-text-light;
+    -fx-padding: 0 0 10px 0;
+}
+
+.header-wrapper {
+    /* Adiciona a linha divisória inferior */
+    -fx-border-color: #e0e0e0; /* Cinza bem claro e discreto */
+    -fx-border-width: 0 0 1px 0; /* Borda apenas na parte inferior */
+}
+
+/* 2. Estilo para o ScrollPane e seu Viewport (Remove o cinza) */
+.scroll-content {
+    -fx-background-color: transparent; /* Remove background do próprio ScrollPane */
+    -fx-border-color: transparent; /* Remove borda, caso haja */
+}
+
+/* O viewport é o container interno do ScrollPane. SEMPRE precisa ser ajustado */
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* ------------------ BOTÕES ------------------ */
+
+.button {
+    -fx-cursor: hand;
+    -fx-padding: 8px 15px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-weight: bold;
+}
+
+.primary-button {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: -color-white;
+}
+
+.primary-button:hover {
+    -fx-background-color: #7a0000; /* Vermelho mais escuro no hover */
+}
+
+/* ------------------ CARDS (Componente principal da tela) ------------------ */
+
+.tournament-card {
+    -fx-background-color: -color-white;
+    -fx-border-color: -color-secondary;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+
+    /* Efeito de Sombra sutil, replicando o look & feel */
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.0, 0.0, 2.0);
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-dark;
+    -fx-padding: 0 0 5px 0;
+}
+
+.card-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-text-light;
+    -fx-padding: 3px 0 0 0;
+}
+
+/* Adicione esta classe para um feedback visual de que é clicável */
+.tournament-card:hover {
+    -fx-border-color: -color-primary; /* Borda vermelha no hover */
+    -fx-cursor: hand;
+}
