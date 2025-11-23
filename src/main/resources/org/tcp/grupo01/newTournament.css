@@ -1,0 +1,177 @@
+.root {
+  -fx-primary: #a10000;
+  -fx-primary-dark: #7b0000;
+
+  -fx-gray-50: #f5f5f5;
+  -fx-gray-100: #f2f2f2;
+  -fx-gray-200: #e0e0e0;
+  -fx-gray-300: #cccccc;
+  -fx-gray-400: #bdbdbd;
+  -fx-gray-600: #777777;
+  -fx-gray-800: #444444;
+
+  -fx-text-dark: #333333;
+
+  -fx-shadow-red: rgba(161, 0, 0, 0.25);
+}
+
+.modal-background {
+  -fx-background-color: -fx-gray-50;
+}
+
+.modal-header {
+  -fx-background-color: white;
+  -fx-padding: 20 20 10 20;
+  -fx-border-color: -fx-gray-200;
+  -fx-border-width: 0 0 1px 0;
+}
+
+.modal-title {
+  -fx-font-size: 22px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-text-dark;
+}
+
+.modal-subtitle {
+  -fx-font-size: 14px;
+  -fx-text-fill: -fx-gray-600;
+}
+
+.close-button {
+  -fx-background-color: transparent;
+  -fx-font-size: 18px;
+  -fx-text-fill: -fx-gray-600;
+  -fx-cursor: hand;
+}
+.close-button:hover {
+  -fx-text-fill: -fx-primary-dark;
+}
+
+.modal-body {
+  -fx-background-color: transparent;
+}
+.modal-body > * {
+  -fx-background-insets: 0;
+}
+
+.scroll-pane,
+.scroll-pane .viewport {
+  -fx-background-color: transparent;
+}
+
+.field-label {
+  -fx-font-weight: bold;
+  -fx-text-fill: -fx-gray-800;
+}
+
+.input-field {
+  -fx-background-color: white;
+  -fx-padding: 10px 12px;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-border-color: -fx-gray-300;
+  -fx-border-width: 1px;
+  -fx-pref-height: 35px;
+}
+
+.input-field:focused {
+  -fx-border-color: -fx-primary;
+  -fx-effect: dropshadow(gaussian, -fx-shadow-red, 10, 0.1, 0, 2);
+}
+
+.primary-button-large {
+  -fx-background-color: -fx-primary;
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-padding: 10 18;
+  -fx-background-radius: 8px;
+  -fx-cursor: hand;
+}
+.primary-button-large:hover {
+  -fx-background-color: -fx-primary-dark;
+}
+
+.cancel-button {
+  -fx-background-color: transparent;
+  -fx-border-color: -fx-gray-400;
+  -fx-text-fill: -fx-gray-800;
+  -fx-padding: 8 18;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-cursor: hand;
+}
+.cancel-button:hover {
+  -fx-border-color: -fx-gray-600;
+}
+
+.small-button {
+  -fx-background-color: -fx-gray-200;
+  -fx-background-radius: 8px;
+  -fx-padding: 8 14;
+  -fx-font-size: 12px;
+  -fx-cursor: hand;
+}
+.small-button:hover {
+  -fx-background-color: -fx-gray-100;
+}
+
+.round-add-button {
+  -fx-background-color: -fx-primary;
+  -fx-text-fill: white;
+  -fx-background-radius: 50%;
+  -fx-font-size: 14px;
+  -fx-padding: 6 12;
+  -fx-cursor: hand;
+}
+.round-add-button:hover {
+  -fx-background-color: -fx-primary-dark;
+}
+
+.modal-footer {
+  -fx-background-color: white;
+  -fx-border-color: -fx-gray-200;
+  -fx-border-width: 1px 0 0 0;
+}
+
+.hint-label {
+  -fx-text-fill: -fx-gray-600;
+  -fx-font-size: 12px;
+}
+
+.section-box {
+  -fx-background-color: -fx-gray-100;
+  -fx-background-radius: 10;
+  -fx-padding: 12 15;
+  -fx-min-height: 90px;
+  -fx-pref-height: 90px;
+}
+
+.date-picker {
+  -fx-background-color: transparent;
+  -fx-padding: 0;
+}
+
+.date-picker > .text-field {
+  -fx-pref-height: 40px;
+  -fx-background-color: white;
+  -fx-border-color: -fx-gray-300;
+  -fx-padding: 0 12;
+  -fx-background-radius: 10 0 0 10;
+  -fx-border-radius: 10 0 0 10;
+}
+
+.date-picker > .arrow-button {
+  -fx-pref-height: 40px;
+  -fx-background-color: white;
+  -fx-border-color: -fx-gray-300;
+  -fx-padding: 0 14;
+  -fx-background-radius: 0 10 10 0;
+  -fx-border-radius: 0 10 10 0;
+}
+
+.date-picker:focused > .text-field,
+.date-picker:focused > .arrow-button {
+  -fx-border-color: -fx-primary;
+  -fx-effect: dropshadow(gaussian, -fx-shadow-red, 10, 0, 0, 2);
+}

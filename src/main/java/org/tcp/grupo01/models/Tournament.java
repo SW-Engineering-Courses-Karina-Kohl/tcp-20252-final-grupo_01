@@ -52,6 +52,7 @@ public final class Tournament<T extends Competitor> {
     public void setName(String name) { this.name = name; }
     public EventStatus getStatus() { return status; }
     public void setStatus(EventStatus status) { this.status = status; }
+    public Pairing<T> getPairing() {return pairing;}
     public List<T> getParticipants() { return Collections.unmodifiableList(participants); }
 
     public List<List<Match<T>>> getRounds() {
