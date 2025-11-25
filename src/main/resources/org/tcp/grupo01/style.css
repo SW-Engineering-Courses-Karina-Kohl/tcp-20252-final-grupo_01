@@ -310,3 +310,57 @@
     -fx-border-color: #FECACA;
     -fx-padding: 20px;
 }
+
+/* =================================================================================
+   SCROLLPANE MODERNIZADO
+   ================================================================================= */
+
+.scroll-pane,
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent; /* Garante sem bordas extras */
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px; /* Largura total da área de scroll */
+    -fx-padding: 0;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #E5E7EB; /* Cinza bem claro para mesclar com o fundo */
+    -fx-background-radius: 10px;    /* Totalmente arredondado */
+    -fx-background-insets: 0 2px 0 2px; /* Margem interna para parecer mais fina (6px visual) */
+}
+
+.scroll-bar:vertical .thumb:hover,
+.scroll-bar:vertical .thumb:pressed {
+    -fx-background-color: #D1D5DB; /* Um pouco mais escuro para feedback */
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-pref-height: 0;
+    -fx-pref-width: 0;
+    -fx-opacity: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: " "; /* Remove o desenho da seta */
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+}

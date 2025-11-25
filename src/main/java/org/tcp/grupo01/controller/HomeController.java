@@ -37,6 +37,16 @@ public class HomeController implements Initializable {
         players.add(new Person("Bob"));
         players.add(new Person("Carol"));
         players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+
 
         League<Person> league = new League<>(true, Match::betweenPeople);
         Tournament<Person> t = Tournament.createForPeople("Torneio 1", league, players);
@@ -97,26 +107,21 @@ public class HomeController implements Initializable {
 
         card.setOnMouseClicked(_ -> {
             try {
-                // 1. Carregar o novo FXML
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/tournamentDetails.fxml"));
                 Scene scene = new Scene(loader.load(), 1000, 700);
 
-                // 2. Obter o controller e passar os dados
                 TournamentDetailsController controller = loader.getController();
                 controller.setTournament(tournament);
 
-                // 3. Adicionar CSS (boas práticas: centralizar estilos)
                 scene.getStylesheets().add(
                         Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
                 );
 
-                // 4. Trocar a Scene no Stage atual
-                // (Truque para pegar o stage a partir de qualquer nó da tela atual)
                 Stage stage = (Stage) containerCards.getScene().getWindow();
                 stage.setScene(scene);
 
             } catch (java.io.IOException e) {
-                e.printStackTrace(); // Em produção, usar logger
+                e.printStackTrace();
             }
         });
 

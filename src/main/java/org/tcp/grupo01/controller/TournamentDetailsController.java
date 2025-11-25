@@ -33,7 +33,6 @@ public class TournamentDetailsController {
         this.tournament = tournament;
         updateSidebarInfo();
 
-        // Inicia na primeira rodada
         this.currentRoundIndex = 0;
         showRounds();
     }
@@ -45,31 +44,24 @@ public class TournamentDetailsController {
         lblParticipantsCount.setText(tournament.getParticipants().size() + " participantes");
     }
 
-    // --- LÓGICA DE ABAS ---
-
     @FXML
     public void showRounds() {
-        // Estilo das abas
         setTabActive(btnTabRounds, btnTabStandings);
 
-        // Visibilidade
         roundsContainer.setVisible(true);
         standingsContainer.setVisible(false);
         paginationControls.setVisible(true);
 
-        // Renderiza a rodada atual
         renderCurrentRound();
     }
 
     @FXML
     public void showStandings() {
-        // Estilo das abas
         setTabActive(btnTabStandings, btnTabRounds);
 
-        // Visibilidade
         roundsContainer.setVisible(false);
         standingsContainer.setVisible(true);
-        paginationControls.setVisible(false); // Esconde botões "Anterior/Próxima"
+        paginationControls.setVisible(false);
 
         lblSectionTitle.setText("Classificação");
     }
@@ -144,9 +136,8 @@ public class TournamentDetailsController {
 
         scoreBoard.getColumnConstraints().addAll(colTeam, colScore);
 
-        String text = match.toString();
-        String teamA = text.contains(" vs ") ? text.split(" vs ")[0] : "Time A";
-        String teamB = text.contains(" vs ") ? text.split(" vs ")[1] : "Time B";
+        String teamA = match.getCompetitorA().getName();
+        String teamB = match.getCompetitorB().getName();
 
         scoreBoard.add(createTeamLabel(teamA), 0, 0);
         scoreBoard.add(createScoreLabel("-"), 1, 0); // Placeholder
@@ -156,7 +147,7 @@ public class TournamentDetailsController {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        Label statusBadge = new Label("A Confirmar");
+        Label statusBadge = new Label(match.getStatus().toString());
         statusBadge.getStyleClass().add("status-badge");
 
         card.getChildren().addAll(scoreBoard, spacer, statusBadge);

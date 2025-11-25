@@ -36,8 +36,8 @@
                 <Region HBox.hgrow="ALWAYS"/>
 
                 <HBox styleClass="segmented-control">
-                    <Button fx:id="btnTabRounds" text="📅 Rodadas" onAction="#showRounds" styleClass="segment-button"/>
-                    <Button fx:id="btnTabStandings" text="田 Classificação" onAction="#showStandings" styleClass="segment-button"/>
+                    <Button fx:id="btnTabRounds" text="Rodadas" onAction="#showRounds" styleClass="segment-button"/>
+                    <Button fx:id="btnTabStandings" text="Classificação" onAction="#showStandings" styleClass="segment-button"/>
                 </HBox>
             </HBox>
 
