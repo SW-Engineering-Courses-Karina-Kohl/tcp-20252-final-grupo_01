@@ -28,7 +28,7 @@
                 <Pane HBox.hgrow="ALWAYS" />
 
                 <Button text="+ Novo Campeonato"
-                        onAction="#handleNovoCampeonato"
+                        onAction="#handleNewTournament"
                         styleClass="primary-button"/>
             </HBox>
         </VBox>

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
@@ -11,6 +12,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
@@ -105,30 +107,45 @@ public class HomeController implements Initializable {
 
         card.getChildren().addAll(nomeLabel, statusLabel, participantesLabel, spacer);
 
-        card.setOnMouseClicked(_ -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/tournamentDetails.fxml"));
-                Scene scene = new Scene(loader.load(), 1000, 700);
+        card.setOnMouseClicked(event -> {
+            System.out.println("==== TORNEIO ====");
+            System.out.println("Nome: " + tournament.getName());
+            System.out.println("Pareamento: " + tournament.getPairing().getClass().getSimpleName());
+            System.out.println("Participantes:");
 
-                TournamentDetailsController controller = loader.getController();
-                controller.setTournament(tournament);
+            tournament.getParticipants().forEach(p ->
+                System.out.println(" - " + p.getName())
+            );
 
-                scene.getStylesheets().add(
-                        Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
-                );
-
-                Stage stage = (Stage) containerCards.getScene().getWindow();
-                stage.setScene(scene);
-
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
-            }
+            System.out.println("=================");
         });
 
         return card;
     }
+
     @FXML
-    public void handleNovoCampeonato() {
-        System.out.println("Abrindo modal para novo campeonato...");
+    public void handleNewTournament() {
+        try {FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/new_tournament.fxml"));
+
+            Parent root = loader.load();
+            NewTournamentController controller = loader.getController();
+            controller.setService(this.service);
+
+            Stage stage = new Stage();
+            stage.setTitle("Novo Campeonato");
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().add(getClass().getResource("/org/tcp/grupo01/newTournament.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            containerCards.getChildren().clear();
+            loadTournamentCards(service.getAll());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }
