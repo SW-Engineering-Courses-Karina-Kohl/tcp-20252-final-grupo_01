@@ -1,13 +1,18 @@
 package org.tcp.grupo01.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
@@ -90,13 +95,44 @@ public class HomeController implements Initializable {
         card.getChildren().addAll(nomeLabel, statusLabel, participantesLabel, spacer);
 
         card.setOnMouseClicked(event -> {
-            System.out.println("Clicked on: " + tournament.getName());
+            System.out.println("==== TORNEIO ====");
+            System.out.println("Nome: " + tournament.getName());
+            System.out.println("Pareamento: " + tournament.getPairing().getClass().getSimpleName());
+            System.out.println("Participantes:");
+
+            tournament.getParticipants().forEach(p ->
+                System.out.println(" - " + p.getName())
+            );
+
+            System.out.println("=================");
         });
 
         return card;
     }
+
     @FXML
-    public void handleNovoCampeonato() {
-        System.out.println("Abrindo modal para novo campeonato...");
+    public void handleNewTournament() {
+        try {FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/new_tournament.fxml"));
+
+            Parent root = loader.load();
+            NewTournamentController controller = loader.getController();
+            controller.setService(this.service);
+
+            Stage stage = new Stage();
+            stage.setTitle("Novo Campeonato");
+            Scene scene = new Scene(root);
+
+            scene.getStylesheets().add(getClass().getResource("/org/tcp/grupo01/newTournament.css").toExternalForm());
+
+            stage.setScene(scene);
+            stage.showAndWait();
+
+            containerCards.getChildren().clear();
+            loadTournamentCards(service.getAll());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }

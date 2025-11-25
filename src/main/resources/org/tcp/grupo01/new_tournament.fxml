@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.tcp.grupo01.controller.NewTournamentController"
+            styleClass="modal-background"
+            prefWidth="700"
+            minWidth="700">
+
+    <!-- HEADER -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" styleClass="modal-header">
+            <padding><Insets top="20" right="20" bottom="10" left="20"/></padding>
+            <VBox spacing="3">
+                <Label text="Novo Campeonato" styleClass="modal-title"/>
+                <Label text="Preencha os dados do novo campeonato"
+                       styleClass="modal-subtitle"/>
+            </VBox>
+            <Pane HBox.hgrow="ALWAYS"/>
+        </HBox>
+    </top>
+
+    <!-- BODY -->
+    <center>
+        <VBox spacing="10" maxWidth="650" styleClass="modal-body">
+            <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
+
+            <VBox styleClass="section-box">
+                <Label text="Nome do Campeonato" styleClass="field-label"/>
+                <TextField fx:id="txtName" styleClass="input-field"/>
+            </VBox>
+
+            <VBox styleClass="section-box">
+                <HBox spacing="10">
+                    <VBox spacing="3" >
+                        <Label text="Tipo de Competição" styleClass="field-label"/>
+                        <ComboBox fx:id="cbCompetitionType" styleClass="input-field" prefWidth="250"/>
+                    </VBox>
+
+                    <VBox spacing="3">
+                        <Label text="Formato" styleClass="field-label"/>
+                        <ComboBox fx:id="cbFormat" styleClass="input-field" prefWidth="200"/>
+                    </VBox>
+
+                    <VBox spacing="3">
+                        <Label text="Tipo de Competidor" styleClass="field-label"/>
+                        <ComboBox fx:id="cbCompetitorType" styleClass="input-field" prefWidth="200"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <VBox styleClass="section-box">
+                <HBox spacing="10">
+                    <VBox spacing="3">
+                        <Label text="Local" styleClass="field-label"/>
+                        <TextField fx:id="txtLocation" styleClass="input-field" prefWidth="350"/>
+                    </VBox>
+
+                    <VBox spacing="3">
+                        <Label text="Data de Início" styleClass="field-label"/>
+                        <DatePicker fx:id="dateStart" styleClass="date-picker" prefWidth="300"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+        </VBox>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="modal-footer">
+            <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
+
+            <Button text="Cancelar" onAction="#handleClose" styleClass="cancel-button"/>
+
+            <Button text="Criar Campeonato"
+                    onAction="#handleCreate"
+                    styleClass="primary-button-large"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
