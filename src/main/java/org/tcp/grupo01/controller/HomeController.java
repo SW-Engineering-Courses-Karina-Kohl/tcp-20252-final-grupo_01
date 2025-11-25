@@ -1,13 +1,16 @@
 package org.tcp.grupo01.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
@@ -19,6 +22,7 @@ import org.tcp.grupo01.services.tournament.TournamentServiceIM;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
@@ -35,7 +39,9 @@ public class HomeController implements Initializable {
         players.add(new Person("David"));
 
         League<Person> league = new League<>(true, Match::betweenPeople);
-        service.add(Tournament.createForPeople("Torneio 1", league, players));
+        Tournament<Person> t = Tournament.createForPeople("Torneio 1", league, players);
+        t.generateNextMatches();
+        service.add(t);
         service.add(Tournament.createForPeople("Torneio 2", league, players));
         service.add(Tournament.createForPeople("Torneio 3", league, players));
     }
@@ -89,8 +95,29 @@ public class HomeController implements Initializable {
 
         card.getChildren().addAll(nomeLabel, statusLabel, participantesLabel, spacer);
 
-        card.setOnMouseClicked(event -> {
-            System.out.println("Clicked on: " + tournament.getName());
+        card.setOnMouseClicked(_ -> {
+            try {
+                // 1. Carregar o novo FXML
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/tournamentDetails.fxml"));
+                Scene scene = new Scene(loader.load(), 1000, 700);
+
+                // 2. Obter o controller e passar os dados
+                TournamentDetailsController controller = loader.getController();
+                controller.setTournament(tournament);
+
+                // 3. Adicionar CSS (boas práticas: centralizar estilos)
+                scene.getStylesheets().add(
+                        Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
+                );
+
+                // 4. Trocar a Scene no Stage atual
+                // (Truque para pegar o stage a partir de qualquer nó da tela atual)
+                Stage stage = (Stage) containerCards.getScene().getWindow();
+                stage.setScene(scene);
+
+            } catch (java.io.IOException e) {
+                e.printStackTrace(); // Em produção, usar logger
+            }
         });
 
         return card;
