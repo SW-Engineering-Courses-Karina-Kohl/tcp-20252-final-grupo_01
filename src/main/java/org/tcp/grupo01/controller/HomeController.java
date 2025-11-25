@@ -24,6 +24,7 @@ import org.tcp.grupo01.services.tournament.TournamentServiceIM;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
@@ -38,9 +39,21 @@ public class HomeController implements Initializable {
         players.add(new Person("Bob"));
         players.add(new Person("Carol"));
         players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+        players.add(new Person("Bob"));
+        players.add(new Person("Carol"));
+        players.add(new Person("David"));
+
 
         League<Person> league = new League<>(true, Match::betweenPeople);
-        service.add(Tournament.createForPeople("Torneio 1", league, players));
+        Tournament<Person> t = Tournament.createForPeople("Torneio 1", league, players);
+        t.generateNextMatches();
+        service.add(t);
         service.add(Tournament.createForPeople("Torneio 2", league, players));
         service.add(Tournament.createForPeople("Torneio 3", league, players));
     }
