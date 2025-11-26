@@ -159,4 +159,26 @@ public class HomeController implements Initializable {
         }
     }
 
+    @FXML
+    public void handleManageTeams() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/teamManager.fxml"));
+
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Gerenciar Times");
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm());
+
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
