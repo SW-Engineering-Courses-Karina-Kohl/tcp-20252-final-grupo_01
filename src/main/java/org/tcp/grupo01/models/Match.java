@@ -34,30 +34,40 @@ public final class Match<T extends Competitor> {
 
     public int getId() { return id; }
     public T getCompetitorA() { return competitorA; }
-    // public void setCompetitorA(T competitorA) { this.competitorA = competitorA; }
     public T getCompetitorB() { return competitorB; }
-    // public void setCompetitorB(T competitorB) { this.competitorB = competitorB; }
 
     public int getScoreA() { return scoreA; }
     public int getScoreB() { return scoreB; }
-    public void setScoreA(int scoreA) { this.scoreA = scoreA; }
-    public void setScoreB(int scoreB) { this.scoreB = scoreB; }
-    
+
     public LocalDateTime getStartTime() { return startTime; }
     public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
 
     public T getWinner() { return winner; }
-    public void setWinner(T winner) { this.winner = winner; }
 
     public EventStatus getStatus() { return status; }
-    public void setStatus(EventStatus status) { this.status = status; }
 
     public Place getPlace() { return place; }
     public void setPlace(Place place) { this.place = place; }
 
-    public void decideWinnerByScore() {
-        // if (scoreA == scoreB) throw new IllegalStateException("tie score, cannot decide");
-        winner = scoreA > scoreB ? competitorA : competitorB;
-        status = EventStatus.FINISHED;
+    public void updateResult(int newScoreA, int newScoreB, EventStatus newStatus) {
+        if (this.status == EventStatus.FINISHED) {
+            throw new IllegalStateException("Não é possível alterar uma partida já finalizada.");
+        }
+
+        if (newScoreA < 0 || newScoreB < 0) {
+            throw new IllegalArgumentException("O placar não pode ser negativo.");
+        }
+
+        if (newStatus == EventStatus.FINISHED && newScoreA == newScoreB) {
+            throw new IllegalArgumentException("Empates não são permitidos para finalizar a partida.");
+        }
+
+        this.scoreA = newScoreA;
+        this.scoreB = newScoreB;
+        this.status = newStatus;
+
+        if (this.status == EventStatus.FINISHED) {
+            this.winner = (scoreA > scoreB) ? competitorA : competitorB;
+        }
     }
 }

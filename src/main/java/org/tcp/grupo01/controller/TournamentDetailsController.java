@@ -2,37 +2,49 @@ package org.tcp.grupo01.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.tcp.grupo01.models.EventStatus;
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
+import org.tcp.grupo01.view.components.MatchCard;
 
 import java.io.IOException;
 import java.util.List;
 
 public class TournamentDetailsController {
 
+    // --- ELEMENTOS PRINCIPAIS ---
     @FXML private Label lblTournamentName, lblStatus, lblParticipantsCount, lblSectionTitle;
     @FXML private ScrollPane roundsContainer;
-    @FXML private VBox matchesList, standingsContainer;
-
-    // Controles de Navegação
+    @FXML private VBox matchesList, matchesContainer, standingsContainer; // matchesList é o VBox dentro do Scroll
     @FXML private HBox paginationControls;
-    @FXML private Button btnTabRounds, btnTabStandings;
-    @FXML private Button btnPrevRound, btnNextRound;
+    @FXML private Button btnTabRounds, btnTabStandings, btnPrevRound, btnNextRound;
 
+    // --- ELEMENTOS DO MODAL ---
+    @FXML private VBox modalOverlay;
+    @FXML private Label lblModalTeamA, lblModalTeamB, lblModalScoreA, lblModalScoreB, lblModalError;
+    @FXML private Button btnStatusConfirm, btnStatusRunning, btnStatusFinished;
+    @FXML private HBox scoreBoxA, scoreBoxB;
+
+    // --- ESTADO ---
     private Tournament<?> tournament;
-    private int currentRoundIndex = 0; // Estado da paginação
+    private int currentRoundIndex = 0;
+
+    private Match<?> currentEditingMatch;
+    private int tempScoreA;
+    private int tempScoreB;
+    private EventStatus tempStatus;
+
+    // ================== INICIALIZAÇÃO ==================
 
     public void setTournament(Tournament<?> tournament) {
         this.tournament = tournament;
         updateSidebarInfo();
-
         this.currentRoundIndex = 0;
         showRounds();
     }
@@ -44,25 +56,21 @@ public class TournamentDetailsController {
         lblParticipantsCount.setText(tournament.getParticipants().size() + " participantes");
     }
 
-    @FXML
-    public void showRounds() {
-        setTabActive(btnTabRounds, btnTabStandings);
+    // ================== NAVEGAÇÃO (ABAS) ==================
 
+    @FXML public void showRounds() {
+        setTabActive(btnTabRounds, btnTabStandings);
         roundsContainer.setVisible(true);
         standingsContainer.setVisible(false);
         paginationControls.setVisible(true);
-
         renderCurrentRound();
     }
 
-    @FXML
-    public void showStandings() {
+    @FXML public void showStandings() {
         setTabActive(btnTabStandings, btnTabRounds);
-
         roundsContainer.setVisible(false);
         standingsContainer.setVisible(true);
         paginationControls.setVisible(false);
-
         lblSectionTitle.setText("Classificação");
     }
 
@@ -71,23 +79,7 @@ public class TournamentDetailsController {
         inactive.getStyleClass().remove("segment-button-active");
     }
 
-    // --- LÓGICA DE PAGINAÇÃO ---
-
-    @FXML
-    public void handleNextRound() {
-        if (tournament != null && currentRoundIndex < tournament.getRounds().size() - 1) {
-            currentRoundIndex++;
-            renderCurrentRound();
-        }
-    }
-
-    @FXML
-    public void handlePrevRound() {
-        if (currentRoundIndex > 0) {
-            currentRoundIndex--;
-            renderCurrentRound();
-        }
-    }
+    // ================== RENDERIZAÇÃO ==================
 
     private void renderCurrentRound() {
         matchesList.getChildren().clear();
@@ -100,71 +92,94 @@ public class TournamentDetailsController {
             return;
         }
 
-        // Título Dinâmico
         lblSectionTitle.setText("Rodada " + (currentRoundIndex + 1));
-
-        // Controle dos botões (Desabilitar se for inicio ou fim)
         btnPrevRound.setDisable(currentRoundIndex == 0);
         btnNextRound.setDisable(currentRoundIndex == allRounds.size() - 1);
 
-        // Pega partidas apenas da rodada atual
         List<? extends Match<?>> currentMatches = allRounds.get(currentRoundIndex);
-
         for (Match<?> match : currentMatches) {
-            matchesList.getChildren().add(createMatchCard(match));
+            matchesList.getChildren().add(new MatchCard(match, this::openModal));
         }
     }
 
-    // --- CRIAÇÃO DOS CARDS (Igual ao anterior, apenas com Layout ajustado) ---
-    private HBox createMatchCard(Match<?> match) {
-        HBox card = new HBox();
-        card.getStyleClass().add("match-card");
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setSpacing(20);
+    // ================== LÓGICA DO MODAL ==================
 
-        GridPane scoreBoard = new GridPane();
-        scoreBoard.setVgap(10);
-        scoreBoard.setHgap(20);
+    private void openModal(Match<?> match) {
+        // REGRA DE NEGÓCIO 2: Se já estiver finalizada, proíbe a edição (não abre o modal)
+        if (match.getStatus() == EventStatus.FINISHED) {
+            return;
+        }
 
-        ColumnConstraints colTeam = new ColumnConstraints();
-        colTeam.setHgrow(Priority.ALWAYS);
-        colTeam.setMinWidth(200);
+        this.currentEditingMatch = match;
 
-        ColumnConstraints colScore = new ColumnConstraints();
-        colScore.setMinWidth(30);
-        colScore.setHalignment(javafx.geometry.HPos.RIGHT);
+        this.tempScoreA = match.getScoreA();
+        this.tempScoreB = match.getScoreB();
+        this.tempStatus = match.getStatus();
 
-        scoreBoard.getColumnConstraints().addAll(colTeam, colScore);
+        lblModalTeamA.setText(match.getCompetitorA().getName());
+        lblModalTeamB.setText(match.getCompetitorB().getName());
+        lblModalError.setText("");
 
-        String teamA = match.getCompetitorA().getName();
-        String teamB = match.getCompetitorB().getName();
-
-        scoreBoard.add(createTeamLabel(teamA), 0, 0);
-        scoreBoard.add(createScoreLabel("-"), 1, 0); // Placeholder
-        scoreBoard.add(createTeamLabel(teamB), 0, 1);
-        scoreBoard.add(createScoreLabel("-"), 1, 1); // Placeholder
-
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-
-        Label statusBadge = new Label(match.getStatus().toString());
-        statusBadge.getStyleClass().add("status-badge");
-
-        card.getChildren().addAll(scoreBoard, spacer, statusBadge);
-        return card;
+        updateModalDisplay();
+        modalOverlay.setVisible(true);
     }
 
-    private Label createTeamLabel(String text) {
-        Label l = new Label(text);
-        l.getStyleClass().add("match-team-name");
-        return l;
+    @FXML
+    public void closeModal() {
+        modalOverlay.setVisible(false);
+        currentEditingMatch = null;
     }
 
-    private Label createScoreLabel(String text) {
-        Label l = new Label(text);
-        l.getStyleClass().add("match-score");
-        return l;
+    private void updateModalDisplay() {
+        lblModalScoreA.setText(String.valueOf(tempScoreA));
+        lblModalScoreB.setText(String.valueOf(tempScoreB));
+
+        // Bloqueia edição estiver em "Planejamento"
+        boolean isLocked = (tempStatus == EventStatus.PLANNING);
+        scoreBoxA.setDisable(isLocked);
+        scoreBoxB.setDisable(isLocked);
+
+        updateStatusButtonStyle(btnStatusConfirm, EventStatus.PLANNING);
+        updateStatusButtonStyle(btnStatusRunning, EventStatus.RUNNING);
+        updateStatusButtonStyle(btnStatusFinished, EventStatus.FINISHED);
     }
+
+    private void updateStatusButtonStyle(Button btn, EventStatus targetStatus) {
+        btn.getStyleClass().removeAll("status-option-selected", "status-finalized-selected");
+        if (this.tempStatus == targetStatus) {
+            if (targetStatus == EventStatus.FINISHED) {
+                btn.getStyleClass().add("status-finalized-selected");
+            } else {
+                btn.getStyleClass().add("status-option-selected");
+            }
+        }
+    }
+
+    // --- CONTROLES MODAL ---
+    @FXML public void incrementScoreA() { tempScoreA++; updateModalDisplay(); }
+    @FXML public void decrementScoreA() { if(tempScoreA > 0) tempScoreA--; updateModalDisplay(); }
+    @FXML public void incrementScoreB() { tempScoreB++; updateModalDisplay(); }
+    @FXML public void decrementScoreB() { if(tempScoreB > 0) tempScoreB--; updateModalDisplay(); }
+
+    @FXML public void setStatusPlanning() { tempStatus = EventStatus.PLANNING; updateModalDisplay(); }
+    @FXML public void setStatusRunning() { tempStatus = EventStatus.RUNNING; updateModalDisplay(); }
+    @FXML public void setStatusFinished() { tempStatus = EventStatus.FINISHED; updateModalDisplay(); }
+
+    @FXML
+    public void saveMatch() {
+        if (currentEditingMatch == null) return;
+
+        try {
+            currentEditingMatch.updateResult(tempScoreA, tempScoreB, tempStatus);
+            closeModal();
+            renderCurrentRound();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            lblModalError.setText("⚠️ " + e.getMessage());
+        }
+    }
+    // ================== OUTROS ==================
+    @FXML public void handleNextRound() { if (currentRoundIndex < tournament.getRounds().size() - 1) { currentRoundIndex++; renderCurrentRound(); } }
+    @FXML public void handlePrevRound() { if (currentRoundIndex > 0) { currentRoundIndex--; renderCurrentRound(); } }
 
     @FXML
     public void handleBack() {
@@ -174,8 +189,6 @@ public class TournamentDetailsController {
             Scene scene = new Scene(loader.load(), 1000, 700);
             scene.getStylesheets().add(getClass().getResource("/org/tcp/grupo01/style.css").toExternalForm());
             stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 }

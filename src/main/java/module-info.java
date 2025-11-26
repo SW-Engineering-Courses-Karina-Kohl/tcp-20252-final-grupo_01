@@ -9,4 +9,5 @@ module org.tcp.grupo01 {
 
     exports org.tcp.grupo01;
     exports org.tcp.grupo01.view;
+    opens org.tcp.grupo01.view.components to javafx.fxml;
 }
