@@ -27,6 +27,10 @@
 
                 <Pane HBox.hgrow="ALWAYS" />
 
+                 <Button text="Gerenciar Times"
+                    onAction="#handleManageTeams"
+                    styleClass="secondary-button"/>
+
                 <Button text="+ Novo Campeonato"
                         onAction="#handleNewTournament"
                         styleClass="primary-button"/>

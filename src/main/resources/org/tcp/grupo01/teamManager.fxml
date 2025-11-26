@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.tcp.grupo01.controller.TeamManagerController">
+
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Label text="Nome do Time:"/>
+            <TextField fx:id="teamNameField" prefWidth="200"/>
+            <Button text="Salvar Time" onAction="#handleSaveTeam"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <Label text="Jogadores:" style="-fx-font-weight: bold;"/>
+
+            <HBox spacing="10">
+                <TextField fx:id="playerField" promptText="Nome do jogador"/>
+                <Button text="Adicionar" onAction="#handleAddPlayer"/>
+            </HBox>
+
+            <TableView fx:id="playersTable" prefHeight="250">
+                <columns>
+                    <TableColumn fx:id="playerNameColumn" text="Nome" prefWidth="200"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+
+            <Button text="Remover Selecionado" onAction="#handleRemovePlayer"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
+
