@@ -364,3 +364,118 @@
     -fx-pref-height: 0;
     -fx-opacity: 0;
 }
+
+ /* =================================================================================
+    MODAL & OVERLAY (Pop-up de Edição)
+    ================================================================================= */
+
+ /* Fundo escuro semi-transparente */
+ .modal-overlay {
+     -fx-background-color: rgba(0, 0, 0, 0.4);
+     -fx-alignment: CENTER;
+ }
+
+ /* A caixa branca do modal */
+ .modal-box {
+     -fx-background-color: white;
+     -fx-background-radius: 12px;
+     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
+     -fx-padding: 30px;
+     -fx-max-width: 500px;
+     -fx-min-width: 400px;
+     -fx-spacing: 20px;
+ }
+
+ .modal-title {
+     -fx-font-size: 20px;
+     -fx-font-weight: bold;
+     -fx-text-fill: -color-text-primary;
+     -fx-alignment: CENTER;
+ }
+
+ /* Controles de Placar (- 0 +) */
+ .score-control-box {
+     -fx-alignment: CENTER;
+     -fx-spacing: 15px;
+ }
+
+ .btn-counter {
+     -fx-background-color: white;
+     -fx-border-color: -color-border;
+     -fx-border-radius: 50%; /* Botão Redondo */
+     -fx-background-radius: 50%;
+     -fx-min-width: 32px;
+     -fx-min-height: 32px;
+     -fx-max-width: 32px;
+     -fx-max-height: 32px;
+     -fx-padding: 0;
+     -fx-font-weight: bold;
+     -fx-font-size: 16px;
+     -fx-cursor: hand;
+ }
+ .btn-counter:hover {
+     -fx-border-color: -color-primary;
+     -fx-text-fill: -color-primary;
+ }
+
+ .score-display {
+     -fx-font-size: 28px;
+     -fx-font-weight: bold;
+     -fx-text-fill: -color-text-primary;
+ }
+
+ /* Botões de Status (Pílulas selecionáveis) */
+ .status-option {
+     -fx-background-color: white;
+     -fx-border-color: -color-border;
+     -fx-border-radius: 20px;
+     -fx-background-radius: 20px;
+     -fx-padding: 6px 16px;
+     -fx-cursor: hand;
+     -fx-text-fill: -color-text-secondary;
+ }
+
+ .status-option-selected {
+     -fx-background-color: -color-text-primary; /* Preto ou Cinza Escuro */
+     -fx-text-fill: white;
+     -fx-border-color: -color-text-primary;
+ }
+
+ /* Botão de Status FINALIZADA (Vermelho quando selecionado) */
+ .status-option-finished:selected { /* Pseudo-classe customizada via código ou styleclass */
+     -fx-background-color: -color-primary;
+     -fx-border-color: -color-primary;
+ }
+ /* No CSS simples, vamos usar classe direta: */
+ .status-finalized-selected {
+     -fx-background-color: -color-primary;
+     -fx-text-fill: white;
+     -fx-border-color: -color-primary;
+ }
+
+ /* Botões de Ação (Cancelar / Salvar) */
+ .btn-cancel {
+     -fx-background-color: #E5E7EB;
+     -fx-text-fill: -color-text-primary;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+     -fx-padding: 10px 20px;
+     -fx-background-radius: 6px;
+ }
+ .btn-save {
+     -fx-background-color: -color-primary;
+     -fx-text-fill: white;
+     -fx-font-weight: bold;
+     -fx-cursor: hand;
+     -fx-padding: 10px 20px;
+     -fx-background-radius: 6px;
+ }
+ .btn-save:hover {
+     -fx-background-color: -color-primary-hover;
+ }
+
+ .error-label {
+     -fx-text-fill: -color-primary;
+     -fx-font-size: 12px;
+     -fx-alignment: CENTER;
+ }
