@@ -51,21 +51,27 @@
                 </HBox>
 
                 <StackPane VBox.vgrow="ALWAYS">
+
                     <ScrollPane fx:id="roundsContainer" fitToWidth="true" styleClass="transparent-scroll">
                         <content>
                             <VBox fx:id="matchesList" spacing="15"/>
                         </content>
                     </ScrollPane>
 
-                    <VBox fx:id="standingsContainer" visible="false" alignment="TOP_LEFT">
-                        <HBox styleClass="standings-placeholder" alignment="CENTER_LEFT" spacing="15">
-                            <Label text="🏆" style="-fx-font-size: 24px;"/>
-                            <VBox>
-                                <Label text="Tabela de Classificação" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-                                <Label text="Disponível em breve" style="-fx-text-fill: #666;"/>
+                    <ScrollPane fx:id="standingsScroll" fitToWidth="true" styleClass="transparent-scroll" visible="false">
+                        <content>
+                            <VBox fx:id="standingsContainer" alignment="TOP_LEFT">
+                                <HBox styleClass="standings-placeholder" alignment="CENTER_LEFT" spacing="15">
+                                    <Label text="🏆" style="-fx-font-size: 24px;"/>
+                                    <VBox>
+                                        <Label text="Tabela de Classificação" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                                        <Label text="Disponível em breve" style="-fx-text-fill: #666;"/>
+                                    </VBox>
+                                </HBox>
                             </VBox>
-                        </HBox>
-                    </VBox>
+                        </content>
+                    </ScrollPane>
+
                 </StackPane>
             </VBox>
         </center>

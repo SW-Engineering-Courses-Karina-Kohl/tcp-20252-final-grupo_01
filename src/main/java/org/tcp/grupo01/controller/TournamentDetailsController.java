@@ -11,19 +11,22 @@ import javafx.stage.Stage;
 import org.tcp.grupo01.models.EventStatus;
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
+import org.tcp.grupo01.view.components.standings.StandingsViewFactory;
 import org.tcp.grupo01.view.components.MatchCard;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class TournamentDetailsController {
 
     // --- ELEMENTOS PRINCIPAIS ---
     @FXML private Label lblTournamentName, lblStatus, lblParticipantsCount, lblSectionTitle;
     @FXML private ScrollPane roundsContainer;
-    @FXML private VBox matchesList, matchesContainer, standingsContainer; // matchesList é o VBox dentro do Scroll
+    @FXML private VBox matchesList, standingsContainer;
     @FXML private HBox paginationControls;
     @FXML private Button btnTabRounds, btnTabStandings, btnPrevRound, btnNextRound;
+    @FXML private ScrollPane standingsScroll; // Adicione isso
 
     // --- ELEMENTOS DO MODAL ---
     @FXML private VBox modalOverlay;
@@ -46,7 +49,7 @@ public class TournamentDetailsController {
         this.tournament = tournament;
         updateSidebarInfo();
         this.currentRoundIndex = 0;
-        showRounds();
+        showRounds(); // Default view
     }
 
     private void updateSidebarInfo() {
@@ -60,26 +63,29 @@ public class TournamentDetailsController {
 
     @FXML public void showRounds() {
         setTabActive(btnTabRounds, btnTabStandings);
+
         roundsContainer.setVisible(true);
-        standingsContainer.setVisible(false);
+        standingsScroll.setVisible(false);
+
         paginationControls.setVisible(true);
-        renderCurrentRound();
-    }
+        renderCurrentRound();    }
 
     @FXML public void showStandings() {
         setTabActive(btnTabStandings, btnTabRounds);
+
         roundsContainer.setVisible(false);
-        standingsContainer.setVisible(true);
+        standingsScroll.setVisible(true);
+
         paginationControls.setVisible(false);
         lblSectionTitle.setText("Classificação");
-    }
+        renderStandings();    }
 
     private void setTabActive(Button active, Button inactive) {
         active.getStyleClass().add("segment-button-active");
         inactive.getStyleClass().remove("segment-button-active");
     }
 
-    // ================== RENDERIZAÇÃO ==================
+    // ================== RENDERIZAÇÃO DAS RODADAS ==================
 
     private void renderCurrentRound() {
         matchesList.getChildren().clear();
@@ -102,10 +108,22 @@ public class TournamentDetailsController {
         }
     }
 
+    // ================== RENDERIZAÇÃO DA CLASSIFICAÇÃO [NOVO] ==================
+
+    private void renderStandings() {
+        standingsContainer.getChildren().clear();
+
+        // Usa a Factory para decidir qual visualização mostrar (League, Bracket, etc.)
+        // Isso mantém o princípio Open/Closed
+        javafx.scene.Node view = StandingsViewFactory.createViewFor(tournament);
+
+        standingsContainer.getChildren().add(view);
+    }
+
     // ================== LÓGICA DO MODAL ==================
 
     private void openModal(Match<?> match) {
-        // REGRA DE NEGÓCIO 2: Se já estiver finalizada, proíbe a edição (não abre o modal)
+        // Se já estiver finalizada, proíbe a edição
         if (match.getStatus() == EventStatus.FINISHED) {
             return;
         }
@@ -134,7 +152,6 @@ public class TournamentDetailsController {
         lblModalScoreA.setText(String.valueOf(tempScoreA));
         lblModalScoreB.setText(String.valueOf(tempScoreB));
 
-        // Bloqueia edição estiver em "Planejamento"
         boolean isLocked = (tempStatus == EventStatus.PLANNING);
         scoreBoxA.setDisable(isLocked);
         scoreBoxB.setDisable(isLocked);
@@ -169,14 +186,24 @@ public class TournamentDetailsController {
     public void saveMatch() {
         if (currentEditingMatch == null) return;
 
+        // Só proíbe empate se tentar FINALIZAR a partida
+        if (tempStatus == EventStatus.FINISHED && tempScoreA == tempScoreB) {
+            lblModalError.setText("⚠️ Para finalizar, é necessário haver um vencedor!");
+            return;
+        }
+
+        // Tenta aplicar as mudanças no modelo
         try {
             currentEditingMatch.updateResult(tempScoreA, tempScoreB, tempStatus);
+
             closeModal();
             renderCurrentRound();
-        } catch (IllegalArgumentException | IllegalStateException e) {
+
+        } catch (Exception e) {
             lblModalError.setText("⚠️ " + e.getMessage());
         }
     }
+
     // ================== OUTROS ==================
     @FXML public void handleNextRound() { if (currentRoundIndex < tournament.getRounds().size() - 1) { currentRoundIndex++; renderCurrentRound(); } }
     @FXML public void handlePrevRound() { if (currentRoundIndex > 0) { currentRoundIndex--; renderCurrentRound(); } }
@@ -187,7 +214,7 @@ public class TournamentDetailsController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/home.fxml"));
             Stage stage = (Stage) lblTournamentName.getScene().getWindow();
             Scene scene = new Scene(loader.load(), 1000, 700);
-            scene.getStylesheets().add(getClass().getResource("/org/tcp/grupo01/style.css").toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm());
             stage.setScene(scene);
         } catch (IOException e) { e.printStackTrace(); }
     }

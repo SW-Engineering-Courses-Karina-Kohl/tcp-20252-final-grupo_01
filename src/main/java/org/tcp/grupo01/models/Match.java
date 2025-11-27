@@ -58,6 +58,11 @@ public final class Match<T extends Competitor> {
             throw new IllegalArgumentException("O placar não pode ser negativo.");
         }
 
+        if (newStatus == EventStatus.PLANNING && (newScoreA != 0 || newScoreB != 0)) {
+            throw new IllegalArgumentException("Não é possível definir pontuação para uma partida que não iniciou.");
+        }
+
+        // 4. No tie
         if (newStatus == EventStatus.FINISHED && newScoreA == newScoreB) {
             throw new IllegalArgumentException("Empates não são permitidos para finalizar a partida.");
         }
