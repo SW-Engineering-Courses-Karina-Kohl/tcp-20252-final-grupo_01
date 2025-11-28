@@ -34,7 +34,7 @@ public class Place {
     }
 
     public void setCapacity(int newCapacity) {
-        // if (newCapacity < 0) throw new IllegalArgumentException("capacity cannot be negative");
+        if (newCapacity < 0) throw new IllegalArgumentException("capacity cannot be negative");
         this.capacity = newCapacity;
     }
 

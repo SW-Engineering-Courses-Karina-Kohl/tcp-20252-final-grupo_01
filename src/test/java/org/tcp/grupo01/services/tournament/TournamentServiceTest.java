@@ -22,7 +22,8 @@ class TournamentServiceIMTest {
 
     @BeforeEach
     void setUp() {
-        this.service = new TournamentServiceIM();
+        this.service = TournamentServiceIM.getInstance();
+        this.service.clear();
 
         List<Person> participants = List.of(new Person("Jubileu"), new Person("Zé"));
 

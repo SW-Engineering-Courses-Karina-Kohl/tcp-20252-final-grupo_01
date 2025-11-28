@@ -55,6 +55,10 @@ public class TournamentServiceIM implements TournamentService {
         this.add(Tournament.createForPeople("Suíço", swiss, players));
     }
 
+    public void clear() {
+        this.dataStore.clear();
+    }
+
     @Override
     public List<Tournament<?>> getAll() {
         return new ArrayList<>(dataStore.values());

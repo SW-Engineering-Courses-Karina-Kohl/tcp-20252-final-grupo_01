@@ -6,7 +6,6 @@ import org.tcp.grupo01.models.competitors.Team;
 
 import java.time.LocalDateTime;
 
-// Partida entre competidores do mesmo tipo, Construtor privado
 public final class Match<T extends Competitor> {
 
     private static int nextId = 1;
@@ -62,7 +61,7 @@ public final class Match<T extends Competitor> {
             throw new IllegalArgumentException("Não é possível definir pontuação para uma partida que não iniciou.");
         }
 
-        // 4. No tie
+        // No tie
         if (newStatus == EventStatus.FINISHED && newScoreA == newScoreB) {
             throw new IllegalArgumentException("Empates não são permitidos para finalizar a partida.");
         }
