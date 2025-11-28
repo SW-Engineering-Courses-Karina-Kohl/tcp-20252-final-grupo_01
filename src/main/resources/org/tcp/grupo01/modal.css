@@ -1,0 +1,102 @@
+.root {
+  -fx-background-color: #ffffff;
+}
+
+.label {
+  -fx-font-size: 14px;
+}
+
+.title-label {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+}
+
+.text-field,
+.date-picker,
+.combo-box {
+  -fx-pref-height: 32px;
+  -fx-font-size: 14px;
+}
+
+.button {
+  -fx-background-radius: 6;
+  -fx-font-size: 14px;
+  -fx-cursor: hand;
+  -fx-padding: 8 18 8 18;
+}
+
+/* Botões principais (vermelhos) */
+.button-primary {
+  -fx-background-color: #e63946;
+  -fx-text-fill: white;
+}
+
+.button-primary:hover {
+  -fx-background-color: #d62839;
+}
+
+/* Botões secundários (cinza claro) */
+.button-secondary {
+  -fx-background-color: #e5e5e5;
+  -fx-text-fill: #333;
+}
+
+.button-secondary:hover {
+  -fx-background-color: #dcdcdc;
+}
+
+/* Tabelas modernizadas */
+.table-view {
+  -fx-background-color: #f8f9fa;
+  -fx-border-color: #ccc;
+  -fx-border-radius: 4;
+}
+
+.table-view .column-header {
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+}
+
+.table-view .table-row-cell:selected {
+  -fx-background-color: #f5b7b1;
+}
+
+.button {
+  -fx-font-weight: bold;
+}
+
+.swiss-board {
+  -fx-background-color: #1f242a;
+}
+
+.round-box {
+  -fx-background-color: #2c323a;
+  -fx-padding: 15;
+  -fx-background-radius: 8;
+}
+
+.round-title {
+  -fx-text-fill: white;
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+}
+
+.record-group {
+  -fx-background-color: #373e47;
+  -fx-padding: 10;
+  -fx-background-radius: 6;
+}
+
+.record-title {
+  -fx-font-weight: bold;
+  -fx-text-fill: #9adcff;
+}
+
+.match-line {
+  -fx-padding: 5 0 5 0;
+}
+
+.match-line Label {
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+}

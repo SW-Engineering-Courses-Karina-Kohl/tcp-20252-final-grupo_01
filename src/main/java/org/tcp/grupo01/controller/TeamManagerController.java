@@ -1,87 +1,184 @@
 package org.tcp.grupo01.controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
+import org.tcp.grupo01.services.pairing.Pairing;
+import org.tcp.grupo01.services.tournament.TournamentService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TeamManagerController {
 
-    @FXML private TextField teamNameField;
-    @FXML private TextField playerField;
+    @FXML private TextField txtTeamName;
+    @FXML private TableView<Team> tableTeams;
+    @FXML private TableColumn<Team, String> colTeamName;
+    @FXML private TableColumn<Team, Number> colPlayersCount;
+    @FXML private TableColumn<Team, String> colTeamPlayers;
+    @FXML private ComboBox<Team> cbExistingTeams;
 
-    @FXML private TableView<Person> playersTable;
-    @FXML private TableColumn<Person, String> playerNameColumn;
+    private String tournamentName;
+    private Pairing<Team> pairingMethod;
+    private TournamentService service;
 
-    private Team currentTeam;
-    private final ObservableList<Person> players = FXCollections.observableArrayList();
+    private final ObservableList<Team> teams = FXCollections.observableArrayList();
+    private final ObservableList<Team> existingTeams = FXCollections.observableArrayList();
+
+    public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
+        this.tournamentName = name;
+        this.pairingMethod = (Pairing<Team>) pairing;
+        this.service = service;
+
+        loadExistingTeams();
+    }
 
     @FXML
     public void initialize() {
-        currentTeam = new Team("");
+        tableTeams.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
-        playerNameColumn.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(data.getValue().getName())
-        );
+        colTeamName.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getName()));
 
-        playersTable.setItems(players);
+        colPlayersCount.setCellValueFactory(data ->
+                new SimpleIntegerProperty(data.getValue().getPlayers().size()));
+
+        colTeamPlayers.setCellValueFactory(data ->
+        new SimpleStringProperty(
+                data.getValue()
+                    .getPlayers()
+                    .stream()
+                    .map(Person::getName)
+                    .reduce("", (a, b) -> a.isEmpty() ? b : a + ", " + b)
+        ));
+
+        tableTeams.setItems(teams);
+        cbExistingTeams.setItems(existingTeams);
+    }
+
+    private void loadExistingTeams() {
+        if (service == null) return;
+
+        Set<Integer> seenIds = new HashSet<>();
+        List<Tournament<?>> tournaments = service.getAll();
+
+        for (Tournament<?> t : tournaments) {
+            if (t.getParticipants().isEmpty()) continue;
+
+            if (t.getParticipants().get(0) instanceof Team) {
+                for (Object obj : t.getParticipants()) {
+                    Team tm = (Team) obj;
+                    if (seenIds.add(tm.getId())) {
+                        existingTeams.add(tm);
+                    }
+                }
+            }
+        }
     }
 
     @FXML
-    public void handleAddPlayer() {
-        String name = playerField.getText().trim();
-
-        if (name.isEmpty()) {
-            showAlert("Erro", "O nome do jogador não pode estar vazio.");
+    private void handleAddNewTeam() {
+        String name = txtTeamName.getText();
+        if (name.isBlank()) {
+            new Alert(Alert.AlertType.ERROR, "Nome do time é obrigatório.").showAndWait();
             return;
         }
 
-        Person p = new Person(name);
-
-        currentTeam.addPlayer(p);
-        players.add(p);
-
-        playerField.clear();
+        Team t = new Team(name);
+        teams.add(t);
+        txtTeamName.clear();
     }
 
     @FXML
-    public void handleRemovePlayer() {
-        Person selected = playersTable.getSelectionModel().getSelectedItem();
+    private void handleAddExistingTeam() {
+        Team selected = cbExistingTeams.getValue();
+        if (selected == null) return;
 
+        if (!teams.contains(selected)) {
+            teams.add(selected);
+        }
+    }
+
+    @FXML
+    private void handleRemoveTeam() {
+        Team selected = tableTeams.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            teams.remove(selected);
+        }
+    }
+
+    @FXML
+    private void handleManagePlayers() {
+        Team selected = tableTeams.getSelectionModel().getSelectedItem();
         if (selected == null) {
-            showAlert("Erro", "Selecione um jogador para remover.");
+            new Alert(Alert.AlertType.WARNING, "Selecione um time para gerenciar jogadores.").showAndWait();
             return;
         }
 
-        currentTeam.removePlayer(selected);
-        players.remove(selected);
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/org/tcp/grupo01/addPlayersToTeam.fxml")
+            );
+            Parent root = loader.load();
+
+            AddPlayersToTeamController controller = loader.getController();
+            controller.setTeamAndService(selected, service);
+
+            Stage modal = new Stage();
+            modal.initModality(Modality.APPLICATION_MODAL);
+            modal.setTitle("Jogadores do time: " + selected.getName());
+            modal.setScene(new Scene(root));
+            modal.showAndWait();
+
+            tableTeams.refresh();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    public void handleSaveTeam() {
-        String teamName = teamNameField.getText().trim();
-
-        if (teamName.isEmpty()) {
-            showAlert("Erro", "O nome do time é obrigatório.");
+    private void handleFinish() {
+        if (teams.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Adicione pelo menos um time.").showAndWait();
             return;
         }
 
-        currentTeam.setName(teamName);
+        for (Team t : teams) {
+            if (t.getPlayers().isEmpty()) {
+                new Alert(Alert.AlertType.ERROR,
+                        "O time '" + t.getName() + "' precisa ter pelo menos um jogador.")
+                        .showAndWait();
+                return;
+            }
+        }
 
-        showAlert("Sucesso",
-                "Time salvo!\n" +
-                "Nome: " + currentTeam.getName() + "\n" +
-                "Jogadores: " + currentTeam.getPlayers().size()
-        );
+        Tournament<Team> tournament =
+                Tournament.createForTeams(tournamentName, pairingMethod, new ArrayList<>(teams));
+
+        service.add(tournament);
+
+        Stage stage = (Stage) tableTeams.getScene().getWindow();
+        stage.close();
     }
 
-    private void showAlert(String title, String msg) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(title);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.showAndWait();
+    @FXML
+    private void handleCancel() {
+        Stage stage = (Stage) tableTeams.getScene().getWindow();
+        stage.close();
     }
 }

@@ -1,18 +1,23 @@
 package org.tcp.grupo01.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-
 import org.tcp.grupo01.models.Match;
-import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
 import org.tcp.grupo01.services.pairing.Knockout;
 import org.tcp.grupo01.services.pairing.League;
+import org.tcp.grupo01.services.pairing.Pairing;
 import org.tcp.grupo01.services.pairing.Swiss;
+import org.tcp.grupo01.services.tournament.TournamentService;
+
+import java.io.IOException;
 
 public class NewTournamentController {
 
@@ -23,29 +28,113 @@ public class NewTournamentController {
     @FXML private DatePicker dateStart;
     @FXML private ComboBox<String> cbFormat;
 
-    private org.tcp.grupo01.services.tournament.TournamentService service;
+    private TournamentService service;
 
-    public void setService(org.tcp.grupo01.services.tournament.TournamentService service) {
+    public void setService(TournamentService service) {
         this.service = service;
-    }
-
-    private void updateFieldLock() {
-        boolean enabled = cbCompetitionType.getValue() != null;
-        cbFormat.setDisable(!enabled);
     }
 
     @FXML
     public void initialize() {
         cbCompetitionType.getItems().addAll("Pontos Corridos", "Mata-Mata", "Suíço");
         cbCompetitorType.getItems().addAll("Jogadores", "Times");
+
         cbFormat.setDisable(true);
 
-        updateFormatOptions();
-
-        cbCompetitionType.valueProperty().addListener((obs, o, n) -> {
-            updateFieldLock();
+        cbCompetitionType.valueProperty().addListener((obs, oldVal, newVal) -> {
             updateFormatOptions();
+            cbFormat.setDisable(false);
         });
+    }
+
+    @FXML
+    private void handleContinue() {
+
+        if (txtName.getText().isBlank() ||
+            cbCompetitionType.getValue() == null ||
+            cbCompetitorType.getValue() == null ||
+            cbFormat.getValue() == null) {
+
+            new Alert(Alert.AlertType.ERROR, "Preencha todos os campos antes de continuar.").showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader;
+
+            boolean isTeam = cbCompetitorType.getValue().equals("Times");
+
+            if (isTeam) {
+                loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/teamManager.fxml"));
+            } else {
+                loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/playerManager.fxml"));
+            }
+
+            Parent root = loader.load();
+
+            Pairing<?> pairing = buildPairing(cbCompetitionType.getValue(), cbCompetitorType.getValue());
+
+            if (isTeam) {
+                TeamManagerController controller = loader.getController();
+                controller.setupTournamentData(txtName.getText(), pairing, service);
+            } else {
+                PlayerManagerController controller = loader.getController();
+                controller.setupTournamentData(txtName.getText(), pairing, service);
+            }
+
+            Stage modal = new Stage();
+            modal.setTitle("Gerenciar Participantes");
+            modal.setScene(new Scene(root));
+            modal.initModality(Modality.WINDOW_MODAL);
+            modal.initOwner(txtName.getScene().getWindow());
+
+            modal.showAndWait();
+
+            Stage stage = (Stage) txtName.getScene().getWindow();
+            stage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Pairing<?> buildPairing(String competition, String competitorType) {
+
+        return switch (competition) {
+
+        case "Pontos Corridos" ->
+            competitorType.equals("Jogadores")
+                    ? new League<Person>(false, Match::betweenPeople)
+                    : new League<Team>(false, Match::betweenTeams);
+
+            case "Suíço" ->
+                competitorType.equals("Jogadores")
+                    ? new Swiss<Person>(3, 3, Match::betweenPeople)
+                    : new Swiss<Team>(3, 3, Match::betweenTeams);
+
+            case "Mata-Mata" ->
+                    competitorType.equals("Jogadores")
+                        ? new Knockout<Person>(Match::betweenPeople)
+                        : new Knockout<Team>(Match::betweenTeams);
+
+            default -> throw new IllegalArgumentException("Tipo de competição inválido");
+        };
+    }
+
+    private void updateFormatOptions() {
+        cbFormat.getItems().clear();
+        cbFormat.setValue(null);
+
+        switch (cbCompetitionType.getValue()) {
+            case "Pontos Corridos" ->
+                    cbFormat.getItems().addAll("Turno", "Turno e Returno");
+
+            case "Suíço" ->
+                    cbFormat.getItems().addAll("16 Times", "32 Times");
+
+            case "Mata-Mata" ->
+                    cbFormat.getItems().add("Eliminação Simples");
+        }
     }
 
     @FXML
@@ -53,127 +142,4 @@ public class NewTournamentController {
         ((Stage) txtName.getScene().getWindow()).close();
     }
 
-    private boolean validateRequired(Control c, boolean valid) {
-        if (!valid) {
-            c.setStyle("-fx-border-color: #ff4444;");
-            return false;
-        }
-        c.setStyle("");
-        return true;
-    }
-
-    private boolean validateTextField(TextInputControl t) {
-        return validateRequired(t, t.getText() != null && !t.getText().isBlank());
-    }
-
-    @FXML
-    public void handleCreate() {
-        boolean ok = true;
-
-        ok &= validateTextField(txtName);
-        ok &= validateRequired(cbCompetitionType, cbCompetitionType.getValue() != null);
-        ok &= validateRequired(cbFormat, cbFormat.getValue() != null);
-        ok &= validateRequired(cbCompetitorType, cbCompetitorType.getValue() != null);
-        ok &= validateTextField(txtLocation);
-        ok &= validateRequired(dateStart, dateStart.getValue() != null);
-
-        if (!ok) return;
-
-        Tournament<?> t = buildTournament(txtName.getText(), cbCompetitionType.getValue(), cbCompetitorType.getValue(), cbFormat.getValue());
-        service.add(t);
-        handleClose();
-    }
-
-    private Object buildPairing(String competition, String competitorType) {
-        return switch (competition) {
-
-            case "Pontos Corridos" ->
-                    competitorType.equals("Jogadores")
-                        ? new League<Person>(false, Match::betweenPeople)
-                        : new League<Team>(false, Match::betweenTeams);
-
-            case "Suíço" ->
-                    competitorType.equals("Jogadores")
-                        ? new Swiss<Person>(3, 3, Match::betweenPeople)
-                        : new Swiss<Team>(3, 3, Match::betweenTeams);
-
-            case "Mata-Mata" ->
-                    competitorType.equals("Jogadores")
-                        ? new Knockout<Person>(Match::betweenPeople)
-                        : new Knockout<Team>(Match::betweenTeams);
-
-            default -> throw new IllegalArgumentException("Tipo desconhecido: " + competition);
-        };
-    }
-
-    public Tournament<?> buildTournament(String name, String competition, String competitorType, String format) {
-        ArrayList<?> competitors = loadCompetitors(competitorType);
-
-        Object pairing = buildPairing(competition, competitorType);
-
-        if (competitorType.equals("Jogadores")) {
-            ArrayList<Person> players = (ArrayList<Person>) competitors;
-
-            if (pairing instanceof League<?> league)
-                return Tournament.createForPeople(name, (League<Person>) league, players);
-
-            if (pairing instanceof Knockout<?> knockout)
-                return Tournament.createForPeople(name, (Knockout<Person>) knockout, players);
-
-            return Tournament.createForPeople(name, (Swiss<Person>) pairing, players);
-        }
-
-        ArrayList<Team> teams = (ArrayList<Team>) competitors;
-
-        if (pairing instanceof League<?> league)
-            return Tournament.createForTeams(name, (League<Team>) league, teams);
-
-        if (pairing instanceof Knockout<?> knockout)
-            return Tournament.createForTeams(name, (Knockout<Team>) knockout, teams);
-
-        return Tournament.createForTeams(name, (Swiss<Team>) pairing, teams);
-    }
-
-    private ArrayList<?> loadCompetitors(String type) {
-        if ("Jogadores".equals(type)) {
-            ArrayList<Person> list = new ArrayList<>();
-            list.add(new Person("Alice"));
-            list.add(new Person("Bob"));
-            list.add(new Person("Carol"));
-            list.add(new Person("David"));
-            return list;
-        }
-
-        if ("Times".equals(type)) {
-            ArrayList<Team> list = new ArrayList<>();
-            Team t1 = new Team("Team A");
-            t1.addPlayer(new Person("Player 1"));
-            list.add(t1);
-
-            Team t2 = new Team("Team B");
-            t2.addPlayer(new Person("Player 2"));
-            list.add(t2);
-
-            return list;
-        }
-
-        throw new IllegalArgumentException("Tipo de competidor inválido: " + type);
-    }
-
-    private void updateFormatOptions() {
-        cbFormat.getItems().clear();
-        cbFormat.setValue(null);
-
-        String type = cbCompetitionType.getValue();
-        if (type == null) return;
-
-        switch (type) {
-            case "Pontos Corridos" ->
-                    cbFormat.getItems().addAll("Turno", "Turno e Returno");
-            case "Suíço" ->
-                    cbFormat.getItems().addAll("Confronto Direto", "Mata-Mata");
-            case "Mata-Mata" ->
-                    cbFormat.getItems().addAll("Eliminação Simples");
-        }
-    }
 }

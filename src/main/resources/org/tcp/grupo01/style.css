@@ -1,229 +1,227 @@
 /* Definições de Cores e Fontes Globais (Root) */
 .root {
-    /* Cores */
-    -color-primary: #C92A2A; /* Vermelho/Vinculo forte */
-    -color-primary-hover: #991B1B;  /* Vermelho mais escuro para interações */
-    -color-secondary: #f0f0f0; /* Cinza claro para backgrounds secundários */
-    -color-text-dark: #333333;
-    -color-text-light: #555555;
-    -color-white: #FFFFFF;
+  /* Cores */
+  -color-primary: #c92a2a; /* Vermelho/Vinculo forte */
+  -color-primary-hover: #991b1b; /* Vermelho mais escuro para interações */
+  -color-secondary: #f0f0f0; /* Cinza claro para backgrounds secundários */
+  -color-text-dark: #333333;
+  -color-text-light: #555555;
+  -color-white: #ffffff;
 
-    /* Fontes */
-    -fx-font-family: "Segoe UI", "Arial", sans-serif;
-    -fx-font-size: 14px;
+  /* Fontes */
+  -fx-font-family: "Segoe UI", "Arial", sans-serif;
+  -fx-font-size: 14px;
 }
 
 /* ------------------ BACKGROUNDS E TITULOS ------------------ */
 
 /* Fundo Principal */
 .main-background {
-    -fx-background-color: -color-white;
+  -fx-background-color: -color-white;
 }
 
 .main-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-dark;
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-dark;
 }
 
 .subtitle {
-    -fx-font-size: 16px;
-    -fx-text-fill: -color-text-light;
-    -fx-padding: 0 0 10px 0;
+  -fx-font-size: 16px;
+  -fx-text-fill: -color-text-light;
+  -fx-padding: 0 0 10px 0;
 }
 
 .header-wrapper {
-    /* Adiciona a linha divisória inferior */
-    -fx-border-color: #e0e0e0; /* Cinza bem claro e discreto */
-    -fx-border-width: 0 0 1px 0; /* Borda apenas na parte inferior */
+  /* Adiciona a linha divisória inferior */
+  -fx-border-color: #e0e0e0; /* Cinza bem claro e discreto */
+  -fx-border-width: 0 0 1px 0; /* Borda apenas na parte inferior */
 }
 
 /* 2. Estilo para o ScrollPane e seu Viewport (Remove o cinza) */
 .scroll-content {
-    -fx-background-color: transparent; /* Remove background do próprio ScrollPane */
-    -fx-border-color: transparent; /* Remove borda, caso haja */
+  -fx-background-color: transparent; /* Remove background do próprio ScrollPane */
+  -fx-border-color: transparent; /* Remove borda, caso haja */
 }
 
 /* O viewport é o container interno do ScrollPane. SEMPRE precisa ser ajustado */
 .scroll-pane > .viewport {
-    -fx-background-color: transparent;
+  -fx-background-color: transparent;
 }
 
 /* ------------------ BOTÕES ------------------ */
 
 .button {
-    -fx-cursor: hand;
-    -fx-padding: 8px 15px;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 8px 15px;
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-font-weight: bold;
 }
 
 .primary-button {
-    -fx-background-color: -color-primary;
-    -fx-text-fill: -color-white;
+  -fx-background-color: -color-primary;
+  -fx-text-fill: -color-white;
 }
 
 .primary-button:hover {
-    -fx-background-color: #7a0000; /* Vermelho mais escuro no hover */
+  -fx-background-color: #7a0000; /* Vermelho mais escuro no hover */
 }
 
 /* ------------------ CARDS (Componente principal da tela) ------------------ */
 
 .tournament-card {
-    -fx-background-color: -color-white;
-    -fx-border-color: -color-secondary;
-    -fx-border-radius: 6px;
-    -fx-background-radius: 6px;
+  -fx-background-color: -color-white;
+  -fx-border-color: -color-secondary;
+  -fx-border-radius: 6px;
+  -fx-background-radius: 6px;
 
-    /* Efeito de Sombra sutil, replicando o look & feel */
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.0, 0.0, 2.0);
+  /* Efeito de Sombra sutil, replicando o look & feel */
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
 }
 
 .card-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-dark;
-    -fx-padding: 0 0 5px 0;
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-dark;
+  -fx-padding: 0 0 5px 0;
 }
 
 .card-info {
-    -fx-font-size: 13px;
-    -fx-text-fill: -color-text-light;
-    -fx-padding: 3px 0 0 0;
+  -fx-font-size: 13px;
+  -fx-text-fill: -color-text-light;
+  -fx-padding: 3px 0 0 0;
 }
 
 /* Adicione esta classe para um feedback visual de que é clicável */
 .tournament-card:hover {
-    -fx-border-color: -color-primary; /* Borda vermelha no hover */
-    -fx-cursor: hand;
+  -fx-border-color: -color-primary; /* Borda vermelha no hover */
+  -fx-cursor: hand;
 }
 
-
 .root {
-    /* Ajuste de paleta para bater com o Design System da imagem */
-    -color-bg-sidebar: #FFFFFF;
-    -color-bg-main: #F9FAFB; /* Cinza bem suave de fundo */
-    -color-border: #E5E7EB;
+  /* Ajuste de paleta para bater com o Design System da imagem */
+  -color-bg-sidebar: #ffffff;
+  -color-bg-main: #f9fafb; /* Cinza bem suave de fundo */
+  -color-border: #e5e7eb;
 
-    -color-primary: #C92A2A; /* Vermelho mais fechado (foco) */
-    -color-primary-hover: #A61E1E;
+  -color-primary: #c92a2a; /* Vermelho mais fechado (foco) */
+  -color-primary-hover: #a61e1e;
 
-    -color-text-primary: #111827;
-    -color-text-secondary: #6B7280;
+  -color-text-primary: #111827;
+  -color-text-secondary: #6b7280;
 
-    -color-card-bg: #FFFFFF;
+  -color-card-bg: #ffffff;
 }
 
 /* ------------------ SIDEBAR ------------------ */
 
 .sidebar {
-    -fx-background-color: -color-bg-sidebar;
-    -fx-border-color: -color-border;
-    -fx-border-width: 0 1px 0 0; /* Borda apenas na direita */
+  -fx-background-color: -color-bg-sidebar;
+  -fx-border-color: -color-border;
+  -fx-border-width: 0 1px 0 0; /* Borda apenas na direita */
 }
 
 .sidebar-title {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-primary;
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
 }
 
 .sidebar-subtitle {
-    -fx-font-size: 14px;
-    -fx-text-fill: -color-text-secondary;
+  -fx-font-size: 14px;
+  -fx-text-fill: -color-text-secondary;
 }
 
 .sidebar-section-title {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-secondary;
-    -fx-padding: 20px 0 10px 0;
-    -fx-font-family: "Segoe UI", sans-serif; /* Uppercase look */
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-secondary;
+  -fx-padding: 20px 0 10px 0;
+  -fx-font-family: "Segoe UI", sans-serif; /* Uppercase look */
 }
 
 /* Botão de Voltar (Estilo clean) */
 .btn-secondary {
-    -fx-background-color: transparent;
-    -fx-text-fill: -color-text-secondary;
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 10px 0;
-    -fx-cursor: hand;
+  -fx-background-color: transparent;
+  -fx-text-fill: -color-text-secondary;
+  -fx-alignment: CENTER_LEFT;
+  -fx-padding: 10px 0;
+  -fx-cursor: hand;
 }
 .btn-secondary:hover {
-    -fx-text-fill: -color-primary;
+  -fx-text-fill: -color-primary;
 }
 
 /* ------------------ ÁREA PRINCIPAL ------------------ */
 
 .main-content {
-    -fx-background-color: -color-bg-main;
+  -fx-background-color: -color-bg-main;
 }
 
 .section-title {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-primary;
+  -fx-font-size: 24px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
 }
 
 /* Botões de Navegação (Tabs: Rodadas / Classificação) */
 .tab-button {
-    -fx-background-color: -color-bg-sidebar;
-    -fx-text-fill: -color-text-primary;
-    -fx-border-color: -color-border;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
+  -fx-background-color: -color-bg-sidebar;
+  -fx-text-fill: -color-text-primary;
+  -fx-border-color: -color-border;
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
 }
 
 .tab-button-active {
-    -fx-background-color: -color-primary;
-    -fx-text-fill: white;
-    -fx-border-color: -color-primary;
+  -fx-background-color: -color-primary;
+  -fx-text-fill: white;
+  -fx-border-color: -color-primary;
 }
 
 /* ------------------ CARD DE PARTIDA (MATCH CARD) ------------------ */
 
 .match-card {
-    -fx-background-color: -color-card-bg;
-    -fx-background-radius: 8px;
-    -fx-border-radius: 8px;
-    -fx-border-color: -color-border;
-    -fx-border-width: 1px;
+  -fx-background-color: -color-card-bg;
+  -fx-background-radius: 8px;
+  -fx-border-radius: 8px;
+  -fx-border-color: -color-border;
+  -fx-border-width: 1px;
 
-    /* Sombra suave igual ao design */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 2);
-    -fx-padding: 20px;
+  /* Sombra suave igual ao design */
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 4, 0, 0, 2);
+  -fx-padding: 20px;
 }
 
 .match-team-name {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-primary;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
 }
 
 .match-score {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-primary; /* Destaque no placar */
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-primary; /* Destaque no placar */
 }
 
 /* Badge de Status (ex: Finalizada, Em andamento) */
 .status-badge {
-    -fx-background-color: #F3F4F6;
-    -fx-text-fill: -color-text-secondary;
-    -fx-background-radius: 12px;
-    -fx-padding: 4px 12px;
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
+  -fx-background-color: #f3f4f6;
+  -fx-text-fill: -color-text-secondary;
+  -fx-background-radius: 12px;
+  -fx-padding: 4px 12px;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
 }
 
 .status-badge-running {
-    -fx-background-color: #FEF2F2; /* Fundo avermelhado bem claro */
-    -fx-text-fill: -color-primary;
+  -fx-background-color: #fef2f2; /* Fundo avermelhado bem claro */
+  -fx-text-fill: -color-primary;
 }
-
 
 /* =================================================================================
    NOVOS ESTILOS - PAGINAÇÃO E ABAS (SEGMENTED CONTROL)
@@ -231,84 +229,84 @@
 
 /* Link de Voltar (Cinza discreto) */
 .btn-back-link {
-    -fx-background-color: transparent;
-    -fx-text-fill: -color-text-secondary;
-    -fx-font-size: 13px;
-    -fx-cursor: hand;
-    -fx-padding: 0;
+  -fx-background-color: transparent;
+  -fx-text-fill: -color-text-secondary;
+  -fx-font-size: 13px;
+  -fx-cursor: hand;
+  -fx-padding: 0;
 }
 .btn-back-link:hover {
-    -fx-text-fill: -color-primary;
+  -fx-text-fill: -color-primary;
 }
 
 /* --- SEGMENTED CONTROL (Abas unidas) --- */
 .segmented-control {
-    -fx-background-color: #F3F4F6; /* Fundo cinza do container */
-    -fx-background-radius: 6px;
-    -fx-padding: 4px; /* Espaço interno para o botão "flutuar" */
-    -fx-spacing: 0;
+  -fx-background-color: #f3f4f6; /* Fundo cinza do container */
+  -fx-background-radius: 6px;
+  -fx-padding: 4px; /* Espaço interno para o botão "flutuar" */
+  -fx-spacing: 0;
 }
 
 .segment-button {
-    -fx-background-color: transparent;
-    -fx-text-fill: -color-text-secondary;
-    -fx-background-radius: 4px;
-    -fx-font-weight: bold;
-    -fx-padding: 6px 16px;
-    -fx-cursor: hand;
-    -fx-font-size: 13px;
+  -fx-background-color: transparent;
+  -fx-text-fill: -color-text-secondary;
+  -fx-background-radius: 4px;
+  -fx-font-weight: bold;
+  -fx-padding: 6px 16px;
+  -fx-cursor: hand;
+  -fx-font-size: 13px;
 }
 
 /* Estado Ativo (Fundo branco/vermelho com sombra, estilo iOS/MacOS) */
 .segment-button-active {
-    -fx-background-color: -color-primary; /* Vermelho */
-    -fx-text-fill: white;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 2, 0, 0, 1);
+  -fx-background-color: -color-primary; /* Vermelho */
+  -fx-text-fill: white;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 2, 0, 0, 1);
 }
 
 .segment-button:hover {
-    -fx-text-fill: -color-primary;
+  -fx-text-fill: -color-primary;
 }
 .segment-button-active:hover {
-    -fx-text-fill: white;
+  -fx-text-fill: white;
 }
 
 /* --- TÍTULO DA PÁGINA --- */
 .page-title {
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #111827;
+  -fx-font-size: 28px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #111827;
 }
 
 /* --- BOTÕES DE PAGINAÇÃO (Anterior / Próxima) --- */
 .btn-pagination {
-    -fx-background-color: white;
-    -fx-border-color: #E5E7EB;
-    -fx-border-radius: 4px;
-    -fx-background-radius: 4px;
-    -fx-text-fill: #374151;
-    -fx-font-weight: bold;
-    -fx-padding: 6px 14px;
-    -fx-cursor: hand;
+  -fx-background-color: white;
+  -fx-border-color: #e5e7eb;
+  -fx-border-radius: 4px;
+  -fx-background-radius: 4px;
+  -fx-text-fill: #374151;
+  -fx-font-weight: bold;
+  -fx-padding: 6px 14px;
+  -fx-cursor: hand;
 }
 
 .btn-pagination:hover {
-    -fx-background-color: #F9FAFB;
-    -fx-border-color: #D1D5DB;
+  -fx-background-color: #f9fafb;
+  -fx-border-color: #d1d5db;
 }
 
 /* Quando desabilitado (primeira/última página) */
 .btn-pagination:disabled {
-    -fx-opacity: 0.5;
-    -fx-cursor: default;
+  -fx-opacity: 0.5;
+  -fx-cursor: default;
 }
 
 /* Placeholder da tabela */
 .standings-placeholder {
-    -fx-background-color: #FEF2F2;
-    -fx-background-radius: 8px;
-    -fx-border-color: #FECACA;
-    -fx-padding: 20px;
+  -fx-background-color: #fef2f2;
+  -fx-background-radius: 8px;
+  -fx-border-color: #fecaca;
+  -fx-padding: 20px;
 }
 
 /* =================================================================================
@@ -317,253 +315,342 @@
 
 .scroll-pane,
 .scroll-pane > .viewport {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-padding: 0;
-    -fx-border-color: transparent; /* Garante sem bordas extras */
+  -fx-background-color: transparent;
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+  -fx-border-color: transparent; /* Garante sem bordas extras */
 }
 
 .scroll-bar:vertical {
-    -fx-background-color: transparent;
-    -fx-pref-width: 10px; /* Largura total da área de scroll */
-    -fx-padding: 0;
+  -fx-background-color: transparent;
+  -fx-pref-width: 10px; /* Largura total da área de scroll */
+  -fx-padding: 0;
 }
 
 .scroll-bar:vertical .track {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
-    -fx-background-radius: 0;
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+  -fx-background-radius: 0;
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: #E5E7EB; /* Cinza bem claro para mesclar com o fundo */
-    -fx-background-radius: 10px;    /* Totalmente arredondado */
-    -fx-background-insets: 0 2px 0 2px; /* Margem interna para parecer mais fina (6px visual) */
+  -fx-background-color: #e5e7eb; /* Cinza bem claro para mesclar com o fundo */
+  -fx-background-radius: 10px; /* Totalmente arredondado */
+  -fx-background-insets: 0 2px 0 2px; /* Margem interna para parecer mais fina (6px visual) */
 }
 
 .scroll-bar:vertical .thumb:hover,
 .scroll-bar:vertical .thumb:pressed {
-    -fx-background-color: #D1D5DB; /* Um pouco mais escuro para feedback */
+  -fx-background-color: #d1d5db; /* Um pouco mais escuro para feedback */
 }
 
 .scroll-bar .increment-button,
 .scroll-bar .decrement-button {
-    -fx-padding: 0;
-    -fx-pref-height: 0;
-    -fx-pref-width: 0;
-    -fx-opacity: 0;
+  -fx-padding: 0;
+  -fx-pref-height: 0;
+  -fx-pref-width: 0;
+  -fx-opacity: 0;
 }
 
 .scroll-bar .increment-arrow,
 .scroll-bar .decrement-arrow {
-    -fx-padding: 0;
-    -fx-shape: " "; /* Remove o desenho da seta */
+  -fx-padding: 0;
+  -fx-shape: " "; /* Remove o desenho da seta */
 }
 
 .scroll-bar:horizontal {
-    -fx-pref-height: 0;
-    -fx-opacity: 0;
+  -fx-pref-height: 0;
+  -fx-opacity: 0;
 }
 
- /* =================================================================================
+/* =================================================================================
     MODAL & OVERLAY (Pop-up de Edição)
     ================================================================================= */
 
- /* Fundo escuro semi-transparente */
- .modal-overlay {
-     -fx-background-color: rgba(0, 0, 0, 0.4);
-     -fx-alignment: CENTER;
- }
+/* Fundo escuro semi-transparente */
+.modal-overlay {
+  -fx-background-color: rgba(0, 0, 0, 0.4);
+  -fx-alignment: CENTER;
+}
 
- /* A caixa branca do modal */
- .modal-box {
-     -fx-background-color: white;
-     -fx-background-radius: 12px;
-     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 4);
-     -fx-padding: 30px;
-     -fx-max-width: 500px;
-     -fx-min-width: 400px;
-     -fx-spacing: 20px;
- }
+/* A caixa branca do modal */
+.modal-box {
+  -fx-background-color: white;
+  -fx-background-radius: 12px;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 4);
+  -fx-padding: 30px;
+  -fx-max-width: 500px;
+  -fx-min-width: 400px;
+  -fx-spacing: 20px;
+}
 
- .modal-title {
-     -fx-font-size: 20px;
-     -fx-font-weight: bold;
-     -fx-text-fill: -color-text-primary;
-     -fx-alignment: CENTER;
- }
+.modal-title {
+  -fx-font-size: 20px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
+  -fx-alignment: CENTER;
+}
 
- /* Controles de Placar (- 0 +) */
- .score-control-box {
-     -fx-alignment: CENTER;
-     -fx-spacing: 15px;
- }
+/* Controles de Placar (- 0 +) */
+.score-control-box {
+  -fx-alignment: CENTER;
+  -fx-spacing: 15px;
+}
 
- .btn-counter {
-     -fx-background-color: white;
-     -fx-border-color: -color-border;
-     -fx-border-radius: 50%; /* Botão Redondo */
-     -fx-background-radius: 50%;
-     -fx-min-width: 32px;
-     -fx-min-height: 32px;
-     -fx-max-width: 32px;
-     -fx-max-height: 32px;
-     -fx-padding: 0;
-     -fx-font-weight: bold;
-     -fx-font-size: 16px;
-     -fx-cursor: hand;
- }
- .btn-counter:hover {
-     -fx-border-color: -color-primary;
-     -fx-text-fill: -color-primary;
- }
+.btn-counter {
+  -fx-background-color: white;
+  -fx-border-color: -color-border;
+  -fx-border-radius: 50%; /* Botão Redondo */
+  -fx-background-radius: 50%;
+  -fx-min-width: 32px;
+  -fx-min-height: 32px;
+  -fx-max-width: 32px;
+  -fx-max-height: 32px;
+  -fx-padding: 0;
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+  -fx-cursor: hand;
+}
+.btn-counter:hover {
+  -fx-border-color: -color-primary;
+  -fx-text-fill: -color-primary;
+}
 
- .score-display {
-     -fx-font-size: 28px;
-     -fx-font-weight: bold;
-     -fx-text-fill: -color-text-primary;
- }
+.score-display {
+  -fx-font-size: 28px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
+}
 
- /* Botões de Status (Pílulas selecionáveis) */
- .status-option {
-     -fx-background-color: white;
-     -fx-border-color: -color-border;
-     -fx-border-radius: 20px;
-     -fx-background-radius: 20px;
-     -fx-padding: 6px 16px;
-     -fx-cursor: hand;
-     -fx-text-fill: -color-text-secondary;
- }
+/* Botões de Status (Pílulas selecionáveis) */
+.status-option {
+  -fx-background-color: white;
+  -fx-border-color: -color-border;
+  -fx-border-radius: 20px;
+  -fx-background-radius: 20px;
+  -fx-padding: 6px 16px;
+  -fx-cursor: hand;
+  -fx-text-fill: -color-text-secondary;
+}
 
- .status-option-selected {
-     -fx-background-color: -color-text-primary; /* Preto ou Cinza Escuro */
-     -fx-text-fill: white;
-     -fx-border-color: -color-text-primary;
- }
+.status-option-selected {
+  -fx-background-color: -color-text-primary; /* Preto ou Cinza Escuro */
+  -fx-text-fill: white;
+  -fx-border-color: -color-text-primary;
+}
 
- /* Botão de Status FINALIZADA (Vermelho quando selecionado) */
- .status-option-finished:selected { /* Pseudo-classe customizada via código ou styleclass */
-     -fx-background-color: -color-primary;
-     -fx-border-color: -color-primary;
- }
- /* No CSS simples, vamos usar classe direta: */
- .status-finalized-selected {
-     -fx-background-color: -color-primary;
-     -fx-text-fill: white;
-     -fx-border-color: -color-primary;
- }
+/* Botão de Status FINALIZADA (Vermelho quando selecionado) */
+.status-option-finished:selected {
+  /* Pseudo-classe customizada via código ou styleclass */
+  -fx-background-color: -color-primary;
+  -fx-border-color: -color-primary;
+}
+/* No CSS simples, vamos usar classe direta: */
+.status-finalized-selected {
+  -fx-background-color: -color-primary;
+  -fx-text-fill: white;
+  -fx-border-color: -color-primary;
+}
 
- /* Botões de Ação (Cancelar / Salvar) */
- .btn-cancel {
-     -fx-background-color: #E5E7EB;
-     -fx-text-fill: -color-text-primary;
-     -fx-font-weight: bold;
-     -fx-cursor: hand;
-     -fx-padding: 10px 20px;
-     -fx-background-radius: 6px;
- }
- .btn-save {
-     -fx-background-color: -color-primary;
-     -fx-text-fill: white;
-     -fx-font-weight: bold;
-     -fx-cursor: hand;
-     -fx-padding: 10px 20px;
-     -fx-background-radius: 6px;
- }
- .btn-save:hover {
-     -fx-background-color: -color-primary-hover;
- }
+/* Botões de Ação (Cancelar / Salvar) */
+.btn-cancel {
+  -fx-background-color: #e5e7eb;
+  -fx-text-fill: -color-text-primary;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 10px 20px;
+  -fx-background-radius: 6px;
+}
+.btn-save {
+  -fx-background-color: -color-primary;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+  -fx-padding: 10px 20px;
+  -fx-background-radius: 6px;
+}
+.btn-save:hover {
+  -fx-background-color: -color-primary-hover;
+}
 
- .error-label {
-     -fx-text-fill: -color-primary;
-     -fx-font-size: 12px;
-     -fx-alignment: CENTER;
- }
-
+.error-label {
+  -fx-text-fill: -color-primary;
+  -fx-font-size: 12px;
+  -fx-alignment: CENTER;
+}
 
 /* =================================================================================
    TABELA DE CLASSIFICAÇÃO (STANDINGS)
    ================================================================================= */
 
 .standings-table {
-    -fx-background-color: white;
-    -fx-background-radius: 8px;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 2);
-    -fx-border-color: -color-border;
-    -fx-border-width: 1px;
-    -fx-border-radius: 8px;
-    -fx-padding: 0; /* Importante para as bordas */
+  -fx-background-color: white;
+  -fx-background-radius: 8px;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 4, 0, 0, 2);
+  -fx-border-color: -color-border;
+  -fx-border-width: 1px;
+  -fx-border-radius: 8px;
+  -fx-padding: 0; /* Importante para as bordas */
 }
 
 .standings-header {
-    -fx-background-color: #F9FAFB; /* Cinza bem claro */
-    -fx-padding: 12px 10px;
-    -fx-border-color: -color-border;
-    -fx-border-width: 0 0 1px 0; /* Borda só embaixo */
-    -fx-background-radius: 8px 8px 0 0;
+  -fx-background-color: #f9fafb; /* Cinza bem claro */
+  -fx-padding: 12px 10px;
+  -fx-border-color: -color-border;
+  -fx-border-width: 0 0 1px 0; /* Borda só embaixo */
+  -fx-background-radius: 8px 8px 0 0;
 }
 
 .header-label {
-    -fx-font-size: 11px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-secondary;
-    -fx-alignment: CENTER;
+  -fx-font-size: 11px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-secondary;
+  -fx-alignment: CENTER;
 }
 
 .standing-row {
-    -fx-background-color: white;
-    -fx-padding: 12px 10px;
-    -fx-border-color: -color-border;
-    -fx-border-width: 0 0 1px 0;
+  -fx-background-color: white;
+  -fx-padding: 12px 10px;
+  -fx-border-color: -color-border;
+  -fx-border-width: 0 0 1px 0;
 }
 .standing-row:last-child {
-    -fx-border-width: 0;
+  -fx-border-width: 0;
 }
 
 .standing-team-name {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-primary;
-    -fx-padding: 0 0 0 10px;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
+  -fx-padding: 0 0 0 10px;
 }
 
 .standing-pts {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-primary;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-primary;
 }
 
 .standing-cell {
-    -fx-font-size: 13px;
-    -fx-text-fill: -color-text-secondary;
+  -fx-font-size: 13px;
+  -fx-text-fill: -color-text-secondary;
 }
 
 .standing-sg {
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -color-text-primary;
-}
-
-
-.standing-rank {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-alignment: CENTER;
-    -fx-min-width: 24px;
-    -fx-min-height: 24px;
-    -fx-max-width: 24px;
-    -fx-max-height: 24px;
-    -fx-background-radius: 12px; /* Círculo perfeito */
+  -fx-font-size: 13px;
+  -fx-font-weight: bold;
+  -fx-text-fill: -color-text-primary;
 }
 
 .standing-rank {
-    -fx-text-fill: -color-text-secondary;
-    -fx-background-color: transparent;
+  -fx-font-size: 12px;
+  -fx-font-weight: bold;
+  -fx-alignment: CENTER;
+  -fx-min-width: 24px;
+  -fx-min-height: 24px;
+  -fx-max-width: 24px;
+  -fx-max-height: 24px;
+  -fx-background-radius: 12px; /* Círculo perfeito */
 }
 
-.rank-1, .rank-2, .rank-3 {
-    -fx-background-color: #FEF2F2; /* Vermelho muito claro */
-    -fx-text-fill: -color-primary;
-    -fx-border-color: #FEE2E2;
-    -fx-border-radius: 12px;
+.standing-rank {
+  -fx-text-fill: -color-text-secondary;
+  -fx-background-color: transparent;
+}
+
+.rank-1,
+.rank-2,
+.rank-3 {
+  -fx-background-color: #fef2f2; /* Vermelho muito claro */
+  -fx-text-fill: -color-primary;
+  -fx-border-color: #fee2e2;
+  -fx-border-radius: 12px;
+}
+
+.sidebar-button {
+  -fx-background-color: #c62828;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+  -fx-font-size: 14px;
+  -fx-padding: 10 18;
+  -fx-background-radius: 8px;
+  -fx-cursor: hand;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 3, 0, 0, 1);
+}
+
+.sidebar-button:hover {
+  -fx-background-color: #b71c1c;
+}
+
+.sidebar-button:pressed {
+  -fx-background-color: #8e0000;
+}
+
+.swiss-group-box {
+  -fx-background-color: #f4f4f4;
+  -fx-padding: 10;
+  -fx-border-color: #ddd;
+  -fx-border-radius: 6;
+  -fx-background-radius: 6;
+}
+
+.swiss-group-title {
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #333;
+}
+
+.swiss-player-name {
+  -fx-font-size: 15px;
+  -fx-text-fill: #555;
+}
+
+/* Container geral */
+.swiss-stage-container {
+  -fx-background-color: #000000;
+}
+
+/* Coluna */
+.swiss-column {
+  -fx-background-color: #020202;
+  -fx-border-color: #00e5ff;
+  -fx-border-width: 3;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+  -fx-padding: 10 15;
+  -fx-min-width: 140;
+}
+
+/* Título da coluna (1-0, 0-1, etc.) */
+.swiss-column-title {
+  -fx-background-color: #00e5ff;
+  -fx-text-fill: black;
+  -fx-font-size: 22px;
+  -fx-font-weight: bold;
+  -fx-padding: 8;
+  -fx-alignment: center;
+  -fx-background-radius: 3;
+}
+
+/* Card de confronto */
+.swiss-match-card {
+  -fx-background-color: #111;
+  -fx-padding: 10 5;
+  -fx-border-color: #00e5ff;
+  -fx-border-width: 2;
+  -fx-border-radius: 4;
+  -fx-background-radius: 4;
+}
+
+/* Nome dos times */
+.swiss-team {
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+}
+
+/* VS */
+.swiss-vs {
+  -fx-text-fill: #00e5ff;
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
 }

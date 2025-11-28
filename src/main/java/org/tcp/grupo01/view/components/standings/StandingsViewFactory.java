@@ -12,6 +12,9 @@ public class StandingsViewFactory {
         if (tournament.getPairing() instanceof League) {
             strategy = new LeagueStandingsView();
         }
+        // else if (tournament.getPairing() instanceof Swiss) {
+        //     strategy = new SwissStandingsView();
+        // }
         /* future:
         else if (tournament.getPairing() instanceof Elimination) {
             strategy = new BracketView();

@@ -19,20 +19,32 @@ public class Swiss<T extends Competitor> implements Pairing<T> {
         this.createMatch = createMatch;
     }
 
-    private Map<T, Set<T>> buildHistory(List<Match<T>> matches) {
-        Map<T, Set<T>> map = new HashMap<>();
+    private void validateParticipants(List<T> participants) {
+        if (participants == null || participants.isEmpty())
+            throw new IllegalArgumentException("A lista de participantes está vazia.");
 
-        for (Match<T> m : matches) {
-            T a = m.getCompetitorA();
-            T b = m.getCompetitorB();
+        if (participants.size() != 16 && participants.size() != 32)
+            throw new IllegalArgumentException("Swiss só permite 16 ou 32 participantes.");
 
-            map.computeIfAbsent(a, k -> new HashSet<>()).add(b);
-            map.computeIfAbsent(b, k -> new HashSet<>()).add(a);
+        if (participants.size() % 2 != 0)
+            throw new IllegalArgumentException("Swiss exige número par de participantes.");
+
+        Set<T> set = new HashSet<>(participants);
+        if (set.size() != participants.size())
+            throw new IllegalArgumentException("Existem participantes duplicados.");
+    }
+
+    private void ensureAllMatchesCompleted(List<List<Match<T>>> rounds) {
+        for (int r = 0; r < rounds.size(); r++) {
+            for (Match<T> m : rounds.get(r)) {
+                if (m.getWinner() == null)
+                    throw new IllegalStateException("A rodada " + (r + 1) + " ainda possui partidas incompletas.");
+            }
         }
-        return map;
     }
 
     private Map<T, int[]> calculateRecords(List<T> participants, List<Match<T>> matches) {
+
         Map<T, int[]> records = new HashMap<>();
         for (T p : participants) records.put(p, new int[]{0, 0});
 
@@ -50,98 +62,24 @@ public class Swiss<T extends Competitor> implements Pairing<T> {
                 records.get(a)[1]++;
             }
         }
+
         return records;
     }
 
-    private void ensureAllMatchesCompleted(List<List<Match<T>>> previousRounds) {
-        for (int roundIndex = 0; roundIndex < previousRounds.size(); roundIndex++) {
-            List<Match<T>> round = previousRounds.get(roundIndex);
-            for (Match<T> match : round) {
-                if (match.getWinner() == null) {
-                    throw new IllegalStateException(
-                            "Não é possível gerar a próxima rodada. "
-                            + "A rodada " + (roundIndex + 1) + " ainda possui partidas sem resultado."
-                    );
-                }
-            }
-        }
-    }
-
-    private T findOpponentAvoidingRepeat(T a, List<T> group, Map<T, Set<T>> history) {
-        for (T candidate : group) {
-            if (!history.getOrDefault(a, Set.of()).contains(candidate)) {
-                return candidate;
-            }
-        }
-        return null;
-    }
-
-    private List<Match<T>> flatten(List<List<Match<T>>> rounds) {
-        return rounds.stream().flatMap(List::stream).collect(Collectors.toList());
-    }
-
-    private List<Match<T>> generateNextRound(List<T> participants, List<Match<T>> previousMatches) {
-        List<Match<T>> newMatches = new ArrayList<>();
-
-        Map<T, int[]> records = calculateRecords(participants, previousMatches);
-        List<T> activePlayers = getActivePlayers(participants, records);
-        Map<String, List<T>> buckets = groupByRecord(activePlayers, records);
-
-        pairBuckets(buckets, newMatches, previousMatches);
-        return newMatches;
-    }
-
-    @Override
-    public List<List<Match<T>>> generateRounds(List<T> participants, List<List<Match<T>>> previousRounds) {
-
-        validateParticipants(participants);
-        ensureAllMatchesCompleted(previousRounds);
-
-        List<Match<T>> flattened = flatten(previousRounds);
-        List<Match<T>> newRound = generateNextRound(participants, flattened);
-
-        if (newRound.isEmpty()) return previousRounds;
-
-        List<List<Match<T>>> updated = new ArrayList<>(previousRounds);
-        updated.add(newRound);
-        return updated;
-    }
-
-    private List<T> getActivePlayers(List<T> participants, Map<T, int[]> records) {
+    private List<T> getActivePlayers(List<T> participants, Map<T, int[]> recs) {
         return participants.stream()
                 .filter(p -> {
-                    int[] r = records.get(p);
+                    int[] r = recs.get(p);
                     return r[0] < maxWins && r[1] < maxLosses;
                 })
                 .collect(Collectors.toList());
     }
 
-    public int[] getRecordOf(T player, List<List<Match<T>>> rounds) {
-        int wins = 0, losses = 0;
-
-        for (List<Match<T>> r : rounds) {
-            for (Match<T> m : r) {
-
-                if (m.getWinner() == null) continue;
-
-                if (m.getCompetitorA().equals(player)) {
-                    if (m.getWinner().equals(player)) wins++; else losses++;
-                }
-
-                if (m.getCompetitorB().equals(player)) {
-                    if (m.getWinner().equals(player)) wins++; else losses++;
-                }
-            }
-        }
-        return new int[]{wins, losses};
-    }
-
-    private Map<String, List<T>> groupByRecord(List<T> players, Map<T, int[]> records) {
-
-        Map<String, List<T>> buckets = new HashMap<>();
+    private Map<String, List<T>> groupByRecord(List<T> players, Map<T, int[]> recs) {
+        Map<String, List<T>> buckets = new LinkedHashMap<>();
 
         for (T p : players) {
-            int[] r = records.get(p);
+            int[] r = recs.get(p);
             String key = r[0] + "-" + r[1];
             buckets.computeIfAbsent(key, k -> new ArrayList<>()).add(p);
         }
@@ -150,53 +88,110 @@ public class Swiss<T extends Competitor> implements Pairing<T> {
                 .sorted((a, b) -> {
                     int[] ra = Arrays.stream(a.getKey().split("-")).mapToInt(Integer::parseInt).toArray();
                     int[] rb = Arrays.stream(b.getKey().split("-")).mapToInt(Integer::parseInt).toArray();
-
-                if (ra[0] != rb[0]) return Integer.compare(rb[0], ra[0]);
+                    if (ra[0] != rb[0]) return Integer.compare(rb[0], ra[0]);
                     return Integer.compare(ra[1], rb[1]);
                 })
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
-                        e -> e.getValue(),
+                        Map.Entry::getValue,
                         (a, b) -> a,
                         LinkedHashMap::new
                 ));
     }
 
-    private void pairBuckets(Map<String, List<T>> buckets,
-                            List<Match<T>> output,
-                            List<Match<T>> previousMatches) {
+    private Map<T, Set<T>> buildHistory(List<Match<T>> matches) {
+        Map<T, Set<T>> map = new HashMap<>();
 
-        Map<T, Set<T>> alreadyPlayed = buildHistory(previousMatches);
+        for (Match<T> m : matches) {
+            T a = m.getCompetitorA();
+            T b = m.getCompetitorB();
+
+            map.computeIfAbsent(a, k -> new HashSet<>()).add(b);
+            map.computeIfAbsent(b, k -> new HashSet<>()).add(a);
+        }
+
+        return map;
+    }
+
+    private T findNewOpponent(T a, List<T> group, Map<T, Set<T>> history) {
+        for (T b : group)
+            if (!history.getOrDefault(a, Set.of()).contains(b))
+                return b;
+
+        return group.get(0);
+    }
+
+    private List<Match<T>> generateNextRound(List<T> participants, List<Match<T>> prevMatches) {
+
+        Map<T, int[]> recs = calculateRecords(participants, prevMatches);
+        List<T> actives = getActivePlayers(participants, recs);
+
+        if (actives.size() < 2) return List.of();
+
+        Map<String, List<T>> buckets = groupByRecord(actives, recs);
+        Map<T, Set<T>> history = buildHistory(prevMatches);
+
+        List<Match<T>> newRound = new ArrayList<>();
 
         for (List<T> group : buckets.values()) {
 
-            group.sort(Comparator.comparing(Competitor::getName)); // ordem estável
+            group.sort(Comparator.comparing(Competitor::getName));
+
+            if (group.size() % 2 != 0)
+                throw new IllegalStateException("Bucket " + group + " está ímpar! Isso não pode acontecer com 16/32 jogadores.");
 
             List<T> pool = new ArrayList<>(group);
 
             while (pool.size() >= 2) {
-
                 T a = pool.remove(0);
-                T b = findOpponentAvoidingRepeat(a, pool, alreadyPlayed);
+                T b = findNewOpponent(a, pool, history);
+                pool.remove(b);
 
-                if (b == null) {
-                    b = pool.remove(0);
-                } else {
-                    pool.remove(b);
-                }
-
-                output.add(createMatch.apply(a, b));
+                Match<T> match = createMatch.apply(a, b);
+                newRound.add(match);
             }
         }
+
+        return newRound;
     }
 
-    private void validateParticipants(List<T> participants) {
-        if (participants == null || participants.isEmpty())
-            throw new IllegalArgumentException("A lista de participantes está vazia.");
+    @Override
+    public List<List<Match<T>>> generateRounds(List<T> participants, List<List<Match<T>>> previousRounds) {
 
-        Set<T> set = new HashSet<>(participants);
-        if (set.size() != participants.size())
-            throw new IllegalArgumentException("Existem participantes duplicados.");
+        validateParticipants(participants);
+        ensureAllMatchesCompleted(previousRounds);
+
+        List<Match<T>> allMatches = previousRounds.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+
+        List<Match<T>> newRound = generateNextRound(participants, allMatches);
+
+        if (newRound.isEmpty()) return previousRounds;
+
+        List<List<Match<T>>> updated = new ArrayList<>(previousRounds);
+        updated.add(newRound);
+        return updated;
+    }
+
+    public int[] getRecordOf(Competitor player, List<List<Match<?>>> rounds) {
+        int wins = 0, losses = 0;
+
+        for (List<Match<?>> r : rounds) {
+            for (Match<?> m : r) {
+
+                if (m.getWinner() == null) continue;
+
+                if (m.getCompetitorA().equals(player)) {
+                    if (m.getWinner().equals(player)) wins++;
+                    else losses++;
+                } else if (m.getCompetitorB().equals(player)) {
+                    if (m.getWinner().equals(player)) wins++;
+                    else losses++;
+                }
+            }
+        }
+        return new int[]{wins, losses};
     }
 
 }

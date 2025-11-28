@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.tcp.grupo01.controller.AddPlayersToTeamController"
+      stylesheets="@modal.css">
+
+    <padding>
+        <Insets top="20" right="25" bottom="20" left="25"/>
+    </padding>
+
+    <Label text="Gerenciar Jogadores do Time" styleClass="title-label"/>
+    <Label fx:id="lblTeamName" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="12" vgap="10">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+
+        <Label text="Nome:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPlayerName"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="CPF:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtCpf"
+                   GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+        <Label text="Telefone:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPhone"
+                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Nascimento:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <DatePicker fx:id="dateBirth"
+                    GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+        <Button text="Adicionar Novo"
+                onAction="#handleAddNewPlayer"
+                styleClass="button-primary"
+                GridPane.rowIndex="2" GridPane.columnIndex="3"
+                GridPane.halignment="RIGHT"/>
+    </GridPane>
+
+    <TableView fx:id="tableTeamPlayers" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colName" text="Nome" prefWidth="150"/>
+            <TableColumn fx:id="colCpf" text="CPF" prefWidth="120"/>
+            <TableColumn fx:id="colPhone" text="Telefone" prefWidth="120"/>
+            <TableColumn fx:id="colBirth" text="Nascimento" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Jogador existente:"/>
+        <ComboBox fx:id="cbExistingPlayers" prefWidth="250"/>
+
+        <Button text="Adicionar"
+                onAction="#handleAddExistingPlayer"
+                styleClass="button-secondary"/>
+
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Remover Selecionado"
+                onAction="#handleRemovePlayer"
+                styleClass="button-secondary"/>
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button text="Fechar" onAction="#handleClose" styleClass="button-primary"/>
+    </HBox>
+
+</VBox>
