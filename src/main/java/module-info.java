@@ -5,7 +5,7 @@ module org.tcp.grupo01 {
 
     opens org.tcp.grupo01 to javafx.fxml;
     opens org.tcp.grupo01.view to javafx.fxml, javafx.graphics;
-    opens org.tcp.grupo01.controller to javafx.fxml;  // Adicione esta linha
+    opens org.tcp.grupo01.controller to javafx.fxml;
 
     exports org.tcp.grupo01;
     exports org.tcp.grupo01.view;
