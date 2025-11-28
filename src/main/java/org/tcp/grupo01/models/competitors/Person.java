@@ -20,4 +20,10 @@ public final class Person extends Competitor {
 
     public LocalDate getBirthDate() { return birthDate; }
     public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
+
+    @Override
+    public String toString() {
+        return (cpf != null && !cpf.isBlank()) ? getName() + " (" + cpf + ")" : getName();
+    }
+
 }

@@ -12,7 +12,6 @@
             prefWidth="700"
             minWidth="700">
 
-    <!-- HEADER -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="12" styleClass="modal-header">
             <padding><Insets top="20" right="20" bottom="10" left="20"/></padding>
@@ -25,7 +24,6 @@
         </HBox>
     </top>
 
-    <!-- BODY -->
     <center>
         <VBox spacing="10" maxWidth="650" styleClass="modal-body">
             <padding><Insets top="10" right="15" bottom="10" left="15"/></padding>
@@ -71,15 +69,14 @@
         </VBox>
     </center>
 
-    <!-- FOOTER -->
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="15" styleClass="modal-footer">
             <padding><Insets top="15" right="25" bottom="15" left="25"/></padding>
 
             <Button text="Cancelar" onAction="#handleClose" styleClass="cancel-button"/>
 
-            <Button text="Criar Campeonato"
-                    onAction="#handleCreate"
+            <Button text="Continuar"
+                    onAction="#handleContinue"
                     styleClass="primary-button-large"/>
         </HBox>
     </bottom>

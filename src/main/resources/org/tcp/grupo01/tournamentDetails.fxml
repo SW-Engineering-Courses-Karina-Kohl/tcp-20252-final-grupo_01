@@ -24,6 +24,7 @@
                     <Label text="INFORMAÇÕES GERAIS" styleClass="sidebar-section-title"/>
                     <Label fx:id="lblParticipantsCount" text="0 participantes" styleClass="sidebar-text"/>
                 </VBox>
+                <Button fx:id="btnGenerateRound" text="Gerar Próxima Rodada" onAction="#handleGenerateRound" styleClass="sidebar-button" maxWidth="Infinity"/>
                 <Region VBox.vgrow="ALWAYS" />
                 <Button text="Voltar aos Campeonatos" onAction="#handleBack" styleClass="btn-secondary"/>
             </VBox>

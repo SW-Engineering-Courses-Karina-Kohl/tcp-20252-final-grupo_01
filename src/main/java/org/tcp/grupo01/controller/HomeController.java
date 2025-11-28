@@ -13,16 +13,12 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
-import org.tcp.grupo01.models.competitors.Person;
-import org.tcp.grupo01.services.pairing.League;
 import org.tcp.grupo01.services.tournament.TournamentService;
 import org.tcp.grupo01.services.tournament.TournamentServiceIM;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -109,24 +105,24 @@ public class HomeController implements Initializable {
 
     @FXML
     public void handleNewTournament() {
-        try {FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/new_tournament.fxml"));
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/newTournament.fxml"));
             Parent root = loader.load();
+
             NewTournamentController controller = loader.getController();
-            controller.setService(this.service);
+            controller.setService(service);
 
-            Stage stage = new Stage();
-            stage.setTitle("Novo Campeonato");
+            Stage modal = new Stage();
+            modal.setTitle("Novo Campeonato");
+
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/newTournament.css")).toExternalForm());
 
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(
-                            getClass()
-                            .getResource("/org/tcp/grupo01/newTournament.css"))
-                            .toExternalForm());
+            modal.setScene(scene);
+            modal.initOwner(containerCards.getScene().getWindow());
+            modal.initModality(javafx.stage.Modality.WINDOW_MODAL);
 
-            stage.setScene(scene);
-            stage.showAndWait();
+            modal.showAndWait();
 
             containerCards.getChildren().clear();
             loadTournamentCards(service.getAll());
@@ -135,27 +131,5 @@ public class HomeController implements Initializable {
             e.printStackTrace();
         }
     }
-
-    @FXML
-    public void handleManageTeams() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/teamManager.fxml"));
-
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Gerenciar Times");
-
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm());
-
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
 }

@@ -1,55 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.tcp.grupo01.controller.TeamManagerController">
+<VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.tcp.grupo01.controller.TeamManagerController"
+      stylesheets="@modal.css">
 
-    <top>
-        <HBox spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
 
-            <Label text="Nome do Time:"/>
-            <TextField fx:id="teamNameField" prefWidth="200"/>
-            <Button text="Salvar Time" onAction="#handleSaveTeam"/>
-        </HBox>
-    </top>
+    <Label text="Gerenciar Times" styleClass="title-label"/>
 
-    <center>
-        <VBox spacing="15">
-            <padding>
-                <Insets top="15" right="15" bottom="15" left="15"/>
-            </padding>
+    <!-- Adicionar novo time -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Nome do time:"/>
+        <TextField fx:id="txtTeamName" prefWidth="220"/>
+        <Button text="Adicionar Novo" onAction="#handleAddNewTeam" styleClass="button-primary"/>
+    </HBox>
 
-            <Label text="Jogadores:" style="-fx-font-weight: bold;"/>
+    <!-- Tabela de times -->
+    <TableView fx:id="tableTeams" prefHeight="250">
+        <columns>
 
-            <HBox spacing="10">
-                <TextField fx:id="playerField" promptText="Nome do jogador"/>
-                <Button text="Adicionar" onAction="#handleAddPlayer"/>
-            </HBox>
+            <!-- Nome do time -->
+            <TableColumn fx:id="colTeamName" text="Time" prefWidth="150"
+                         style="-fx-alignment: CENTER;"/>
 
-            <TableView fx:id="playersTable" prefHeight="250">
-                <columns>
-                    <TableColumn fx:id="playerNameColumn" text="Nome" prefWidth="200"/>
-                </columns>
-            </TableView>
+            <!-- Quantidade de jogadores -->
+            <TableColumn fx:id="colPlayersCount" text="Qtd." prefWidth="60"
+                         style="-fx-alignment: CENTER;"/>
 
-        </VBox>
-    </center>
+            <!-- Lista dos jogadores -->
+            <TableColumn fx:id="colTeamPlayers" text="Jogadores" prefWidth="300"
+                         style="-fx-alignment: CENTER;"/>
 
-    <bottom>
-        <HBox spacing="10">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
+        </columns>
+    </TableView>
 
-            <Button text="Remover Selecionado" onAction="#handleRemovePlayer"/>
-        </HBox>
-    </bottom>
+    <!-- Adicionar time existente -->
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Time existente:"/>
+        <ComboBox fx:id="cbExistingTeams" prefWidth="250"/>
+        <Button text="Adicionar" onAction="#handleAddExistingTeam" styleClass="button-secondary"/>
+        <Pane HBox.hgrow="ALWAYS"/>
+        <Button text="Remover Selecionado" onAction="#handleRemoveTeam" styleClass="button-secondary"/>
+    </HBox>
 
-</BorderPane>
+    <!-- Ações finais -->
+    <HBox spacing="15" alignment="CENTER_RIGHT">
+        <Button text="Gerenciar Jogadores" onAction="#handleManagePlayers" styleClass="button-secondary"/>
+        <Button text="Cancelar" onAction="#handleCancel" styleClass="button-primary"/>
+        <Button text="Finalizar" onAction="#handleFinish" styleClass="button-primary"/>
+    </HBox>
 
+</VBox>

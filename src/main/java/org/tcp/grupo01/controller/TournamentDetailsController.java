@@ -3,6 +3,7 @@ package org.tcp.grupo01.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -31,7 +32,7 @@ public class TournamentDetailsController {
     // --- ELEMENTOS DO MODAL ---
     @FXML private VBox modalOverlay;
     @FXML private Label lblModalTeamA, lblModalTeamB, lblModalScoreA, lblModalScoreB, lblModalError;
-    @FXML private Button btnStatusConfirm, btnStatusRunning, btnStatusFinished;
+    @FXML private Button btnGenerateRound, btnStatusConfirm, btnStatusRunning, btnStatusFinished;
     @FXML private HBox scoreBoxA, scoreBoxB;
 
     // --- ESTADO ---
@@ -57,6 +58,7 @@ public class TournamentDetailsController {
         lblTournamentName.setText(tournament.getName());
         lblStatus.setText("Status: " + tournament.getStatus());
         lblParticipantsCount.setText(tournament.getParticipants().size() + " participantes");
+        
     }
 
     // ================== NAVEGAÇÃO (ABAS) ==================
@@ -218,4 +220,19 @@ public class TournamentDetailsController {
             stage.setScene(scene);
         } catch (IOException e) { e.printStackTrace(); }
     }
+
+    @FXML
+    public void handleGenerateRound() {
+        try {
+            tournament.generateNextMatches();
+            renderCurrentRound();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, 
+                "Erro ao gerar rodada: " + e.getMessage()
+            ).showAndWait();
+        }
+    }
+
 }
