@@ -479,3 +479,91 @@
      -fx-font-size: 12px;
      -fx-alignment: CENTER;
  }
+
+
+/* =================================================================================
+   TABELA DE CLASSIFICAÇÃO (STANDINGS)
+   ================================================================================= */
+
+.standings-table {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 4, 0, 0, 2);
+    -fx-border-color: -color-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-padding: 0; /* Importante para as bordas */
+}
+
+.standings-header {
+    -fx-background-color: #F9FAFB; /* Cinza bem claro */
+    -fx-padding: 12px 10px;
+    -fx-border-color: -color-border;
+    -fx-border-width: 0 0 1px 0; /* Borda só embaixo */
+    -fx-background-radius: 8px 8px 0 0;
+}
+
+.header-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-secondary;
+    -fx-alignment: CENTER;
+}
+
+.standing-row {
+    -fx-background-color: white;
+    -fx-padding: 12px 10px;
+    -fx-border-color: -color-border;
+    -fx-border-width: 0 0 1px 0;
+}
+.standing-row:last-child {
+    -fx-border-width: 0;
+}
+
+.standing-team-name {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-primary;
+    -fx-padding: 0 0 0 10px;
+}
+
+.standing-pts {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-primary;
+}
+
+.standing-cell {
+    -fx-font-size: 13px;
+    -fx-text-fill: -color-text-secondary;
+}
+
+.standing-sg {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-primary;
+}
+
+
+.standing-rank {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-max-width: 24px;
+    -fx-max-height: 24px;
+    -fx-background-radius: 12px; /* Círculo perfeito */
+}
+
+.standing-rank {
+    -fx-text-fill: -color-text-secondary;
+    -fx-background-color: transparent;
+}
+
+.rank-1, .rank-2, .rank-3 {
+    -fx-background-color: #FEF2F2; /* Vermelho muito claro */
+    -fx-text-fill: -color-primary;
+    -fx-border-color: #FEE2E2;
+    -fx-border-radius: 12px;
+}

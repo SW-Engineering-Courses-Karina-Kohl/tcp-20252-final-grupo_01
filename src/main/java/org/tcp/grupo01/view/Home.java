@@ -18,7 +18,6 @@ public class Home extends Application {
         
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
 
-        // Opcional: Adiciona o CSS global
         scene.getStylesheets().add(
              Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
         );
