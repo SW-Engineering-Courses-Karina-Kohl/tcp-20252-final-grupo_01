@@ -179,16 +179,9 @@ public class Swiss<T extends Competitor> implements Pairing<T> {
 
         for (List<Match<?>> r : rounds) {
             for (Match<?> m : r) {
-
                 if (m.getWinner() == null) continue;
-
-                if (m.getCompetitorA().equals(player)) {
-                    if (m.getWinner().equals(player)) wins++;
-                    else losses++;
-                } else if (m.getCompetitorB().equals(player)) {
-                    if (m.getWinner().equals(player)) wins++;
-                    else losses++;
-                }
+                if (m.getWinner().equals(player)) wins++;
+                else if (m.getCompetitorA().equals(player) || m.getCompetitorB().equals(player)) losses++;
             }
         }
         return new int[]{wins, losses};
