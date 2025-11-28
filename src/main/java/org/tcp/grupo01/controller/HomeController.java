@@ -32,30 +32,7 @@ public class HomeController implements Initializable {
     private final TournamentService service;
 
     public HomeController() {
-        this.service = new TournamentServiceIM();
-
-        ArrayList<Person> players = new ArrayList<>();
-        players.add(new Person("Alice"));
-        players.add(new Person("Bob"));
-        players.add(new Person("Carol"));
-        players.add(new Person("David"));
-        players.add(new Person("Bob"));
-        players.add(new Person("Carol"));
-        players.add(new Person("David"));
-        players.add(new Person("Bob"));
-        players.add(new Person("Carol"));
-        players.add(new Person("David"));
-        players.add(new Person("Bob"));
-        players.add(new Person("Carol"));
-        players.add(new Person("David"));
-
-
-        League<Person> league = new League<>(true, Match::betweenPeople);
-        Tournament<Person> t = Tournament.createForPeople("Torneio 1", league, players);
-        t.generateNextMatches();
-        service.add(t);
-        service.add(Tournament.createForPeople("Torneio 2", league, players));
-        service.add(Tournament.createForPeople("Torneio 3", league, players));
+        this.service = TournamentServiceIM.getInstance();
     }
 
     // Injects FXML FlowPane (fx:id="containerCards")
