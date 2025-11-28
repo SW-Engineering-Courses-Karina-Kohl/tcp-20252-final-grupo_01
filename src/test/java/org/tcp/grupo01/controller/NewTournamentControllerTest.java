@@ -71,6 +71,36 @@ public class NewTournamentControllerTest {
     }
 
     @Test
+    void testBuildTournament_KnockoutPlayers() {
+        NewTournamentController c = new NewTournamentController();
+
+        Tournament<?> t = c.buildTournament(
+                "Knockout Test",
+                "Mata-Mata",
+                "Jogadores",
+                "Confronto Direto"
+        );
+
+        assertEquals(4, t.getParticipants().size());
+        assertEquals(Person.class, t.getParticipants().get(0).getClass());
+    }
+
+    @Test
+    void testBuildTournament_KnockoutTeams() {
+        NewTournamentController c = new NewTournamentController();
+
+        Tournament<?> t = c.buildTournament(
+                "Knockout Team Test",
+                "Mata-Mata",
+                "Times",
+                "Mata-Mata"
+        );
+
+        assertEquals(2, t.getParticipants().size());
+        assertEquals(Team.class, t.getParticipants().get(0).getClass());
+    }
+
+    @Test
     void testBuildTournament_InvalidCompetition() {
         NewTournamentController c = new NewTournamentController();
 
