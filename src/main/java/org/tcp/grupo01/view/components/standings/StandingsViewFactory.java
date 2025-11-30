@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.services.pairing.League;
+import org.tcp.grupo01.services.pairing.Swiss;
 
 public class StandingsViewFactory {
     public static Node createViewFor(Tournament<?> tournament) {
@@ -12,9 +13,9 @@ public class StandingsViewFactory {
         if (tournament.getPairing() instanceof League) {
             strategy = new LeagueStandingsView();
         }
-        // else if (tournament.getPairing() instanceof Swiss) {
-        //     strategy = new SwissStandingsView();
-        // }
+        else if (tournament.getPairing() instanceof Swiss) {
+            strategy = new SwissBucketsView();
+        }
         /* future:
         else if (tournament.getPairing() instanceof Elimination) {
             strategy = new BracketView();

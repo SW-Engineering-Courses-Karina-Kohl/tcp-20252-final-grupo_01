@@ -14,14 +14,11 @@ import javafx.stage.Stage;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
-import org.tcp.grupo01.services.pairing.Pairing;
+import org.tcp.grupo01.services.pairing.*;
 import org.tcp.grupo01.services.tournament.TournamentService;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TeamManagerController {
 
@@ -31,6 +28,7 @@ public class TeamManagerController {
     @FXML private TableColumn<Team, Number> colPlayersCount;
     @FXML private TableColumn<Team, String> colTeamPlayers;
     @FXML private ComboBox<Team> cbExistingTeams;
+    @FXML private Label lblCountTeams;
 
     private String tournamentName;
     private Pairing<Team> pairingMethod;
@@ -39,12 +37,17 @@ public class TeamManagerController {
     private final ObservableList<Team> teams = FXCollections.observableArrayList();
     private final ObservableList<Team> existingTeams = FXCollections.observableArrayList();
 
+    // ==========================================================
+    // SETUP
+    // ==========================================================
+
     public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
         this.tournamentName = name;
         this.pairingMethod = (Pairing<Team>) pairing;
         this.service = service;
 
         loadExistingTeams();
+        updateCountLabel();
     }
 
     @FXML
@@ -58,30 +61,32 @@ public class TeamManagerController {
                 new SimpleIntegerProperty(data.getValue().getPlayers().size()));
 
         colTeamPlayers.setCellValueFactory(data ->
-        new SimpleStringProperty(
-                data.getValue()
-                    .getPlayers()
-                    .stream()
-                    .map(Person::getName)
-                    .reduce("", (a, b) -> a.isEmpty() ? b : a + ", " + b)
-        ));
+                new SimpleStringProperty(
+                        String.join(", ",
+                                data.getValue().getPlayers().stream()
+                                        .map(Person::getName)
+                                        .toList()
+                        )
+                ));
 
         tableTeams.setItems(teams);
         cbExistingTeams.setItems(existingTeams);
+
+        updateCountLabel();
     }
 
     private void loadExistingTeams() {
         if (service == null) return;
 
         Set<Integer> seenIds = new HashSet<>();
-        List<Tournament<?>> tournaments = service.getAll();
 
-        for (Tournament<?> t : tournaments) {
+        for (Tournament<?> t : service.getAll()) {
             if (t.getParticipants().isEmpty()) continue;
 
             if (t.getParticipants().get(0) instanceof Team) {
                 for (Object obj : t.getParticipants()) {
                     Team tm = (Team) obj;
+
                     if (seenIds.add(tm.getId())) {
                         existingTeams.add(tm);
                     }
@@ -89,6 +94,10 @@ public class TeamManagerController {
             }
         }
     }
+
+    // ==========================================================
+    // AÇÕES
+    // ==========================================================
 
     @FXML
     private void handleAddNewTeam() {
@@ -101,6 +110,7 @@ public class TeamManagerController {
         Team t = new Team(name);
         teams.add(t);
         txtTeamName.clear();
+        updateCountLabel();
     }
 
     @FXML
@@ -110,6 +120,7 @@ public class TeamManagerController {
 
         if (!teams.contains(selected)) {
             teams.add(selected);
+            updateCountLabel();
         }
     }
 
@@ -118,6 +129,7 @@ public class TeamManagerController {
         Team selected = tableTeams.getSelectionModel().getSelectedItem();
         if (selected != null) {
             teams.remove(selected);
+            updateCountLabel();
         }
     }
 
@@ -151,34 +163,105 @@ public class TeamManagerController {
         }
     }
 
+    // ==========================================================
+    // FINALIZAR (VALIDAÇÕES IDÊNTICAS AO PLAYERMANAGER)
+    // ==========================================================
+
     @FXML
     private void handleFinish() {
-        if (teams.isEmpty()) {
-            new Alert(Alert.AlertType.ERROR, "Adicione pelo menos um time.").showAndWait();
+
+        int size = teams.size();
+
+        if (size == 0) {
+            new Alert(Alert.AlertType.ERROR, "Adicione pelo menos 1 time.").showAndWait();
             return;
         }
 
         for (Team t : teams) {
             if (t.getPlayers().isEmpty()) {
                 new Alert(Alert.AlertType.ERROR,
-                        "O time '" + t.getName() + "' precisa ter pelo menos um jogador.")
+                        "O time '" + t.getName() + "' precisa ter pelo menos 1 jogador.")
                         .showAndWait();
                 return;
             }
         }
 
+        if (pairingMethod instanceof Swiss) {
+            if (size != 16 && size != 32) {
+                new Alert(Alert.AlertType.ERROR,
+                        "Torneio suíço exige 16 ou 32 times.")
+                        .showAndWait();
+                return;
+            }
+        }
+
+        if (pairingMethod instanceof League) {
+            if (size < 2) {
+                new Alert(Alert.AlertType.ERROR,
+                        "Pontos corridos exige pelo menos 2 times.")
+                        .showAndWait();
+                return;
+            }
+        }
+
+        if (pairingMethod instanceof Knockout) {
+            if (!isPowerOfTwo(size)) {
+                new Alert(Alert.AlertType.ERROR,
+                        "Mata-mata exige número potência de 2.")
+                        .showAndWait();
+                return;
+            }
+        }
+
+        // Se estiver editando → atualiza o torneio
+        if (editingTournament != null) {
+            editingTournament.replaceParticipants(teams);
+            Stage stage = (Stage) tableTeams.getScene().getWindow();
+            stage.close();
+            return;
+        }
+
+        // Criando novo
         Tournament<Team> tournament =
                 Tournament.createForTeams(tournamentName, pairingMethod, new ArrayList<>(teams));
 
         service.add(tournament);
 
-        Stage stage = (Stage) tableTeams.getScene().getWindow();
-        stage.close();
+        ((Stage) tableTeams.getScene().getWindow()).close();
+    }
+
+    private boolean isPowerOfTwo(int n) {
+        return n > 1 && (n & (n - 1)) == 0;
     }
 
     @FXML
     private void handleCancel() {
         Stage stage = (Stage) tableTeams.getScene().getWindow();
         stage.close();
+    }
+
+    // ==========================================================
+    // EDIT MODE
+    // ==========================================================
+
+    private Tournament<Team> editingTournament;
+
+    public void setupEditMode(Tournament<?> tournament, TournamentService service) {
+        this.editingTournament = (Tournament<Team>) tournament;
+        this.service = service;
+        this.pairingMethod = (Pairing<Team>) tournament.getPairing();
+        this.tournamentName = tournament.getName();
+
+        teams.clear();
+        for (var tm : tournament.getParticipants()) teams.add((Team) tm);
+
+        updateCountLabel();
+    }
+
+    private void updateCountLabel() {
+        int count = teams.size();
+        lblCountTeams.setText(count == 1 ?
+                "1 time adicionado" :
+                count + " times adicionados");
     }
 }

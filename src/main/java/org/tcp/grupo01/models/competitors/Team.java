@@ -20,4 +20,10 @@ public final class Team extends Competitor {
 
     public Person getCoach() { return coach; }
     public void setCoach(Person coach) { this.coach = coach; }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }
