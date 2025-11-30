@@ -3,6 +3,7 @@ package org.tcp.grupo01.view.components.standings;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import org.tcp.grupo01.models.Tournament;
+import org.tcp.grupo01.services.pairing.Knockout;
 import org.tcp.grupo01.services.pairing.League;
 import org.tcp.grupo01.services.pairing.Swiss;
 
@@ -16,11 +17,10 @@ public class StandingsViewFactory {
         else if (tournament.getPairing() instanceof Swiss) {
             strategy = new SwissBucketsView();
         }
-        /* future:
-        else if (tournament.getPairing() instanceof Elimination) {
-            strategy = new BracketView();
+        
+        else if (tournament.getPairing() instanceof Knockout) {
+            strategy = new KnockoutBracketView();
         }
-        */
         else {
             return new Label("Visualização de classificação não implementada para este formato.");
         }

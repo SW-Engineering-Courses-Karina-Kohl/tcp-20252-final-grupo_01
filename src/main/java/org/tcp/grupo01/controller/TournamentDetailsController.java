@@ -87,6 +87,10 @@ public class TournamentDetailsController {
         return tournament.getPairing().getClass().getSimpleName().equals("Swiss");
     }
 
+    private boolean isKnockout() {
+        return tournament.getPairing().getClass().getSimpleName().equals("Knockout");
+    }
+
     private int expectedSwissRounds() {
         int n = tournament.getParticipants().size();
         return (n == 16) ? 5 : (n == 32) ? 6 : 0;
@@ -143,16 +147,18 @@ public class TournamentDetailsController {
             return;
         }
 
-        // ----- KNOCKOUT -----
-        boolean finished = allMatchesFinished();
-
-        btnGenerateRound.setVisible(!finished);
-        btnGenerateRound.setManaged(!finished);
-
-        btnShowResults.setVisible(finished);
-        btnShowResults.setManaged(finished);
-
-        if (finished) finalizeTournament();
+        if (isKnockout())
+        {
+            boolean finished = allMatchesFinished() && tournament.getRounds().getLast().size() == 1;
+    
+            btnGenerateRound.setVisible(!finished);
+            btnGenerateRound.setManaged(!finished);
+    
+            btnShowResults.setVisible(finished);
+            btnShowResults.setManaged(finished);
+    
+            if (finished) finalizeTournament();
+        }
     }
 
     private void finalizeTournament() {
