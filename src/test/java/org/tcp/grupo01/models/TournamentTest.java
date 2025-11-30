@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
+import org.tcp.grupo01.services.pairing.Knockout;
 import org.tcp.grupo01.services.pairing.League;
 import org.tcp.grupo01.services.pairing.Pairing;
 
@@ -18,6 +19,13 @@ class TournamentTest {
 
     private Pairing<Person> createRealLeague() {
         return new League<>(false, Match::betweenPeople);
+    }
+    private Pairing<Person> createLeagueStrategy() {
+        return new League<>(false, Match::betweenPeople);
+    }
+
+    private Pairing<Person> createKnockoutStrategy() {
+        return new Knockout<>(Match::betweenPeople);
     }
 
     // --- Factory & Initialization Tests ---
@@ -181,5 +189,93 @@ class TournamentTest {
         // Assert
         assertEquals(1, tournament.getParticipants().size());
         assertEquals("B", tournament.getParticipants().get(0).getName());
+    }
+
+    @Test
+    @DisplayName("Should NOT clear rounds or reset scores if pairing returns nothing new (League Idempotency)")
+    void shouldPreserveDataIfNoNewRounds() {
+        // Arrange
+        ArrayList<Person> participants = new ArrayList<>();
+        participants.add(new Person("Alice"));
+        participants.add(new Person("Bob"));
+
+        Tournament<Person> tournament = Tournament.createForPeople("League Cup", createLeagueStrategy(), participants);
+
+        tournament.generateNextMatches();
+        List<List<Match<Person>>> roundsRef1 = tournament.getRounds();
+        Match<Person> match = roundsRef1.get(0).get(0);
+
+        match.updateResult(5, 0, EventStatus.FINISHED);
+
+        tournament.generateNextMatches();
+
+        List<List<Match<Person>>> roundsRef2 = tournament.getRounds();
+
+        assertEquals(1, roundsRef2.size());
+
+        Match<Person> matchAfterRegen = roundsRef2.get(0).get(0);
+        assertEquals(5, matchAfterRegen.getScoreA(), "Score MUST be preserved");
+        assertEquals(EventStatus.FINISHED, matchAfterRegen.getStatus());
+
+        assertEquals(EventStatus.FINISHED, tournament.getStatus());
+    }
+
+    @Test
+    @DisplayName("Should auto-finish tournament when all matches are done and no new rounds generated")
+    void shouldAutoFinish() {
+        ArrayList<Person> participants = new ArrayList<>();
+        participants.add(new Person("Alice"));
+        participants.add(new Person("Bob"));
+
+        Tournament<Person> tournament = Tournament.createForPeople("Final Cup", createKnockoutStrategy(), participants);
+
+        tournament.generateNextMatches();
+        assertEquals(EventStatus.RUNNING, tournament.getStatus());
+
+        Match<Person> finalMatch = tournament.getRounds().get(0).get(0);
+        finalMatch.updateResult(1, 0, EventStatus.FINISHED);
+
+        tournament.generateNextMatches();
+
+        assertEquals(EventStatus.FINISHED, tournament.getStatus(), "Tournament should be marked as FINISHED");
+        assertEquals(1, tournament.getRoundCount(), "Should not duplicate rounds");
+    }
+
+
+    @Test
+    @DisplayName("Should transition status from PLANNING to RUNNING on first generation")
+    void shouldStartTournament() {
+        ArrayList<Person> participants = new ArrayList<>();
+        participants.add(new Person("A"));
+        participants.add(new Person("B"));
+
+        Tournament<Person> tournament = Tournament.createForPeople("Cup", createLeagueStrategy(), participants);
+
+        assertEquals(EventStatus.PLANNING, tournament.getStatus());
+
+        tournament.generateNextMatches();
+
+        assertEquals(EventStatus.RUNNING, tournament.getStatus());
+        assertFalse(tournament.getRounds().isEmpty());
+    }
+
+    @Test
+    @DisplayName("Should handle empty pairing results gracefully")
+    void shouldHandleEmptyGeneration() {
+        Tournament<Person> tournament = Tournament.createForPeople("Empty", createLeagueStrategy(), new ArrayList<>());
+
+        tournament.generateNextMatches();
+
+        assertEquals(EventStatus.PLANNING, tournament.getStatus());
+        assertTrue(tournament.getRounds().isEmpty());
+    }
+
+    @Test
+    @DisplayName("getParticipants should return unmodifiable list")
+    void participantsImmutability() {
+        Tournament<Person> tournament = Tournament.createForPeople("Test", createLeagueStrategy(), new ArrayList<>());
+        List<Person> list = tournament.getParticipants();
+
+        assertThrows(UnsupportedOperationException.class, () -> list.add(new Person("Hacker")));
     }
 }

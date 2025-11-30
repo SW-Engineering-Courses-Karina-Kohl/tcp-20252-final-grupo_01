@@ -11,18 +11,13 @@ public class StandingsViewFactory {
     public static Node createViewFor(Tournament<?> tournament) {
         StandingsViewStrategy strategy;
 
-        if (tournament.getPairing() instanceof League) {
-            strategy = new LeagueStandingsView();
-        }
-        else if (tournament.getPairing() instanceof Swiss) {
-            strategy = new SwissBucketsView();
-        }
-        
-        else if (tournament.getPairing() instanceof Knockout) {
-            strategy = new KnockoutBracketView();
-        }
-        else {
-            return new Label("Visualização de classificação não implementada para este formato.");
+        switch (tournament.getPairing()) {
+            case League league -> strategy = new LeagueStandingsView();
+            case Swiss swiss -> strategy = new SwissBucketsView();
+            case Knockout knockout -> strategy = new KnockoutBracketView();
+            case null, default -> {
+                return new Label("Visualização de classificação não implementada para este formato.");
+            }
         }
 
         return strategy.render(tournament);
