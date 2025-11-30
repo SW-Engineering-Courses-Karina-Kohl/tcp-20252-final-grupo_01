@@ -45,7 +45,7 @@
                 </VBox>
 
                 <Button fx:id="btnGenerateRound"
-                        text="Gerar Próxima Rodada"
+                        text="Gerar Rodadas"
                         onAction="#handleGenerateRound"
                         styleClass="sidebar-button"
                         maxWidth="1.7976931348623157E308"/>

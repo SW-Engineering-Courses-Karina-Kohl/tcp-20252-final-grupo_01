@@ -86,6 +86,19 @@ public class TournamentDetailsController {
         return tournament.getPairing() instanceof Knockout;
     }
 
+    private boolean hasNextRound() {
+        if (isLeague()) {
+            return false;
+        } else if (isSwiss()) {
+            return tournament.getRounds().size() < expectedSwissRounds();
+        } else if (isKnockout()) {
+            List<? extends List<? extends Match<?>>> rounds = tournament.getRounds();
+            if (rounds.isEmpty()) return true;
+            return rounds.get(rounds.size() - 1).size() > 1;
+        }
+
+        return false;
+    }
     private int expectedSwissRounds() {
         int n = tournament.getParticipants().size();
         return (n == 16) ? 5 : (n == 32) ? 6 : 0;
@@ -99,18 +112,16 @@ public class TournamentDetailsController {
     }
 
     private void updateButtons() {
-
         boolean hasRounds = !tournament.getRounds().isEmpty();
 
         btnEditParticipants.setVisible(!hasRounds);
         btnEditParticipants.setManaged(!hasRounds);
-
+        btnGenerateRound.setVisible(!hasRounds);
+        btnGenerateRound.setManaged(!hasRounds);
+        
         if (isLeague()) {
             boolean finished = allMatchesFinished();
-
-            btnGenerateRound.setVisible(!hasRounds);
-            btnGenerateRound.setManaged(!hasRounds);
-
+            
             btnShowResults.setVisible(finished);
             btnShowResults.setManaged(finished);
 
@@ -119,14 +130,8 @@ public class TournamentDetailsController {
         }
 
         if (isSwiss()) {
-            int expected = expectedSwissRounds();
-            int generated = tournament.getRounds().size();
-
-            boolean allGenerated = generated == expected;
+            boolean allGenerated = tournament.getRounds().size() == expectedSwissRounds();;
             boolean finished = allGenerated && allMatchesFinished();
-
-            btnGenerateRound.setVisible(!allGenerated);
-            btnGenerateRound.setManaged(!allGenerated);
 
             btnShowResults.setVisible(finished);
             btnShowResults.setManaged(finished);
@@ -136,11 +141,7 @@ public class TournamentDetailsController {
         }
 
         if (isKnockout()) {
-            boolean finished = allMatchesFinished() && tournament.getRounds().getLast().size() == 1;
-    
-            btnGenerateRound.setVisible(!finished);
-            btnGenerateRound.setManaged(!finished);
-    
+            boolean finished = allMatchesFinished() && tournament.getRounds().get(tournament.getRounds().size() - 1).size() == 1;
             btnShowResults.setVisible(finished);
             btnShowResults.setManaged(finished);
     
@@ -150,7 +151,7 @@ public class TournamentDetailsController {
 
     private void finalizeTournament() {
         tournament.setStatus(EventStatus.FINISHED);
-        lblStatus.setText("Status: FINISHED");
+        lblStatus.setText("Status: FINALIZADO");
     }
 
     @FXML
@@ -205,11 +206,10 @@ public class TournamentDetailsController {
         btnPrevRound.setDisable(currentRoundIndex == 0);
         btnNextRound.setDisable(currentRoundIndex == rounds.size() - 1);
 
-        rounds.get(currentRoundIndex).forEach(
-                m -> matchesList.getChildren().add(new MatchCard(m, this::openModal))
-        );
+        rounds.get(currentRoundIndex).forEach(m -> matchesList.getChildren().add(new MatchCard(m, this::openModal)));
 
         updateButtons();
+        if (allMatchesFinished()) handleNextRound();
     }
 
     @FXML
@@ -218,6 +218,7 @@ public class TournamentDetailsController {
             currentRoundIndex++;
             renderCurrentRound();
         }
+
     }
 
     @FXML
@@ -267,11 +268,7 @@ public class TournamentDetailsController {
         btn.getStyleClass().removeAll("status-option-selected", "status-finalized-selected");
 
         if (tempStatus == status) {
-            btn.getStyleClass().add(
-                    status == EventStatus.FINISHED ?
-                            "status-finalized-selected" :
-                            "status-option-selected"
-            );
+            btn.getStyleClass().add(status == EventStatus.FINISHED ? "status-finalized-selected" : "status-option-selected");
         }
     }
 
@@ -300,6 +297,8 @@ public class TournamentDetailsController {
             renderCurrentRound();
             updateButtons();
 
+            if (allMatchesFinished() && hasNextRound()) handleGenerateRound();
+
         } catch (Exception e) {
             lblModalError.setText("⚠ " + e.getMessage());
         }
@@ -318,9 +317,7 @@ public class TournamentDetailsController {
             Stage stage = (Stage) lblTournamentName.getScene().getWindow();
 
             Scene scene = new Scene(loader.load(), 1000, 700);
-            scene.getStylesheets().add(
-                    Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/styles/style.css")).toExternalForm()
-            );
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/styles/style.css")).toExternalForm());
 
             stage.setScene(scene);
 
@@ -333,17 +330,20 @@ public class TournamentDetailsController {
     public void handleGenerateRound() {
         try {
             tournament.generateNextMatches();
-            if (!(tournament.getPairing() instanceof League)) currentRoundIndex = Math.max(0, tournament.getRounds().size() - 1);
+            if (!(tournament.getPairing() instanceof League)) {
+                currentRoundIndex = Math.max(0, tournament.getRounds().size() - 1);
+            }
             renderCurrentRound();
             updateButtons();
 
             paginationControls.setVisible(true);
             paginationControls.setManaged(true);
 
+            if (allMatchesFinished()) {
+                handleNextRound();
+            }
         } catch (Exception e) {
-            new Alert(Alert.AlertType.ERROR,
-                    "Erro ao gerar rodada:\n" + e.getMessage()
-            ).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Erro ao gerar rodada:\n" + e.getMessage()).showAndWait();
         }
     }
 
@@ -357,29 +357,21 @@ public class TournamentDetailsController {
     public void handleEditParticipants() {
 
         if (!tournament.getRounds().isEmpty()) {
-            new Alert(Alert.AlertType.WARNING,
-                    "Você não pode mais editar participantes após gerar a primeira rodada.")
-                    .showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Você não pode mais editar participantes após gerar a primeira rodada.").showAndWait();
             return;
         }
 
         try {
             boolean isTeam = tournament.getParticipants().get(0) instanceof Team;
 
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource(isTeam ?
-                            "/org/tcp/grupo01/teamManager.fxml" :
-                            "/org/tcp/grupo01/playerManager.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(isTeam ? "/org/tcp/grupo01/teamManager.fxml" : "/org/tcp/grupo01/playerManager.fxml"));
 
             Parent root = loader.load();
 
             if (isTeam) {
-                loader.<TeamManagerController>getController()
-                        .setupEditMode((Tournament<Team>) tournament, service);
+                loader.<TeamManagerController>getController().setupEditMode((Tournament<Team>) tournament, service);
             } else {
-                loader.<PlayerManagerController>getController()
-                        .setupEditMode((Tournament<Person>) tournament, service);
+                loader.<PlayerManagerController>getController().setupEditMode((Tournament<Person>) tournament, service);
             }
 
             Stage modal = new Stage();
@@ -393,9 +385,7 @@ public class TournamentDetailsController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR,
-                    "Erro ao abrir editor:\n" + e.getMessage()
-            ).showAndWait();
+            new Alert(Alert.AlertType.ERROR, "Erro ao abrir editor:\n" + e.getMessage()).showAndWait();
         }
     }
 }

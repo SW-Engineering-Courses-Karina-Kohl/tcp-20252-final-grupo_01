@@ -27,7 +27,6 @@ public class KnockoutBracketView implements StandingsViewStrategy {
                         .toExternalForm()
         );
 
-        @SuppressWarnings("unchecked")
         List<List<Match<?>>> rounds = (List<List<Match<?>>>) (List<?>) tournament.getRounds();
 
         int totalRounds = rounds.size();
