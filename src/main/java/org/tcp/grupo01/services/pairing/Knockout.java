@@ -5,7 +5,6 @@ import org.tcp.grupo01.models.competitors.Competitor;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class Knockout<T extends Competitor> implements Pairing<T> {
 
@@ -29,20 +28,31 @@ public class Knockout<T extends Competitor> implements Pairing<T> {
         }
     }
 
-    private List<Match<T>> flatten(List<List<Match<T>>> rounds) {
-        return rounds.stream().flatMap(List::stream).collect(Collectors.toList());
-    }
-
     @Override
     public List<List<Match<T>>> generateRounds(List<T> participants, List<List<Match<T>>> previousRounds) {
 
         validateParticipants(participants);
+        
+        if (previousRounds == null || previousRounds.isEmpty()) {
+            List<Match<T>> firstRound = new ArrayList<>();
+            for (int i = 0; i < participants.size(); i += 2)
+                firstRound.add(createMatch.apply(participants.get(i), participants.get(i + 1)));
+    
+            List<List<Match<T>>> result = new ArrayList<>();
+            result.add(firstRound);
+            return result;
+        }
+    
         ensureAllMatchesCompleted(previousRounds);
+    
+        List<Match<T>> lastRound = previousRounds.get(previousRounds.size() - 1);
+        if (lastRound.size() == 1 && lastRound.get(0).getWinner() != null) {
+            return previousRounds;
+        }
 
-        List<Match<T>> flattened = flatten(previousRounds);
         List<Match<T>> newRound = new ArrayList<>();
-        for (int i = 0; i < flattened.size(); i += 2)
-            newRound.add(createMatch.apply(flattened.get(i).getWinner(), flattened.get(i+1).getWinner()));
+        for (int i = 0; i < lastRound.size(); i += 2)
+            newRound.add(createMatch.apply(lastRound.get(i).getWinner(), lastRound.get(i+1).getWinner()));
 
         if (newRound.isEmpty()) return previousRounds;
 

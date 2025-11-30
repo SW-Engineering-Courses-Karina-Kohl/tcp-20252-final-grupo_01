@@ -20,6 +20,9 @@ import org.tcp.grupo01.models.competitors.Team;
 import org.tcp.grupo01.view.components.MatchCard;
 import org.tcp.grupo01.view.components.standings.StandingsViewFactory;
 import org.tcp.grupo01.services.tournament.TournamentService;
+import org.tcp.grupo01.services.pairing.Knockout;
+import org.tcp.grupo01.services.pairing.Swiss;
+import org.tcp.grupo01.services.pairing.League;
 
 import java.io.IOException;
 import java.util.List;
@@ -80,11 +83,15 @@ public class TournamentDetailsController {
     // ============================================================
 
     private boolean isLeague() {
-        return tournament.getPairing().getClass().getSimpleName().equals("League");
+        return tournament.getPairing() instanceof League;
     }
 
     private boolean isSwiss() {
-        return tournament.getPairing().getClass().getSimpleName().equals("Swiss");
+        return tournament.getPairing() instanceof Swiss;
+    }
+
+    private boolean isKnockout() {
+        return tournament.getPairing() instanceof Knockout;
     }
 
     private int expectedSwissRounds() {
@@ -143,16 +150,18 @@ public class TournamentDetailsController {
             return;
         }
 
-        // ----- KNOCKOUT -----
-        boolean finished = allMatchesFinished();
-
-        btnGenerateRound.setVisible(!finished);
-        btnGenerateRound.setManaged(!finished);
-
-        btnShowResults.setVisible(finished);
-        btnShowResults.setManaged(finished);
-
-        if (finished) finalizeTournament();
+        if (isKnockout())
+        {
+            boolean finished = allMatchesFinished() && tournament.getRounds().getLast().size() == 1;
+    
+            btnGenerateRound.setVisible(!finished);
+            btnGenerateRound.setManaged(!finished);
+    
+            btnShowResults.setVisible(finished);
+            btnShowResults.setManaged(finished);
+    
+            if (finished) finalizeTournament();
+        }
     }
 
     private void finalizeTournament() {

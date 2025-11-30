@@ -1,0 +1,28 @@
+.bracket-column {
+  -fx-alignment: top-center;
+}
+
+.bracket-round-title {
+  -fx-font-size: 18;
+  -fx-font-weight: bold;
+  -fx-padding: 0 0 10 0;
+  -fx-text-fill: #111;
+}
+
+.bracket-match {
+  -fx-background-color: white;
+  -fx-background-radius: 10;
+  -fx-padding: 8 12;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 4, 0.2, 0, 2);
+  -fx-min-width: 170;
+}
+
+.bracket-player {
+  -fx-font-size: 14;
+  -fx-text-fill: #333;
+}
+
+.bracket-player.winner {
+  -fx-font-weight: bold;
+  -fx-text-fill: #c62828;
+}
