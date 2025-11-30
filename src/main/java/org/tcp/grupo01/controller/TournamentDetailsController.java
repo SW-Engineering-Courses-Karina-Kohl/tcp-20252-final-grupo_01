@@ -72,8 +72,6 @@ public class TournamentDetailsController {
         lblParticipantsCount.setText(tournament.getParticipants().size() + " participantes");
     }
 
-    // --- Lógica de Navegação e Geração (BLINDADA) ---
-
     private boolean hasNextRoundExisting() {
         return currentRoundIndex < tournament.getRoundCount() - 1;
     }
@@ -86,11 +84,7 @@ public class TournamentDetailsController {
                 .allMatch(m -> m.getStatus() == EventStatus.FINISHED);
     }
 
-    /**
-     * Verifica se o torneio acabou visualmente.
-     * CRÍTICO: Detecta fim de Mata-mata e Suíço para evitar chamar generateNextMatches
-     * e causar o bug do reset.
-     */
+
     private boolean isObviouslyFinished() {
         List<? extends List<? extends Match<?>>> rounds = tournament.getRounds();
         if (rounds.isEmpty()) return false;
@@ -100,46 +94,35 @@ public class TournamentDetailsController {
 
         if (!lastRoundFinished) return false;
 
-        // 1. Mata-mata: Se a última rodada tem apenas 1 jogo (Final) e acabou.
         if (lastRound.size() == 1) return true;
 
-        // 2. Suíço: Heurística baseada no número de participantes vs rodadas.
-        // Suíço padrão: 16 players -> 5 rounds | 32 players -> 6 rounds.
         int n = tournament.getParticipants().size();
         int r = rounds.size();
 
         if (n == 16 && r >= 5) return true;
         if (n == 32 && r >= 6) return true;
 
-        // Fallback genérico para outros tamanhos (Log2(N) + 1 é o padrão do Suíço)
-        if (r >= (Math.log(n) / Math.log(2)) + 1) return true;
-
-        return false;
+        return r >= (Math.log(n) / Math.log(2)) + 1;
     }
 
     private void tryAdvanceRound() {
-        // 1. Navegação de histórico
         if (hasNextRoundExisting()) {
             currentRoundIndex++;
             renderCurrentRound();
             return;
         }
 
-        // 2. Bloqueio se a rodada atual não acabou
         if (!isCurrentRoundFinished()) {
             renderCurrentRound();
             return;
         }
 
-        // 3. (PROTEÇÃO ANTI-RESET) Se detectamos que é a última rodada,
-        // finalizamos direto sem chamar o backend.
         if (isObviouslyFinished()) {
             finalizeTournament();
             renderCurrentRound();
             return;
         }
 
-        // 4. Tenta gerar nova rodada
         try {
             int oldRoundCount = tournament.getRoundCount();
 
@@ -148,18 +131,15 @@ public class TournamentDetailsController {
             int newRoundCount = tournament.getRoundCount();
 
             if (newRoundCount > oldRoundCount) {
-                // Nova rodada criada
                 currentRoundIndex = newRoundCount - 1;
                 renderCurrentRound();
             } else {
-                // Backend não gerou nada novo (provavelmente League ou fim de Swiss atípico)
                 finalizeTournament();
                 renderCurrentRound();
             }
 
         } catch (Exception e) {
             lblModalError.setText("Erro fluxo: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -170,7 +150,6 @@ public class TournamentDetailsController {
         }
     }
 
-    // --- UI Rendering & Tab Management (CORRIGIDO) ---
 
     private void updateButtons() {
         boolean hasRounds = !tournament.getRounds().isEmpty();
@@ -186,7 +165,6 @@ public class TournamentDetailsController {
         btnShowResults.setVisible(isFinished);
         btnShowResults.setManaged(isFinished);
 
-        // CORREÇÃO: Paginação só aparece se tiver rodadas E estivermos na aba de Rodadas
         if (paginationControls != null) {
             boolean showPagination = hasRounds && showingRoundsTab;
             paginationControls.setVisible(showPagination);
@@ -207,7 +185,6 @@ public class TournamentDetailsController {
         renderStandings();
     }
 
-    // Método centralizado para gerenciar abas e evitar seleção dupla
     private void updateTabStyles(boolean isRoundsActive) {
         btnTabRounds.getStyleClass().remove("segment-button-active");
         btnTabStandings.getStyleClass().remove("segment-button-active");
