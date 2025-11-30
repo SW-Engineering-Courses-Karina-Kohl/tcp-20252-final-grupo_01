@@ -5,7 +5,6 @@ import org.tcp.grupo01.models.competitors.Competitor;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 public class Knockout<T extends Competitor> implements Pairing<T> {
 

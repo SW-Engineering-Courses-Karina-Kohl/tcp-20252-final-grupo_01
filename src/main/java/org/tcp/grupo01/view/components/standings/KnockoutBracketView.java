@@ -43,7 +43,7 @@ public class KnockoutBracketView implements StandingsViewStrategy {
             column.setAlignment(Pos.TOP_CENTER);
             column.getStyleClass().add("bracket-column");
 
-            Label header = new Label(getRoundName(roundIndex, totalRounds));
+            Label header = new Label(getRoundName(round.size(), roundIndex));
             header.getStyleClass().add("bracket-round-title");
             column.getChildren().add(header);
 
@@ -66,8 +66,8 @@ public class KnockoutBracketView implements StandingsViewStrategy {
         box.setAlignment(Pos.CENTER_LEFT);
         box.getStyleClass().add("bracket-match");
 
-        Competitor a = (Competitor) m.getCompetitorA();
-        Competitor b = (Competitor) m.getCompetitorB();
+        Competitor a = m.getCompetitorA();
+        Competitor b = m.getCompetitorB();
 
         String nameA = a != null ? a.getName() : "A definir";
         String nameB = b != null ? b.getName() : "A definir";
@@ -89,15 +89,13 @@ public class KnockoutBracketView implements StandingsViewStrategy {
         return box;
     }
 
-    private String getRoundName(int index, int totalRounds) {
-        int fromFinal = totalRounds - index;
-
-        return switch (fromFinal) {
+    private String getRoundName(int matchCount, int roundIndex) {
+        return switch (matchCount) {
             case 1 -> "Final";
             case 2 -> "Semifinal";
-            case 3 -> "Quartas de final";
-            case 4 -> "Oitavas de final";
-            default -> "Rodada " + (index + 1);
+            case 4 -> "Quartas de final";
+            case 8 -> "Oitavas de final";
+            default -> "Rodada " + (roundIndex + 1);
         };
     }
 }
