@@ -80,12 +80,26 @@ public final class Tournament<T extends Competitor> {
         List<List<Match<T>>> generatedRounds =
                 pairing.generateRounds(participants, rounds);
 
+        if (generatedRounds == null || generatedRounds.size() <= rounds.size()) {
+
+            if (!rounds.isEmpty() && isLastRoundFinished()) {
+                this.status = EventStatus.FINISHED;
+            }
+            return;
+        }
+
         this.rounds.clear();
         this.rounds.addAll(generatedRounds);
 
         if (status == EventStatus.PLANNING && !rounds.isEmpty()) {
             status = EventStatus.RUNNING;
         }
+    }
+
+    private boolean isLastRoundFinished() {
+        if (rounds.isEmpty()) return false;
+        List<Match<T>> lastRound = rounds.get(rounds.size() - 1);
+        return lastRound.stream().allMatch(m -> m.getStatus() == EventStatus.FINISHED);
     }
 
     public int getRoundCount() {
