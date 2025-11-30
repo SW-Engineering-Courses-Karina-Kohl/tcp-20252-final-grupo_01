@@ -26,7 +26,6 @@ import java.util.Objects;
 
 public class TournamentDetailsController {
 
-    // UI Components
     @FXML private Label lblTournamentName, lblStatus, lblParticipantsCount, lblSectionTitle;
     @FXML private ScrollPane roundsContainer, standingsScroll;
     @FXML private VBox matchesList, standingsContainer;
@@ -35,18 +34,15 @@ public class TournamentDetailsController {
     @FXML private Button btnGenerateRound, btnShowResults;
     @FXML private Button btnEditParticipants;
 
-    // Modal Components
     @FXML private VBox modalOverlay;
     @FXML private Label lblModalTeamA, lblModalTeamB, lblModalScoreA, lblModalScoreB, lblModalError;
     @FXML private Button btnStatusConfirm, btnStatusRunning, btnStatusFinished;
     @FXML private HBox scoreBoxA, scoreBoxB;
 
-    // State
     private Tournament<?> tournament;
     private TournamentService service;
     private int currentRoundIndex = 0;
 
-    // Editing State
     private Match<?> currentEditingMatch;
     private int tempScoreA;
     private int tempScoreB;
@@ -61,7 +57,6 @@ public class TournamentDetailsController {
         this.currentRoundIndex = Math.max(0, tournament.getRoundCount() - 1);
 
         updateSidebar();
-        // Garante que a aba de Rodadas esteja selecionada ao abrir
         showRounds();
     }
 
@@ -84,27 +79,6 @@ public class TournamentDetailsController {
                 .allMatch(m -> m.getStatus() == EventStatus.FINISHED);
     }
 
-
-    private boolean isObviouslyFinished() {
-        List<? extends List<? extends Match<?>>> rounds = tournament.getRounds();
-        if (rounds.isEmpty()) return false;
-
-        List<? extends Match<?>> lastRound = rounds.get(rounds.size() - 1);
-        boolean lastRoundFinished = lastRound.stream().allMatch(m -> m.getStatus() == EventStatus.FINISHED);
-
-        if (!lastRoundFinished) return false;
-
-        if (lastRound.size() == 1) return true;
-
-        int n = tournament.getParticipants().size();
-        int r = rounds.size();
-
-        if (n == 16 && r >= 5) return true;
-        if (n == 32 && r >= 6) return true;
-
-        return r >= (Math.log(n) / Math.log(2)) + 1;
-    }
-
     private void tryAdvanceRound() {
         if (hasNextRoundExisting()) {
             currentRoundIndex++;
@@ -113,12 +87,6 @@ public class TournamentDetailsController {
         }
 
         if (!isCurrentRoundFinished()) {
-            renderCurrentRound();
-            return;
-        }
-
-        if (isObviouslyFinished()) {
-            finalizeTournament();
             renderCurrentRound();
             return;
         }
@@ -149,7 +117,6 @@ public class TournamentDetailsController {
             updateSidebar();
         }
     }
-
 
     private void updateButtons() {
         boolean hasRounds = !tournament.getRounds().isEmpty();
@@ -233,8 +200,6 @@ public class TournamentDetailsController {
         );
     }
 
-    // --- User Actions ---
-
     @FXML
     public void handleNextRound() {
         if (hasNextRoundExisting()) {
@@ -304,8 +269,6 @@ public class TournamentDetailsController {
             new Alert(Alert.AlertType.ERROR, "Erro ao abrir editor: " + e.getMessage()).showAndWait();
         }
     }
-
-    // --- Modal Logic ---
 
     private void openModal(Match<?> match) {
         if (match.getStatus() == EventStatus.FINISHED) return;
