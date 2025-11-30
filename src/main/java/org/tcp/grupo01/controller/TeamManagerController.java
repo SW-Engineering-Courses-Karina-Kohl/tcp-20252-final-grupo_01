@@ -37,9 +37,6 @@ public class TeamManagerController {
     private final ObservableList<Team> teams = FXCollections.observableArrayList();
     private final ObservableList<Team> existingTeams = FXCollections.observableArrayList();
 
-    // ==========================================================
-    // SETUP
-    // ==========================================================
 
     public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
         this.tournamentName = name;
@@ -94,10 +91,6 @@ public class TeamManagerController {
             }
         }
     }
-
-    // ==========================================================
-    // AÇÕES
-    // ==========================================================
 
     @FXML
     private void handleAddNewTeam() {
@@ -163,10 +156,6 @@ public class TeamManagerController {
         }
     }
 
-    // ==========================================================
-    // FINALIZAR (VALIDAÇÕES IDÊNTICAS AO PLAYERMANAGER)
-    // ==========================================================
-
     @FXML
     private void handleFinish() {
 
@@ -213,7 +202,6 @@ public class TeamManagerController {
             }
         }
 
-        // Se estiver editando → atualiza o torneio
         if (editingTournament != null) {
             editingTournament.replaceParticipants(teams);
             Stage stage = (Stage) tableTeams.getScene().getWindow();
@@ -221,7 +209,6 @@ public class TeamManagerController {
             return;
         }
 
-        // Criando novo
         Tournament<Team> tournament =
                 Tournament.createForTeams(tournamentName, pairingMethod, new ArrayList<>(teams));
 
@@ -239,10 +226,6 @@ public class TeamManagerController {
         Stage stage = (Stage) tableTeams.getScene().getWindow();
         stage.close();
     }
-
-    // ==========================================================
-    // EDIT MODE
-    // ==========================================================
 
     private Tournament<Team> editingTournament;
 

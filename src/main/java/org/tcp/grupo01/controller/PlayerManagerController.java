@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
@@ -38,13 +39,8 @@ public class PlayerManagerController {
     private final ObservableList<Person> players = FXCollections.observableArrayList();
     private final ObservableList<Person> existingPlayers = FXCollections.observableArrayList();
 
-    // ----- MODO DE EDIÇÃO -----
     private boolean editMode = false;
     private Tournament<Person> editingTournament;
-
-    // ==========================================================
-    // SETUP
-    // ==========================================================
 
     public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
         this.tournamentName = name;
@@ -72,28 +68,57 @@ public class PlayerManagerController {
 
     @FXML
     public void initialize() {
-
         tablePlayers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-
-        colName.setStyle("-fx-alignment: CENTER;");
-        colCpf.setStyle("-fx-alignment: CENTER;");
-        colPhone.setStyle("-fx-alignment: CENTER;");
-        colBirth.setStyle("-fx-alignment: CENTER;");
-
-        colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        colCpf.setCellValueFactory(data -> new SimpleStringProperty(
-                data.getValue().getCpf() != null ? data.getValue().getCpf() : ""));
-
-        colPhone.setCellValueFactory(data -> new SimpleStringProperty(
-                data.getValue().getPhone() != null ? data.getValue().getPhone() : ""));
-
-        colBirth.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBirthDate()));
-
+        configureTextField(txtCpf);
+        configureTextField(txtPhone);
+        configureFields();
+        
         tablePlayers.setItems(players);
         cbExistingPlayers.setItems(existingPlayers);
         updateCountLabel();
     }
 
+    private void configureFields() {
+        colName.setStyle("-fx-alignment: CENTER;");
+        colCpf.setStyle("-fx-alignment: CENTER;");
+        colPhone.setStyle("-fx-alignment: CENTER;");
+        colBirth.setStyle("-fx-alignment: CENTER;");
+        dateBirth.getEditor().setDisable(true);
+        dateBirth.getEditor().setOpacity(1);
+
+        colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        colCpf.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCpf() != null ? data.getValue().getCpf() : ""));
+        colPhone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone() != null ? data.getValue().getPhone() : ""));
+        colBirth.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBirthDate()));
+    }
+
+    private void configureTextField(TextField textField) {
+        textField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getControlNewText().matches("[0-9]*")) {
+                return change;
+            }
+            return null;
+        }));
+
+        textField.addEventFilter(KeyEvent.KEY_TYPED, event -> validateInput(event, textField.getId()));
+    }
+
+    private void validateInput(KeyEvent event, String field) {
+        String input = event.getCharacter();
+        if (!input.matches("[0-9]")) {
+            event.consume();
+            showInvalidInputAlert();
+        }
+    }
+
+    private void showInvalidInputAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Entrada Inválida");
+        alert.setHeaderText("Apenas números são permitidos.");
+        alert.setContentText("Por favor, insira apenas números no campo .");
+        alert.showAndWait();
+    }    
+    
     private void loadExistingPlayers() {
         if (service == null) return;
 
@@ -114,10 +139,6 @@ public class PlayerManagerController {
             }
         }
     }
-
-    // ==========================================================
-    // AÇÕES
-    // ==========================================================
 
     @FXML
     private void handleAddNewPlayer() {
@@ -161,10 +182,6 @@ public class PlayerManagerController {
         }
     }
 
-    // ==========================================================
-    // FINALIZAR (CRIA OU EDITA)
-    // ==========================================================
-
     @FXML
     private void handleFinish() {
 
@@ -196,14 +213,12 @@ public class PlayerManagerController {
             }
         }
 
-        // ======== EDIT MODE ========
         if (editMode) {
             editingTournament.replaceParticipants(new ArrayList<>(players));
             ((Stage) tablePlayers.getScene().getWindow()).close();
             return;
         }
 
-        // ======== CREATE MODE ========
         Tournament<Person> tournament =
                 Tournament.createForPeople(tournamentName, pairingMethod, new ArrayList<>(players));
 

@@ -17,7 +17,6 @@ public final class Match<T extends Competitor> {
     private LocalDateTime startTime;
     private T winner;
     private EventStatus status = EventStatus.PLANNING;
-    private Place place;
 
     private Match(T a, T b) {
         this.competitorA = a;
@@ -44,9 +43,6 @@ public final class Match<T extends Competitor> {
     public T getWinner() { return winner; }
 
     public EventStatus getStatus() { return status; }
-
-    public Place getPlace() { return place; }
-    public void setPlace(Place place) { this.place = place; }
 
     public void updateResult(int newScoreA, int newScoreB, EventStatus newStatus) {
         if (this.status == EventStatus.FINISHED) {

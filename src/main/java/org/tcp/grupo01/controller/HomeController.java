@@ -31,11 +31,9 @@ public class HomeController implements Initializable {
         this.service = TournamentServiceIM.getInstance();
     }
 
-    // Injects FXML FlowPane (fx:id="containerCards")
     @FXML
     private FlowPane containerCards;
 
-    // JavaFX calls initialize to open the new window
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<Tournament<? extends Competitor>> tournaments = service.getAll();

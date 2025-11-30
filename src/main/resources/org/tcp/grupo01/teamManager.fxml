@@ -14,38 +14,31 @@
 
     <Label text="Gerenciar Times" styleClass="title-label"/>
 
-    <!-- CONTADOR DE TIMES (CORRIGIDO) -->
     <Label fx:id="lblCountTeams"
            text="0 times adicionados"
            style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;" />
 
-    <!-- Adicionar novo time -->
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Nome do time:"/>
         <TextField fx:id="txtTeamName" prefWidth="220"/>
         <Button text="Adicionar Novo" onAction="#handleAddNewTeam" styleClass="button-primary"/>
     </HBox>
 
-    <!-- Tabela de times -->
     <TableView fx:id="tableTeams" prefHeight="250">
         <columns>
 
-            <!-- Nome do time -->
             <TableColumn fx:id="colTeamName" text="Time" prefWidth="150"
                          style="-fx-alignment: CENTER;"/>
 
-            <!-- Quantidade de jogadores -->
             <TableColumn fx:id="colPlayersCount" text="Qtd." prefWidth="60"
                          style="-fx-alignment: CENTER;"/>
 
-            <!-- Lista dos jogadores -->
             <TableColumn fx:id="colTeamPlayers" text="Jogadores" prefWidth="300"
                          style="-fx-alignment: CENTER;"/>
 
         </columns>
     </TableView>
 
-    <!-- Adicionar time existente -->
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Time existente:"/>
         <ComboBox fx:id="cbExistingTeams" prefWidth="250"/>

@@ -37,7 +37,7 @@ public class TournamentDetailsController {
     @FXML private HBox paginationControls;
     @FXML private Button btnTabRounds, btnTabStandings, btnPrevRound, btnNextRound;
     @FXML private Button btnGenerateRound, btnShowResults;
-    @FXML private Button btnEditParticipants;   // <<<<<< ADICIONADO
+    @FXML private Button btnEditParticipants;
 
     // Modal
     @FXML private VBox modalOverlay;
@@ -54,10 +54,6 @@ public class TournamentDetailsController {
     private int tempScoreA;
     private int tempScoreB;
     private EventStatus tempStatus;
-
-    // ============================================================
-    // SETUP
-    // ============================================================
 
     public void setService(TournamentService service) {
         this.service = service;
@@ -77,10 +73,6 @@ public class TournamentDetailsController {
         lblStatus.setText("Status: " + tournament.getStatus());
         lblParticipantsCount.setText(tournament.getParticipants().size() + " participantes");
     }
-
-    // ============================================================
-    // IDENTIFICAÇÃO
-    // ============================================================
 
     private boolean isLeague() {
         return tournament.getPairing() instanceof League;
@@ -106,19 +98,13 @@ public class TournamentDetailsController {
                         .allMatch(m -> m.getStatus() == EventStatus.FINISHED);
     }
 
-    // ============================================================
-    // BOTÕES DO SIDEBAR
-    // ============================================================
-
     private void updateButtons() {
 
         boolean hasRounds = !tournament.getRounds().isEmpty();
 
-        // ----- DESABILITA EDIÇÃO DE PARTICIPANTES DEPOIS DA 1ª RODADA -----
         btnEditParticipants.setVisible(!hasRounds);
         btnEditParticipants.setManaged(!hasRounds);
 
-        // ----- LIGA -----
         if (isLeague()) {
             boolean finished = allMatchesFinished();
 
@@ -132,7 +118,6 @@ public class TournamentDetailsController {
             return;
         }
 
-        // ----- SUÍÇO -----
         if (isSwiss()) {
             int expected = expectedSwissRounds();
             int generated = tournament.getRounds().size();
@@ -150,8 +135,7 @@ public class TournamentDetailsController {
             return;
         }
 
-        if (isKnockout())
-        {
+        if (isKnockout()) {
             boolean finished = allMatchesFinished() && tournament.getRounds().getLast().size() == 1;
     
             btnGenerateRound.setVisible(!finished);
@@ -168,10 +152,6 @@ public class TournamentDetailsController {
         tournament.setStatus(EventStatus.FINISHED);
         lblStatus.setText("Status: FINISHED");
     }
-
-    // ============================================================
-    // ABAS
-    // ============================================================
 
     @FXML
     public void showRounds() {
@@ -206,10 +186,6 @@ public class TournamentDetailsController {
         active.getStyleClass().add("segment-button-active");
         inactive.getStyleClass().remove("segment-button-active");
     }
-
-    // ============================================================
-    // RODADAS
-    // ============================================================
 
     private void renderCurrentRound() {
 
@@ -252,19 +228,11 @@ public class TournamentDetailsController {
         }
     }
 
-    // ============================================================
-    // CLASSIFICAÇÃO
-    // ============================================================
-
     private void renderStandings() {
         standingsContainer.getChildren().setAll(
                 StandingsViewFactory.createViewFor(tournament)
         );
     }
-
-    // ============================================================
-    // MODAL
-    // ============================================================
 
     private void openModal(Match<?> match) {
         if (match.getStatus() == EventStatus.FINISHED) return;
@@ -343,10 +311,6 @@ public class TournamentDetailsController {
         currentEditingMatch = null;
     }
 
-    // ============================================================
-    // OUTROS BOTÕES
-    // ============================================================
-
     @FXML
     public void handleBack() {
         try {
@@ -369,6 +333,7 @@ public class TournamentDetailsController {
     public void handleGenerateRound() {
         try {
             tournament.generateNextMatches();
+            if (!(tournament.getPairing() instanceof League)) currentRoundIndex = Math.max(0, tournament.getRounds().size() - 1);
             renderCurrentRound();
             updateButtons();
 
@@ -388,14 +353,9 @@ public class TournamentDetailsController {
         lblSectionTitle.setText("Resultados Finais");
     }
 
-    // ============================================================
-    // EDITAR PARTICIPANTES (COM BLOQUEIO)
-    // ============================================================
-
     @FXML
     public void handleEditParticipants() {
 
-        // -------- BLOQUEIO REAL --------
         if (!tournament.getRounds().isEmpty()) {
             new Alert(Alert.AlertType.WARNING,
                     "Você não pode mais editar participantes após gerar a primeira rodada.")

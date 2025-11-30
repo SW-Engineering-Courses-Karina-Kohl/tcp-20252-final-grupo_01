@@ -24,7 +24,6 @@ public class NewTournamentController {
     @FXML private TextField txtName;
     @FXML private ComboBox<String> cbCompetitionType;
     @FXML private ComboBox<String> cbCompetitorType;
-    @FXML private TextField txtLocation;
     @FXML private DatePicker dateStart;
     @FXML private ComboBox<String> cbFormat;
 
@@ -45,6 +44,9 @@ public class NewTournamentController {
             updateFormatOptions();
             cbFormat.setDisable(false);
         });
+
+        dateStart.getEditor().setDisable(true);
+        dateStart.getEditor().setOpacity(1);
     }
 
     @FXML
