@@ -10,63 +10,127 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tcp.grupo01.controller.TournamentDetailsController">
+<StackPane xmlns="http://javafx.com/javafx/17"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.tcp.grupo01.controller.TournamentDetailsController">
 
     <BorderPane fx:id="mainContentArea">
+
+        <!-- SIDEBAR -->
         <left>
             <VBox styleClass="sidebar" spacing="20" prefWidth="250">
-                <padding><Insets top="30" right="20" bottom="20" left="20"/></padding>
+                <padding>
+                    <Insets top="30" right="20" bottom="20" left="20"/>
+                </padding>
+
+                <!-- TÍTULO -->
                 <VBox spacing="5">
-                    <Label fx:id="lblTournamentName" styleClass="sidebar-title" text="Nome do Torneio" wrapText="true"/>
+                    <Label fx:id="lblTournamentName" styleClass="sidebar-title"
+                           text="Nome do Torneio" wrapText="true"/>
                     <Label fx:id="lblStatus" styleClass="sidebar-subtitle" text="Status"/>
                 </VBox>
+
+                <!-- INFORMAÇÕES GERAIS -->
                 <VBox spacing="10">
                     <Label text="INFORMAÇÕES GERAIS" styleClass="sidebar-section-title"/>
-                    <Label fx:id="lblParticipantsCount" text="0 participantes" styleClass="sidebar-text"/>
+
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <Label fx:id="lblParticipantsCount" text="0 participantes" styleClass="sidebar-text"/>
+
+                        <!-- ÍCONE DE EDITAR PARTICIPANTES -->
+                        <Button fx:id="btnEditParticipants"
+                                onAction="#handleEditParticipants"
+                                style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0;">
+                            <graphic>
+                                <Label text="✎" style="-fx-font-size: 22px; -fx-text-fill: #444;" />
+                            </graphic>
+                        </Button>
+                    </HBox>
                 </VBox>
-                <Button fx:id="btnGenerateRound" text="Gerar Próxima Rodada" onAction="#handleGenerateRound" styleClass="sidebar-button" maxWidth="Infinity"/>
-                <Region VBox.vgrow="ALWAYS" />
-                <Button text="Voltar aos Campeonatos" onAction="#handleBack" styleClass="btn-secondary"/>
+
+                <!-- BOTÕES LATERAIS -->
+                <Button fx:id="btnGenerateRound"
+                        text="Gerar Próxima Rodada"
+                        onAction="#handleGenerateRound"
+                        styleClass="sidebar-button"
+                        maxWidth="1.7976931348623157E308"/>
+
+                <Button fx:id="btnShowResults"
+                        text="Mostrar Resultados"
+                        visible="false"
+                        managed="false"
+                        onAction="#handleShowResults"
+                        styleClass="sidebar-button"
+                        maxWidth="1.7976931348623157E308"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+
+                <Button text="Voltar aos Campeonatos"
+                        onAction="#handleBack"
+                        styleClass="btn-secondary"/>
             </VBox>
         </left>
 
+        <!-- CONTEÚDO PRINCIPAL -->
         <center>
             <VBox spacing="30" styleClass="main-content">
-                <padding><Insets top="30" right="40" bottom="30" left="40"/></padding>
+                <padding>
+                    <Insets top="30" right="40" bottom="30" left="40"/>
+                </padding>
 
+                <!-- TABS -->
                 <HBox alignment="CENTER_LEFT">
                     <Region HBox.hgrow="ALWAYS"/>
                     <HBox styleClass="segmented-control">
-                        <Button fx:id="btnTabRounds" text="Rodadas" onAction="#showRounds" styleClass="segment-button"/>
-                        <Button fx:id="btnTabStandings" text="Classificação" onAction="#showStandings" styleClass="segment-button"/>
+                        <Button fx:id="btnTabRounds" text="Rodadas"
+                                onAction="#showRounds" styleClass="segment-button"/>
+                        <Button fx:id="btnTabStandings" text="Classificação"
+                                onAction="#showStandings" styleClass="segment-button"/>
                     </HBox>
                 </HBox>
 
+                <!-- TÍTULO + PAGINAÇÃO -->
                 <HBox alignment="CENTER_LEFT" spacing="20">
                     <Label fx:id="lblSectionTitle" text="Rodada 1" styleClass="page-title"/>
                     <Region HBox.hgrow="ALWAYS"/>
                     <HBox fx:id="paginationControls" spacing="10" alignment="CENTER_RIGHT">
-                        <Button fx:id="btnPrevRound" text="‹ Anterior" onAction="#handlePrevRound" styleClass="btn-pagination"/>
-                        <Button fx:id="btnNextRound" text="Próxima ›" onAction="#handleNextRound" styleClass="btn-pagination"/>
+                        <Button fx:id="btnPrevRound" text="‹ Anterior"
+                                onAction="#handlePrevRound"
+                                styleClass="btn-pagination"/>
+                        <Button fx:id="btnNextRound" text="Próxima ›"
+                                onAction="#handleNextRound"
+                                styleClass="btn-pagination"/>
                     </HBox>
                 </HBox>
 
+                <!-- CONTAINER DAS RODADAS / CLASSIFICAÇÃO -->
                 <StackPane VBox.vgrow="ALWAYS">
 
-                    <ScrollPane fx:id="roundsContainer" fitToWidth="true" styleClass="transparent-scroll">
+                    <!-- RODADAS -->
+                    <ScrollPane fx:id="roundsContainer"
+                                fitToWidth="true"
+                                styleClass="transparent-scroll">
                         <content>
                             <VBox fx:id="matchesList" spacing="15"/>
                         </content>
                     </ScrollPane>
 
-                    <ScrollPane fx:id="standingsScroll" fitToWidth="true" styleClass="transparent-scroll" visible="false">
+                    <!-- CLASSIFICAÇÃO -->
+                    <ScrollPane fx:id="standingsScroll"
+                                fitToWidth="true"
+                                styleClass="transparent-scroll"
+                                visible="false">
                         <content>
                             <VBox fx:id="standingsContainer" alignment="TOP_LEFT">
-                                <HBox styleClass="standings-placeholder" alignment="CENTER_LEFT" spacing="15">
+                                <HBox styleClass="standings-placeholder"
+                                      alignment="CENTER_LEFT"
+                                      spacing="15">
                                     <Label text="🏆" style="-fx-font-size: 24px;"/>
                                     <VBox>
-                                        <Label text="Tabela de Classificação" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
-                                        <Label text="Disponível em breve" style="-fx-text-fill: #666;"/>
+                                        <Label text="Tabela de Classificação"
+                                               style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                                        <Label text="Disponível em breve"
+                                               style="-fx-text-fill: #666;"/>
                                     </VBox>
                                 </HBox>
                             </VBox>
@@ -76,21 +140,30 @@
                 </StackPane>
             </VBox>
         </center>
+
     </BorderPane>
 
-    <VBox fx:id="modalOverlay" visible="false" styleClass="modal-overlay" alignment="CENTER">
+    <!-- MODAL DE EDIÇÃO DE PARTIDA -->
+    <VBox fx:id="modalOverlay"
+          visible="false"
+          styleClass="modal-overlay"
+          alignment="CENTER">
+
         <VBox styleClass="modal-box" alignment="CENTER">
 
             <HBox alignment="CENTER_RIGHT">
-                <Button text="✕" onAction="#closeModal" style="-fx-background-color:transparent; -fx-cursor:hand; -fx-font-size:14px;"/>
+                <Button text="✕"
+                        onAction="#closeModal"
+                        style="-fx-background-color:transparent; -fx-cursor:hand; -fx-font-size:14px;"/>
             </HBox>
 
             <Label text="Editar Partida" styleClass="modal-title"/>
 
             <HBox alignment="CENTER" spacing="40">
-                <VBox alignment="CENTER" spacing="10">
-                    <Label fx:id="lblModalTeamA" text="Time A" style="-fx-font-weight:bold;"/>
 
+                <VBox alignment="CENTER" spacing="10">
+                    <Label fx:id="lblModalTeamA" text="Time A"
+                           style="-fx-font-weight:bold;"/>
                     <HBox fx:id="scoreBoxA" styleClass="score-control-box">
                         <Button text="-" onAction="#decrementScoreA" styleClass="btn-counter"/>
                         <Label fx:id="lblModalScoreA" text="0" styleClass="score-display"/>
@@ -101,7 +174,8 @@
                 <Label text="✕" style="-fx-text-fill:#ccc; -fx-font-size:20px;"/>
 
                 <VBox alignment="CENTER" spacing="10">
-                    <Label fx:id="lblModalTeamB" text="Time B" style="-fx-font-weight:bold;"/>
+                    <Label fx:id="lblModalTeamB" text="Time B"
+                           style="-fx-font-weight:bold;"/>
 
                     <HBox fx:id="scoreBoxB" styleClass="score-control-box">
                         <Button text="-" onAction="#decrementScoreB" styleClass="btn-counter"/>
@@ -109,23 +183,35 @@
                         <Button text="+" onAction="#incrementScoreB" styleClass="btn-counter"/>
                     </HBox>
                 </VBox>
+
             </HBox>
 
             <VBox spacing="10" alignment="CENTER">
                 <Label text="Status" style="-fx-text-fill:#666; -fx-font-size:12px;"/>
                 <HBox spacing="10" alignment="CENTER">
-                    <Button fx:id="btnStatusConfirm" text="A confirmar" onAction="#setStatusPlanning" styleClass="status-option"/>
-                    <Button fx:id="btnStatusRunning" text="Em andamento" onAction="#setStatusRunning" styleClass="status-option"/>
-                    <Button fx:id="btnStatusFinished" text="Finalizada" onAction="#setStatusFinished" styleClass="status-option"/>
+                    <Button fx:id="btnStatusConfirm" text="A confirmar"
+                            onAction="#setStatusPlanning" styleClass="status-option"/>
+                    <Button fx:id="btnStatusRunning" text="Em andamento"
+                            onAction="#setStatusRunning" styleClass="status-option"/>
+                    <Button fx:id="btnStatusFinished" text="Finalizada"
+                            onAction="#setStatusFinished" styleClass="status-option"/>
                 </HBox>
             </VBox>
 
             <Label fx:id="lblModalError" styleClass="error-label"/>
 
             <HBox spacing="15" alignment="CENTER">
-                <Button text="Cancelar" onAction="#closeModal" styleClass="btn-cancel" prefWidth="120"/>
-                <Button text="Salvar" onAction="#saveMatch" styleClass="btn-save" prefWidth="120"/>
+                <Button text="Cancelar"
+                        onAction="#closeModal"
+                        styleClass="btn-cancel"
+                        prefWidth="120"/>
+                <Button text="Salvar"
+                        onAction="#saveMatch"
+                        styleClass="btn-save"
+                        prefWidth="120"/>
             </HBox>
+
         </VBox>
+
     </VBox>
 </StackPane>

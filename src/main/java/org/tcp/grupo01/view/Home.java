@@ -19,7 +19,7 @@ public class Home extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 1000, 700);
 
         scene.getStylesheets().add(
-             Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
+             Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/styles/style.css")).toExternalForm()
         );
 
         stage.setTitle("MatchUp - Gerenciador de Campeonatos");

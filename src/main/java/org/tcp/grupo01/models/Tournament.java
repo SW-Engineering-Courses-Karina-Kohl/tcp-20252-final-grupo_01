@@ -10,11 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-// competidores do mesmo tipo, Construtor privado
 public final class Tournament<T extends Competitor> {
+
     private final UUID id;
     private String name;
-    private final ArrayList<T> participants;
+    private ArrayList<T> participants;
     private final Pairing<T> pairing;
     private EventStatus status = EventStatus.PLANNING;
 
@@ -27,19 +27,16 @@ public final class Tournament<T extends Competitor> {
         this.participants = new ArrayList<>(participants);
     }
 
-    // Factories
     public static Tournament<Person> createForPeople(String name, Pairing<Person> pairing, ArrayList<Person> participants) {
         return new Tournament<>(null, name, pairing, participants);
     }
+
     public static Tournament<Team> createForTeams(String name, Pairing<Team> pairing, ArrayList<Team> participants) {
         return new Tournament<>(null, name, pairing, participants);
     }
 
-    // Used by service
     public Tournament<T> withId(UUID id) {
-        if (this.id != null) {
-            return this;
-        }
+        if (this.id != null) return this;
 
         Tournament<T> copy = new Tournament<>(id, this.name, this.pairing, this.participants);
         copy.setStatus(this.status);
@@ -47,25 +44,41 @@ public final class Tournament<T extends Competitor> {
         return copy;
     }
 
-    public UUID getId() { return id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public EventStatus getStatus() { return status; }
-    public void setStatus(EventStatus status) { this.status = status; }
-    public Pairing<T> getPairing() {return pairing;}
-    public List<T> getParticipants() { return Collections.unmodifiableList(participants); }
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public EventStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EventStatus status) {
+        this.status = status;
+    }
+
+    public Pairing<T> getPairing() {
+        return pairing;
+    }
+
+    public List<T> getParticipants() {
+        return Collections.unmodifiableList(participants);
+    }
 
     public List<List<Match<T>>> getRounds() {
         return Collections.unmodifiableList(rounds);
     }
 
-    /**
-     * Gera ou atualiza a tabela de jogos do torneio.
-     * Passa os participantes e as rodadas atuais para a estratégia de Pairing
-     * e substitui as rodadas do torneio pelo resultado.
-     */
     public void generateNextMatches() {
-        List<List<Match<T>>> generatedRounds = pairing.generateRounds(participants, rounds);
+        List<List<Match<T>>> generatedRounds =
+                pairing.generateRounds(participants, rounds);
 
         this.rounds.clear();
         this.rounds.addAll(generatedRounds);
@@ -73,5 +86,14 @@ public final class Tournament<T extends Competitor> {
         if (status == EventStatus.PLANNING && !rounds.isEmpty()) {
             status = EventStatus.RUNNING;
         }
+    }
+
+    public int getRoundCount() {
+        return rounds.size();
+    }
+
+    // METODO CORRETO
+    public void replaceParticipants(List<? extends T> newList) {
+        this.participants = new ArrayList<>(newList);
     }
 }

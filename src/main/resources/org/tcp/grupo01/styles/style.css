@@ -586,71 +586,9 @@
   -fx-background-color: #8e0000;
 }
 
-.swiss-group-box {
-  -fx-background-color: #f4f4f4;
-  -fx-padding: 10;
-  -fx-border-color: #ddd;
-  -fx-border-radius: 6;
-  -fx-background-radius: 6;
-}
-
-.swiss-group-title {
-  -fx-font-size: 18px;
-  -fx-font-weight: bold;
-  -fx-text-fill: #333;
-}
-
-.swiss-player-name {
-  -fx-font-size: 15px;
-  -fx-text-fill: #555;
-}
-
-/* Container geral */
-.swiss-stage-container {
-  -fx-background-color: #000000;
-}
-
-/* Coluna */
-.swiss-column {
-  -fx-background-color: #020202;
-  -fx-border-color: #00e5ff;
-  -fx-border-width: 3;
-  -fx-border-radius: 4;
-  -fx-background-radius: 4;
-  -fx-padding: 10 15;
-  -fx-min-width: 140;
-}
-
-/* Título da coluna (1-0, 0-1, etc.) */
-.swiss-column-title {
-  -fx-background-color: #00e5ff;
-  -fx-text-fill: black;
-  -fx-font-size: 22px;
-  -fx-font-weight: bold;
-  -fx-padding: 8;
-  -fx-alignment: center;
-  -fx-background-radius: 3;
-}
-
-/* Card de confronto */
-.swiss-match-card {
-  -fx-background-color: #111;
-  -fx-padding: 10 5;
-  -fx-border-color: #00e5ff;
-  -fx-border-width: 2;
-  -fx-border-radius: 4;
-  -fx-background-radius: 4;
-}
-
-/* Nome dos times */
-.swiss-team {
-  -fx-text-fill: white;
-  -fx-font-size: 14px;
-}
-
-/* VS */
-.swiss-vs {
-  -fx-text-fill: #00e5ff;
-  -fx-font-size: 14px;
-  -fx-font-weight: bold;
+.swiss-bucket {
+  -fx-background-color: #c62828; /* vermelho bonito */
+  -fx-background-radius: 10;
+  -fx-padding: 12;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 8, 0.4, 0, 3);
 }

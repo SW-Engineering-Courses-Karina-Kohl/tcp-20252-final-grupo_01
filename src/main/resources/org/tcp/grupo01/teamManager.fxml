@@ -6,13 +6,18 @@
 
 <VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.tcp.grupo01.controller.TeamManagerController"
-      stylesheets="@modal.css">
+      stylesheets="@styles/modal.css">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <Label text="Gerenciar Times" styleClass="title-label"/>
+
+    <!-- CONTADOR DE TIMES (CORRIGIDO) -->
+    <Label fx:id="lblCountTeams"
+           text="0 times adicionados"
+           style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;" />
 
     <!-- Adicionar novo time -->
     <HBox spacing="10" alignment="CENTER_LEFT">

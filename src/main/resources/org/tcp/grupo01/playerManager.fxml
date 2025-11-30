@@ -6,7 +6,7 @@
 
 <VBox spacing="15" xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.tcp.grupo01.controller.PlayerManagerController"
-      stylesheets="@modal.css">
+      stylesheets="@styles/modal.css">
 
     <padding>
         <Insets top="20" right="25" bottom="20" left="25"/>
@@ -34,9 +34,11 @@
         <Label text="Nascimento:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
         <DatePicker fx:id="dateBirth" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
 
-        <Button text="Adicionar Novo" onAction="#handleAddNewPlayer"
+        <Button text="Adicionar Novo"
+                onAction="#handleAddNewPlayer"
                 styleClass="button-primary"
-                GridPane.rowIndex="2" GridPane.columnIndex="3"
+                GridPane.rowIndex="2"
+                GridPane.columnIndex="3"
                 GridPane.halignment="RIGHT"/>
     </GridPane>
 
@@ -56,6 +58,12 @@
         <Pane HBox.hgrow="ALWAYS"/>
         <Button text="Remover Selecionado" onAction="#handleRemovePlayer" styleClass="button-secondary"/>
     </HBox>
+
+    <!-- CONTAGEM DE JOGADORES -->
+    <Label fx:id="lblCountPlayers"
+           text="0 jogadores adicionados"
+           alignment="CENTER_RIGHT"
+           style="-fx-font-size: 13px; -fx-font-weight: bold; -fx-text-fill: #444;"/>
 
     <HBox spacing="15" alignment="CENTER_RIGHT">
         <Button text="Cancelar" onAction="#handleCancel" styleClass="button-primary"/>

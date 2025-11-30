@@ -101,24 +101,35 @@ public class NewTournamentController {
     private Pairing<?> buildPairing(String competition, String competitorType) {
 
         return switch (competition) {
+            case "Pontos Corridos" -> {
+                String format = cbFormat.getValue();
+                boolean doubleRound = ("Turno".equals(format) ? false : true);
 
-        case "Pontos Corridos" ->
-            competitorType.equals("Jogadores")
-                    ? new League<Person>(false, Match::betweenPeople)
-                    : new League<Team>(false, Match::betweenTeams);
+                if (competitorType.equals("Jogadores")) {
+                    yield new League<Person>(doubleRound, Match::betweenPeople);
+                } else {
+                    yield new League<Team>(doubleRound, Match::betweenTeams);
+                }
+            }
 
-            case "Suíço" ->
-                competitorType.equals("Jogadores")
-                    ? new Swiss<Person>(3, 3, Match::betweenPeople)
-                    : new Swiss<Team>(3, 3, Match::betweenTeams);
+            case "Suíço" -> {
+                String format = cbFormat.getValue();
+                int max = ("16 Times".equals(format) ? 3 : 4);
+
+                if (competitorType.equals("Jogadores")) {
+                    yield new Swiss<Person>(max, max, Match::betweenPeople);
+                } else {
+                    yield new Swiss<Team>(max, max, Match::betweenTeams);
+                }
+            }
 
             case "Mata-Mata" ->
-                    competitorType.equals("Jogadores")
+                competitorType.equals("Jogadores")
                         ? new Knockout<Person>(Match::betweenPeople)
                         : new Knockout<Team>(Match::betweenTeams);
 
-            default -> throw new IllegalArgumentException("Tipo de competição inválido");
-        };
+                default -> throw new IllegalArgumentException("Tipo de competição inválido");
+            };
     }
 
     private void updateFormatOptions() {

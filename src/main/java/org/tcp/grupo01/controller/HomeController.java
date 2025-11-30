@@ -86,10 +86,11 @@ public class HomeController implements Initializable {
                 Scene scene = new Scene(loader.load(), 1000, 700);
 
                 TournamentDetailsController controller = loader.getController();
+                controller.setService(service);
                 controller.setTournament(tournament);
 
                 scene.getStylesheets().add(
-                        Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/style.css")).toExternalForm()
+                        Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/styles/style.css")).toExternalForm()
                 );
 
                 Stage stage = (Stage) containerCards.getScene().getWindow();
@@ -116,7 +117,7 @@ public class HomeController implements Initializable {
             modal.setTitle("Novo Campeonato");
 
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/newTournament.css")).toExternalForm());
+            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/tcp/grupo01/styles/newTournament.css")).toExternalForm());
 
             modal.setScene(scene);
             modal.initOwner(containerCards.getScene().getWindow());

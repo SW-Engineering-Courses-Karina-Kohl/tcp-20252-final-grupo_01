@@ -1,0 +1,45 @@
+/* =============================
+   HEADER (barra vermelha)
+   ============================= */
+.bucket-header {
+  -fx-background-color: #c62828;
+  -fx-padding: 10;
+  -fx-background-radius: 8 8 0 0;
+  -fx-alignment: center;
+}
+
+/* Texto do header (precisa ser separado para funcionar) */
+.bucket-header-text {
+  -fx-text-fill: white !important;
+  -fx-font-size: 20;
+  -fx-font-weight: bold;
+}
+
+/* =============================
+   CAIXA BRANCA DOS JOGADORES
+   ============================= */
+.bucket-players {
+  -fx-background-color: white;
+  -fx-padding: 10;
+  -fx-background-radius: 0 0 8 8;
+  -fx-border-color: #ccc;
+  -fx-border-width: 0 1 1 1; /* sem borda superior */
+  -fx-border-radius: 0 0 8 8;
+  -fx-alignment: center;
+}
+
+/* Nome de cada jogador */
+.bucket-player-name {
+  -fx-font-size: 16;
+  -fx-text-fill: #222;
+  -fx-padding: 3 0;
+}
+
+/* =============================
+   CONTAINER DO BUCKET
+   ============================= */
+.bucket-box {
+  -fx-padding: 0;
+  -fx-alignment: center;
+  -fx-max-width: 500;
+}
