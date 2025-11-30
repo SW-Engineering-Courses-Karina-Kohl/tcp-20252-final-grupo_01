@@ -23,7 +23,6 @@ public class SwissBucketsView implements StandingsViewStrategy {
         root.setPadding(new Insets(15));
         root.setAlignment(Pos.TOP_CENTER);
 
-        // carregar CSS do swiss
         root.getStylesheets().add(
                 getClass().getResource("/org/tcp/grupo01/styles/swiss.css").toExternalForm()
         );
@@ -54,7 +53,6 @@ public class SwissBucketsView implements StandingsViewStrategy {
             }
         }
 
-        // Agrupamento pelos buckets
         Map<String, List<Competitor>> buckets = new TreeMap<>(
                 (r1, r2) -> {
                     int[] a = Arrays.stream(r1.split("-")).mapToInt(Integer::parseInt).toArray();
@@ -70,7 +68,6 @@ public class SwissBucketsView implements StandingsViewStrategy {
             buckets.computeIfAbsent(key, k -> new ArrayList<>()).add(c);
         }
 
-        // renderizar cada bucket
         for (Map.Entry<String, List<Competitor>> entry : buckets.entrySet()) {
 
             String bucketKey = entry.getKey().replace("-", " – ");
@@ -79,7 +76,6 @@ public class SwissBucketsView implements StandingsViewStrategy {
             VBox bucketBox = new VBox(0);
             bucketBox.getStyleClass().add("bucket-box");
 
-            // HEADER (vermelho)
             StackPane headerPane = new StackPane();
             headerPane.getStyleClass().add("bucket-header");
 
@@ -87,7 +83,6 @@ public class SwissBucketsView implements StandingsViewStrategy {
             headerLabel.getStyleClass().add("bucket-header-text");
             headerPane.getChildren().add(headerLabel);
 
-            // CAIXA BRANCA DOS PLAYERS
             VBox playersBox = new VBox(6);
             playersBox.setAlignment(Pos.CENTER);
             playersBox.getStyleClass().add("bucket-players");

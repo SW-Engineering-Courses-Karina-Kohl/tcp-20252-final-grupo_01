@@ -58,9 +58,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         return all;
     }
 
-    /**
-     * Ensures the list has an even number of competitors (inserting a "bye" if necessary).
-     */
     private List<T> preparePlayers(List<T> participants) {
         List<T> players = new ArrayList<>(participants);
         if (players.size() % 2 != 0) {
@@ -69,9 +66,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         return players;
     }
 
-    /**
-     * Generates the first leg (single round) using Berger's algorithm.
-     */
     private List<List<Match<T>>> generateFirstLeg(List<T> players) {
         int n = players.size();
         int totalRounds = n - 1;
@@ -88,9 +82,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         return rounds;
     }
 
-    /**
-     * Generates a single round for the Berger algorithm.
-     */
     private List<Match<T>> generateSingleRound(List<T> players) {
         List<Match<T>> matches = new ArrayList<>();
         int n = players.size();
@@ -107,9 +98,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         return matches;
     }
 
-    /**
-     * Classic rotation for Berger's algorithm (fixing the first player).
-     */
     private void rotatePlayers(List<T> players) {
         T fixed = players.getFirst();
         List<T> rotated = new ArrayList<>(players.subList(1, players.size()));
@@ -120,9 +108,6 @@ public class League<T extends Competitor> implements Pairing<T> {
         players.addAll(rotated);
     }
 
-    /**
-     * Generates the second leg (inverting the match pairings).
-     */
     private List<List<Match<T>>> generateSecondLeg(List<List<Match<T>>> firstLeg) {
         return firstLeg.stream()
                 .map(round -> round.stream()

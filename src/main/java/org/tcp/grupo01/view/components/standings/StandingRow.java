@@ -15,7 +15,6 @@ public class StandingRow extends HBox {
         Label lblRank = new Label(String.valueOf(rank));
         lblRank.getStyleClass().add("standing-rank");
 
-        // Estilização específica para Top 3 (bolinhas coloridas)
         if (rank == 1) lblRank.getStyleClass().add("rank-1");
         else if (rank == 2) lblRank.getStyleClass().add("rank-2");
         else if (rank == 3) lblRank.getStyleClass().add("rank-3");
@@ -32,7 +31,6 @@ public class StandingRow extends HBox {
         HBox.setHgrow(nameContainer, Priority.ALWAYS); // O nome ocupa o espaço sobrando
 
         // --- 3. DADOS (Colunas Fixas) ---
-        // PTS, J, V, D, GP, GC, SG
         Label lblPts = createCell(String.valueOf(stats.getPoints()), "standing-pts", 50);
         Label lblJ = createCell(String.valueOf(stats.getMatchesPlayed()), "standing-cell", 40);
         Label lblV = createCell(String.valueOf(stats.getWins()), "standing-cell", 40);

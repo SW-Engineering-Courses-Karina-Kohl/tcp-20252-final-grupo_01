@@ -16,28 +16,24 @@
 
     <BorderPane fx:id="mainContentArea">
 
-        <!-- SIDEBAR -->
         <left>
             <VBox styleClass="sidebar" spacing="20" prefWidth="250">
                 <padding>
                     <Insets top="30" right="20" bottom="20" left="20"/>
                 </padding>
 
-                <!-- TÍTULO -->
                 <VBox spacing="5">
                     <Label fx:id="lblTournamentName" styleClass="sidebar-title"
                            text="Nome do Torneio" wrapText="true"/>
                     <Label fx:id="lblStatus" styleClass="sidebar-subtitle" text="Status"/>
                 </VBox>
 
-                <!-- INFORMAÇÕES GERAIS -->
                 <VBox spacing="10">
                     <Label text="INFORMAÇÕES GERAIS" styleClass="sidebar-section-title"/>
 
                     <HBox spacing="8" alignment="CENTER_LEFT">
                         <Label fx:id="lblParticipantsCount" text="0 participantes" styleClass="sidebar-text"/>
 
-                        <!-- ÍCONE DE EDITAR PARTICIPANTES -->
                         <Button fx:id="btnEditParticipants"
                                 onAction="#handleEditParticipants"
                                 style="-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 0;">
@@ -48,9 +44,8 @@
                     </HBox>
                 </VBox>
 
-                <!-- BOTÕES LATERAIS -->
                 <Button fx:id="btnGenerateRound"
-                        text="Gerar Próxima Rodada"
+                        text="Gerar Rodadas"
                         onAction="#handleGenerateRound"
                         styleClass="sidebar-button"
                         maxWidth="1.7976931348623157E308"/>
@@ -71,14 +66,12 @@
             </VBox>
         </left>
 
-        <!-- CONTEÚDO PRINCIPAL -->
         <center>
             <VBox spacing="30" styleClass="main-content">
                 <padding>
                     <Insets top="30" right="40" bottom="30" left="40"/>
                 </padding>
 
-                <!-- TABS -->
                 <HBox alignment="CENTER_LEFT">
                     <Region HBox.hgrow="ALWAYS"/>
                     <HBox styleClass="segmented-control">
@@ -89,7 +82,6 @@
                     </HBox>
                 </HBox>
 
-                <!-- TÍTULO + PAGINAÇÃO -->
                 <HBox alignment="CENTER_LEFT" spacing="20">
                     <Label fx:id="lblSectionTitle" text="Rodada 1" styleClass="page-title"/>
                     <Region HBox.hgrow="ALWAYS"/>
@@ -103,10 +95,8 @@
                     </HBox>
                 </HBox>
 
-                <!-- CONTAINER DAS RODADAS / CLASSIFICAÇÃO -->
                 <StackPane VBox.vgrow="ALWAYS">
 
-                    <!-- RODADAS -->
                     <ScrollPane fx:id="roundsContainer"
                                 fitToWidth="true"
                                 styleClass="transparent-scroll">
@@ -115,7 +105,6 @@
                         </content>
                     </ScrollPane>
 
-                    <!-- CLASSIFICAÇÃO -->
                     <ScrollPane fx:id="standingsScroll"
                                 fitToWidth="true"
                                 styleClass="transparent-scroll"
@@ -143,7 +132,6 @@
 
     </BorderPane>
 
-    <!-- MODAL DE EDIÇÃO DE PARTIDA -->
     <VBox fx:id="modalOverlay"
           visible="false"
           styleClass="modal-overlay"

@@ -55,11 +55,6 @@
             <VBox styleClass="section-box">
                 <HBox spacing="10">
                     <VBox spacing="3">
-                        <Label text="Local" styleClass="field-label"/>
-                        <TextField fx:id="txtLocation" styleClass="input-field" prefWidth="350"/>
-                    </VBox>
-
-                    <VBox spacing="3">
                         <Label text="Data de Início" styleClass="field-label"/>
                         <DatePicker fx:id="dateStart" styleClass="date-picker" prefWidth="300"/>
                     </VBox>

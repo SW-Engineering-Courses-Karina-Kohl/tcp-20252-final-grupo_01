@@ -27,10 +27,8 @@ public class LeagueStandingsView implements StandingsViewStrategy {
         VBox tableContainer = new VBox();
         tableContainer.getStyleClass().add("standings-table");
 
-        // Adiciona o Header
         tableContainer.getChildren().add(createHeader());
 
-        // Adiciona as Linhas
         int rank = 1;
         for (CompetitorStats stat : stats) {
             tableContainer.getChildren().add(new StandingRow(rank++, stat));
@@ -45,20 +43,18 @@ public class LeagueStandingsView implements StandingsViewStrategy {
         header.setAlignment(Pos.CENTER_LEFT);
 
         // 1. RANKING (#)
-        // Usamos StackPane para garantir a mesma largura e comportamento da linha (StandingRow)
         Label lblHash = createHeaderLabel("#", 0);
         StackPane rankContainer = new StackPane(lblHash);
-        rankContainer.setPrefWidth(40); // Largura fixa igual ao StandingRow
+        rankContainer.setPrefWidth(40);
         rankContainer.setAlignment(Pos.CENTER);
 
         // 2. TIME
-        // Usamos HBox Wrapper para garantir que o Priority.ALWAYS funcione igual à linha
         Label lblTime = createHeaderLabel("Time", 0);
-        lblTime.setPadding(new javafx.geometry.Insets(0, 0, 0, 10)); // Padding igual à linha
+        lblTime.setPadding(new javafx.geometry.Insets(0, 0, 0, 10)); 
 
         HBox nameContainer = new HBox(lblTime);
         nameContainer.setAlignment(Pos.CENTER_LEFT);
-        HBox.setHgrow(nameContainer, Priority.ALWAYS); // Ocupa o espaço restante
+        HBox.setHgrow(nameContainer, Priority.ALWAYS);
 
         // 3. COLUNAS DE DADOS
         Label lblPts = createHeaderLabel("PTS", 50);
@@ -83,7 +79,7 @@ public class LeagueStandingsView implements StandingsViewStrategy {
         l.getStyleClass().add("header-label");
         if (width > 0) {
             l.setPrefWidth(width);
-            l.setAlignment(Pos.CENTER); // Garante que o texto fique centralizado na largura fixa
+            l.setAlignment(Pos.CENTER);
         }
         return l;
     }

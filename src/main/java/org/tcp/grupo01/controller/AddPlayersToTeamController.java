@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
@@ -52,26 +53,56 @@ public class AddPlayersToTeamController {
 
     @FXML
     public void initialize() {
-        colName.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getName()));
-
-        colCpf.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().getCpf() != null ? data.getValue().getCpf() : ""
-                ));
-
-        colPhone.setCellValueFactory(data ->
-                new SimpleStringProperty(
-                        data.getValue().getPhone() != null ? data.getValue().getPhone() : ""
-                ));
-
-        colBirth.setCellValueFactory(data ->
-                new SimpleObjectProperty<>(data.getValue().getBirthDate()));
+        tableTeamPlayers.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+        configureTextField(txtCpf);
+        configureTextField(txtPhone);
+        configureFields();
 
         tableTeamPlayers.setItems(players);
         cbExistingPlayers.setItems(existingPlayers);
     }
 
+    private void configureFields() {
+        colName.setStyle("-fx-alignment: CENTER;");
+        colCpf.setStyle("-fx-alignment: CENTER;");
+        colPhone.setStyle("-fx-alignment: CENTER;");
+        colBirth.setStyle("-fx-alignment: CENTER;");
+        dateBirth.getEditor().setDisable(true);
+        dateBirth.getEditor().setOpacity(1);
+
+        colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
+        colCpf.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCpf() != null ? data.getValue().getCpf() : ""));
+        colPhone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone() != null ? data.getValue().getPhone() : ""));
+        colBirth.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBirthDate()));
+    }
+
+    private void configureTextField(TextField textField) {
+        textField.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getControlNewText().matches("[0-9]*")) {
+                return change;
+            }
+            return null;
+        }));
+
+        textField.addEventFilter(KeyEvent.KEY_TYPED, event -> validateInput(event, textField.getId()));
+    }
+
+    private void validateInput(KeyEvent event, String field) {
+        String input = event.getCharacter();
+        if (!input.matches("[0-9]")) {
+            event.consume();
+            showInvalidInputAlert();
+        }
+    }
+
+    private void showInvalidInputAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Entrada Inválida");
+        alert.setHeaderText("Apenas números são permitidos.");
+        alert.setContentText("Por favor, insira apenas números no campo .");
+        alert.showAndWait();
+    }    
+    
     private void loadExistingPlayers() {
         if (service == null) return;
 

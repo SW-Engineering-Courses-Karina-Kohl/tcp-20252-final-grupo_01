@@ -21,14 +21,12 @@ public class KnockoutBracketView implements StandingsViewStrategy {
         root.setPadding(new Insets(15));
         root.setAlignment(Pos.TOP_CENTER);
 
-        //css knockout
         root.getStylesheets().add(
                 getClass()
                         .getResource("/org/tcp/grupo01/styles/knockout.css")
                         .toExternalForm()
         );
 
-        @SuppressWarnings("unchecked")
         List<List<Match<?>>> rounds = (List<List<Match<?>>>) (List<?>) tournament.getRounds();
 
         int totalRounds = rounds.size();

@@ -92,7 +92,6 @@ public final class Tournament<T extends Competitor> {
         return rounds.size();
     }
 
-    // METODO CORRETO
     public void replaceParticipants(List<? extends T> newList) {
         this.participants = new ArrayList<>(newList);
     }

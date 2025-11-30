@@ -59,7 +59,6 @@
         <Button text="Remover Selecionado" onAction="#handleRemovePlayer" styleClass="button-secondary"/>
     </HBox>
 
-    <!-- CONTAGEM DE JOGADORES -->
     <Label fx:id="lblCountPlayers"
            text="0 jogadores adicionados"
            alignment="CENTER_RIGHT"
