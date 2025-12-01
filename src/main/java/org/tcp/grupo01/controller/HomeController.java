@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Competitor;
+import org.tcp.grupo01.services.ServiceRegistry;
 import org.tcp.grupo01.services.tournament.TournamentService;
-import org.tcp.grupo01.services.tournament.TournamentServiceIM;
 
 import java.net.URL;
 import java.util.List;
@@ -25,11 +25,7 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
 
-    private final TournamentService service;
-
-    public HomeController() {
-        this.service = TournamentServiceIM.getInstance();
-    }
+    private final TournamentService service = ServiceRegistry.tournaments();
 
     @FXML
     private FlowPane containerCards;
@@ -84,7 +80,6 @@ public class HomeController implements Initializable {
                 Scene scene = new Scene(loader.load(), 1000, 700);
 
                 TournamentDetailsController controller = loader.getController();
-                controller.setService(service);
                 controller.setTournament(tournament);
 
                 scene.getStylesheets().add(
@@ -107,9 +102,6 @@ public class HomeController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/tcp/grupo01/newTournament.fxml"));
             Parent root = loader.load();
-
-            NewTournamentController controller = loader.getController();
-            controller.setService(service);
 
             Stage modal = new Stage();
             modal.setTitle("Novo Campeonato");

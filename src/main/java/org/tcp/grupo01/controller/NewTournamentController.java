@@ -15,7 +15,6 @@ import org.tcp.grupo01.services.pairing.Knockout;
 import org.tcp.grupo01.services.pairing.League;
 import org.tcp.grupo01.services.pairing.Pairing;
 import org.tcp.grupo01.services.pairing.Swiss;
-import org.tcp.grupo01.services.tournament.TournamentService;
 
 import java.io.IOException;
 
@@ -27,12 +26,6 @@ public class NewTournamentController {
     @FXML private DatePicker dateStart;
     @FXML private ComboBox<String> cbFormat;
 
-    private TournamentService service;
-
-    public void setService(TournamentService service) {
-        this.service = service;
-    }
-
     @FXML
     public void initialize() {
         cbCompetitionType.getItems().addAll("Pontos Corridos", "Mata-Mata", "Suíço");
@@ -40,7 +33,7 @@ public class NewTournamentController {
 
         cbFormat.setDisable(true);
 
-        cbCompetitionType.valueProperty().addListener((obs, oldVal, newVal) -> {
+        cbCompetitionType.valueProperty().addListener((_, _, _) -> {
             updateFormatOptions();
             cbFormat.setDisable(false);
         });
@@ -53,9 +46,9 @@ public class NewTournamentController {
     private void handleContinue() {
 
         if (txtName.getText().isBlank() ||
-            cbCompetitionType.getValue() == null ||
-            cbCompetitorType.getValue() == null ||
-            cbFormat.getValue() == null) {
+                cbCompetitionType.getValue() == null ||
+                cbCompetitorType.getValue() == null ||
+                cbFormat.getValue() == null) {
 
             new Alert(Alert.AlertType.ERROR, "Preencha todos os campos antes de continuar.").showAndWait();
             return;
@@ -78,10 +71,10 @@ public class NewTournamentController {
 
             if (isTeam) {
                 TeamManagerController controller = loader.getController();
-                controller.setupTournamentData(txtName.getText(), pairing, service);
+                controller.setupTournamentData(txtName.getText(), pairing);
             } else {
                 PlayerManagerController controller = loader.getController();
-                controller.setupTournamentData(txtName.getText(), pairing, service);
+                controller.setupTournamentData(txtName.getText(), pairing);
             }
 
             Stage modal = new Stage();
@@ -105,7 +98,7 @@ public class NewTournamentController {
         return switch (competition) {
             case "Pontos Corridos" -> {
                 String format = cbFormat.getValue();
-                boolean doubleRound = ("Turno".equals(format) ? false : true);
+                boolean doubleRound = !"Turno".equals(format);
 
                 if (competitorType.equals("Jogadores")) {
                     yield new League<Person>(doubleRound, Match::betweenPeople);
@@ -126,12 +119,12 @@ public class NewTournamentController {
             }
 
             case "Mata-Mata" ->
-                competitorType.equals("Jogadores")
-                        ? new Knockout<Person>(Match::betweenPeople)
-                        : new Knockout<Team>(Match::betweenTeams);
+                    competitorType.equals("Jogadores")
+                            ? new Knockout<Person>(Match::betweenPeople)
+                            : new Knockout<Team>(Match::betweenTeams);
 
-                default -> throw new IllegalArgumentException("Tipo de competição inválido");
-            };
+            default -> throw new IllegalArgumentException("Tipo de competição inválido");
+        };
     }
 
     private void updateFormatOptions() {

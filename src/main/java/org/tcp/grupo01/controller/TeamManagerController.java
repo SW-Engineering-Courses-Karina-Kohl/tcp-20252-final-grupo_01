@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
+import org.tcp.grupo01.services.ServiceRegistry;
+import org.tcp.grupo01.services.competitors.CompetitorService;
 import org.tcp.grupo01.services.pairing.*;
 import org.tcp.grupo01.services.tournament.TournamentService;
 
@@ -32,16 +34,18 @@ public class TeamManagerController {
 
     private String tournamentName;
     private Pairing<Team> pairingMethod;
-    private TournamentService service;
+
+    private TournamentService service = ServiceRegistry.tournaments();
+    private final CompetitorService<Team> teamService = ServiceRegistry.teams();
 
     private final ObservableList<Team> teams = FXCollections.observableArrayList();
     private final ObservableList<Team> existingTeams = FXCollections.observableArrayList();
 
+    private Tournament<Team> editingTournament;
 
-    public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
+    public void setupTournamentData(String name, Pairing<?> pairing) {
         this.tournamentName = name;
         this.pairingMethod = (Pairing<Team>) pairing;
-        this.service = service;
 
         loadExistingTeams();
         updateCountLabel();
@@ -73,23 +77,8 @@ public class TeamManagerController {
     }
 
     private void loadExistingTeams() {
-        if (service == null) return;
-
-        Set<Integer> seenIds = new HashSet<>();
-
-        for (Tournament<?> t : service.getAll()) {
-            if (t.getParticipants().isEmpty()) continue;
-
-            if (t.getParticipants().get(0) instanceof Team) {
-                for (Object obj : t.getParticipants()) {
-                    Team tm = (Team) obj;
-
-                    if (seenIds.add(tm.getId())) {
-                        existingTeams.add(tm);
-                    }
-                }
-            }
-        }
+        existingTeams.clear();
+        existingTeams.addAll(teamService.getAll());
     }
 
     @FXML
@@ -101,7 +90,9 @@ public class TeamManagerController {
         }
 
         Team t = new Team(name);
+        teamService.add(t);
         teams.add(t);
+
         txtTeamName.clear();
         updateCountLabel();
     }
@@ -141,7 +132,7 @@ public class TeamManagerController {
             Parent root = loader.load();
 
             AddPlayersToTeamController controller = loader.getController();
-            controller.setTeamAndService(selected, service);
+            controller.setTeamAndService(selected);
 
             Stage modal = new Stage();
             modal.initModality(Modality.APPLICATION_MODAL);
@@ -227,11 +218,8 @@ public class TeamManagerController {
         stage.close();
     }
 
-    private Tournament<Team> editingTournament;
-
-    public void setupEditMode(Tournament<?> tournament, TournamentService service) {
+    public void setupEditMode(Tournament<?> tournament) {
         this.editingTournament = (Tournament<Team>) tournament;
-        this.service = service;
         this.pairingMethod = (Pairing<Team>) tournament.getPairing();
         this.tournamentName = tournament.getName();
 

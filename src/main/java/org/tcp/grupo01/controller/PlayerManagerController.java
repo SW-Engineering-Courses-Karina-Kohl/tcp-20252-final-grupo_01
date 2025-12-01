@@ -8,8 +8,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+
 import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
+import org.tcp.grupo01.services.ServiceRegistry;
+import org.tcp.grupo01.services.competitors.CompetitorService;
 import org.tcp.grupo01.services.pairing.*;
 import org.tcp.grupo01.services.tournament.TournamentService;
 
@@ -34,7 +37,9 @@ public class PlayerManagerController {
 
     private String tournamentName;
     private Pairing<Person> pairingMethod;
-    private TournamentService service;
+
+    private final CompetitorService<Person> competitorService = ServiceRegistry.persons();
+    private final TournamentService tournamentService = ServiceRegistry.tournaments();
 
     private final ObservableList<Person> players = FXCollections.observableArrayList();
     private final ObservableList<Person> existingPlayers = FXCollections.observableArrayList();
@@ -42,25 +47,24 @@ public class PlayerManagerController {
     private boolean editMode = false;
     private Tournament<Person> editingTournament;
 
-    public void setupTournamentData(String name, Pairing<?> pairing, TournamentService service) {
+    // Ajustado: agora só recebe name + pairing (sem service)
+    public void setupTournamentData(String name, Pairing<?> pairing) {
         this.tournamentName = name;
         this.pairingMethod = (Pairing<Person>) pairing;
-        this.service = service;
 
         loadExistingPlayers();
         updateCountLabel();
     }
 
-    public void setupEditMode(Tournament<Person> t, TournamentService service) {
+    public void setupEditMode(Tournament<Person> t) {
         this.editingTournament = t;
         this.editMode = true;
-        this.service = service;
 
         this.tournamentName = t.getName();
-        this.pairingMethod = (Pairing<Person>) t.getPairing();
+        this.pairingMethod = t.getPairing();
 
         players.clear();
-        for (var p : t.getParticipants()) players.add((Person) p);
+        players.addAll(t.getParticipants());
 
         loadExistingPlayers();
         updateCountLabel();
@@ -72,7 +76,7 @@ public class PlayerManagerController {
         configureTextField(txtCpf);
         configureTextField(txtPhone);
         configureFields();
-        
+
         tablePlayers.setItems(players);
         cbExistingPlayers.setItems(existingPlayers);
         updateCountLabel();
@@ -86,21 +90,25 @@ public class PlayerManagerController {
         dateBirth.getEditor().setDisable(true);
         dateBirth.getEditor().setOpacity(1);
 
-        colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
-        colCpf.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCpf() != null ? data.getValue().getCpf() : ""));
-        colPhone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone() != null ? data.getValue().getPhone() : ""));
-        colBirth.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBirthDate()));
+        colName.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getName()));
+        colCpf.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getCpf() != null ? data.getValue().getCpf() : ""));
+        colPhone.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getPhone() != null ? data.getValue().getPhone() : ""));
+        colBirth.setCellValueFactory(data ->
+                new SimpleObjectProperty<>(data.getValue().getBirthDate()));
     }
 
     private void configureTextField(TextField textField) {
         textField.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.getControlNewText().matches("[0-9]*")) {
+            if (change.getControlNewText().matches("[0-9]*"))
                 return change;
-            }
             return null;
         }));
 
-        textField.addEventFilter(KeyEvent.KEY_TYPED, event -> validateInput(event, textField.getId()));
+        textField.addEventFilter(KeyEvent.KEY_TYPED,
+                event -> validateInput(event, textField.getId()));
     }
 
     private void validateInput(KeyEvent event, String field) {
@@ -115,29 +123,13 @@ public class PlayerManagerController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Entrada Inválida");
         alert.setHeaderText("Apenas números são permitidos.");
-        alert.setContentText("Por favor, insira apenas números no campo .");
+        alert.setContentText("Por favor, insira apenas números.");
         alert.showAndWait();
-    }    
-    
+    }
+
     private void loadExistingPlayers() {
-        if (service == null) return;
-
         existingPlayers.clear();
-        Set<Integer> seen = new HashSet<>();
-
-        for (Tournament<?> t : service.getAll()) {
-
-            if (t.getParticipants().isEmpty()) continue;
-
-            if (t.getParticipants().get(0) instanceof Person) {
-                for (Object obj : t.getParticipants()) {
-                    Person p = (Person) obj;
-
-                    if (seen.add(p.getId()))
-                        existingPlayers.add(p);
-                }
-            }
-        }
+        existingPlayers.addAll(competitorService.getAll());
     }
 
     @FXML
@@ -152,6 +144,8 @@ public class PlayerManagerController {
         p.setCpf(txtCpf.getText());
         p.setPhone(txtPhone.getText());
         p.setBirthDate(dateBirth.getValue());
+
+        competitorService.add(p);
 
         players.add(p);
         updateCountLabel();
@@ -222,7 +216,8 @@ public class PlayerManagerController {
         Tournament<Person> tournament =
                 Tournament.createForPeople(tournamentName, pairingMethod, new ArrayList<>(players));
 
-        service.add(tournament);
+        tournamentService.add(tournament);
+
         ((Stage) tablePlayers.getScene().getWindow()).close();
     }
 

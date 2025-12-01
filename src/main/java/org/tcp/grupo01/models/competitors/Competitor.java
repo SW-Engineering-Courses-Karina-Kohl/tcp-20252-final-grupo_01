@@ -1,13 +1,18 @@
 package org.tcp.grupo01.models.competitors;
 
+import java.util.UUID;
+
 public abstract class Competitor {
-    private static int nextId = 1;
-    private final int id = nextId++;
+    private UUID id;
     private String name;
 
-    protected Competitor(String name) { this.name = name; }
+    protected Competitor(String name) {
+        this.name = name;
+    }
 
-    public final int getId() { return id; }
-    public final String getName() { return name; }
-    public final void setName(String name) { this.name = name; }
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }
