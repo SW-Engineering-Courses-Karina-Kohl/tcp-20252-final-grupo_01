@@ -48,10 +48,14 @@ public final class ServiceRegistry {
         Person p10 = new Person("Julia Mendes",    "444.555.666-77", "(11) 99333-0000", LocalDate.of(2000, 6, 10));
         Person p11 = new Person("Kevin Hart",      "555.666.777-88", "(71) 99111-1212", LocalDate.of(1991, 3, 14));
         Person p12 = new Person("Letícia Duarte",  "666.777.888-99", "(48) 99444-3434", LocalDate.of(1997, 10, 18));
+        Person p13 = new Person("Marcos Albuquerque", "777.888.999-00", "(61) 99123-4545", LocalDate.of(1993, 8, 25));
+        Person p14 = new Person("Natalia Fernandez",  "888.999.000-11", "(62) 99234-5656", LocalDate.of(1994, 12, 2));
+        Person p15 = new Person("Oliver Schmidt",     "999.000.111-22", "(51) 99789-6767", LocalDate.of(1986, 4, 11));
 
         List<Person> players = new ArrayList<>(List.of(
-                p1, p2, p3, p4, p5, p6,
-                p7, p8, p9, p10, p11, p12
+                p1, p2, p3, p4, p5,
+                p6, p7, p8, p9, p10,
+                p11, p12, p12, p13, p14, p15
         ));
 
         players.forEach(personService::add);
