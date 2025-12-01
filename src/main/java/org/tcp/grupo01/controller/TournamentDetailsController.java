@@ -76,16 +76,17 @@ public class TournamentDetailsController {
     }
 
     private void tryAdvanceRound() {
+        if (!isCurrentRoundFinished()) {
+            renderCurrentRound();
+            return;
+        }
+
         if (hasNextRoundExisting()) {
             currentRoundIndex++;
             renderCurrentRound();
             return;
         }
 
-        if (!isCurrentRoundFinished()) {
-            renderCurrentRound();
-            return;
-        }
 
         try {
             int oldRoundCount = tournament.getRoundCount();
