@@ -18,9 +18,6 @@ public final class Team extends Competitor {
 
     public void removePlayer(Person p) { players.remove(p); }
 
-    public Person getCoach() { return coach; }
-    public void setCoach(Person coach) { this.coach = coach; }
-
     @Override
     public String toString() {
         return getName();

@@ -19,7 +19,6 @@ import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
 import org.tcp.grupo01.view.components.MatchCard;
 import org.tcp.grupo01.view.components.standings.StandingsViewFactory;
-import org.tcp.grupo01.services.tournament.TournamentService;
 import org.tcp.grupo01.services.pairing.Knockout;
 import org.tcp.grupo01.services.pairing.Swiss;
 import org.tcp.grupo01.services.pairing.League;
@@ -47,17 +46,12 @@ public class TournamentDetailsController {
 
     // State
     private Tournament<?> tournament;
-    private TournamentService service;
     private int currentRoundIndex = 0;
 
     private Match<?> currentEditingMatch;
     private int tempScoreA;
     private int tempScoreB;
     private EventStatus tempStatus;
-
-    public void setService(TournamentService service) {
-        this.service = service;
-    }
 
     public void setTournament(Tournament<?> tournament) {
         this.tournament = tournament;
@@ -130,7 +124,7 @@ public class TournamentDetailsController {
         }
 
         if (isSwiss()) {
-            boolean allGenerated = tournament.getRounds().size() == expectedSwissRounds();;
+            boolean allGenerated = tournament.getRounds().size() == expectedSwissRounds();
             boolean finished = allGenerated && allMatchesFinished();
 
             btnShowResults.setVisible(finished);
@@ -369,9 +363,9 @@ public class TournamentDetailsController {
             Parent root = loader.load();
 
             if (isTeam) {
-                loader.<TeamManagerController>getController().setupEditMode((Tournament<Team>) tournament, service);
+                loader.<TeamManagerController>getController().setupEditMode(tournament);
             } else {
-                loader.<PlayerManagerController>getController().setupEditMode((Tournament<Person>) tournament, service);
+                loader.<PlayerManagerController>getController().setupEditMode((Tournament<Person>) tournament);
             }
 
             Stage modal = new Stage();

@@ -11,6 +11,12 @@ public final class Person extends Competitor {
     public Person(String name) {
         super(name);
     }
+    public Person(String name, String cpf, String phone, LocalDate birth) {
+        super(name);
+        this.cpf = cpf;
+        this.phone = phone;
+        this.birthDate = birth;
+    }
 
     public String getCpf() { return cpf; }
     public void setCpf(String cpf) { this.cpf = cpf; }

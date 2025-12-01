@@ -8,15 +8,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import org.tcp.grupo01.models.Tournament;
 import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
-import org.tcp.grupo01.services.tournament.TournamentService;
+import org.tcp.grupo01.services.ServiceRegistry;
+import org.tcp.grupo01.services.competitors.CompetitorService;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 public class AddPlayersToTeamController {
 
@@ -36,14 +35,13 @@ public class AddPlayersToTeamController {
     @FXML private ComboBox<Person> cbExistingPlayers;
 
     private Team team;
-    private TournamentService service;
+    private final CompetitorService<Person> personService = ServiceRegistry.persons();
 
     private final ObservableList<Person> players = FXCollections.observableArrayList();
     private final ObservableList<Person> existingPlayers = FXCollections.observableArrayList();
 
-    public void setTeamAndService(Team team, TournamentService service) {
+    public void setTeamAndService(Team team) {
         this.team = team;
-        this.service = service;
 
         lblTeamName.setText(team.getName());
         players.setAll(team.getPlayers());
@@ -91,36 +89,16 @@ public class AddPlayersToTeamController {
         String input = event.getCharacter();
         if (!input.matches("[0-9]")) {
             event.consume();
-            showInvalidInputAlert();
         }
     }
 
-    private void showInvalidInputAlert() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Entrada Inválida");
-        alert.setHeaderText("Apenas números são permitidos.");
-        alert.setContentText("Por favor, insira apenas números no campo .");
-        alert.showAndWait();
-    }    
-    
     private void loadExistingPlayers() {
-        if (service == null) return;
+        List<Person> all = personService.getAll();
+        List<Person> notInTeam = all.stream()
+                .filter(p -> !team.getPlayers().contains(p))
+                .toList();
 
-        Set<Integer> seenIds = new HashSet<>();
-        List<Tournament<?>> tournaments = service.getAll();
-
-        for (Tournament<?> t : tournaments) {
-            if (t.getParticipants().isEmpty()) continue;
-
-            if (t.getParticipants().get(0) instanceof Person) {
-                for (Object obj : t.getParticipants()) {
-                    Person p = (Person) obj;
-                    if (seenIds.add(p.getId())) {
-                        existingPlayers.add(p);
-                    }
-                }
-            }
-        }
+        existingPlayers.setAll(notInTeam);
     }
 
     @FXML
@@ -135,6 +113,8 @@ public class AddPlayersToTeamController {
         p.setPhone(txtPhone.getText());
         p.setBirthDate(dateBirth.getValue());
 
+        personService.add(p);
+
         players.add(p);
         team.addPlayer(p);
 
@@ -142,6 +122,8 @@ public class AddPlayersToTeamController {
         txtCpf.clear();
         txtPhone.clear();
         dateBirth.setValue(null);
+
+        loadExistingPlayers();
     }
 
     @FXML
