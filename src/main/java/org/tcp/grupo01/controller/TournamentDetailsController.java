@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import org.tcp.grupo01.models.EventStatus;
 import org.tcp.grupo01.models.Match;
 import org.tcp.grupo01.models.Tournament;
+import org.tcp.grupo01.models.competitors.Person;
 import org.tcp.grupo01.models.competitors.Team;
 import org.tcp.grupo01.view.components.MatchCard;
 import org.tcp.grupo01.view.components.standings.StandingsViewFactory;
@@ -248,17 +249,34 @@ public class TournamentDetailsController {
             return;
         }
         try {
-            boolean isTeam = !tournament.getParticipants().isEmpty() && tournament.getParticipants().get(0) instanceof Team;
-            String fxml = isTeam ? "/org/tcp/grupo01/teamManager.fxml" : "/org/tcp/grupo01/playerManager.fxml";
+            boolean isTeam =
+                    !tournament.getParticipants().isEmpty() &&
+                            tournament.getParticipants().get(0) instanceof Team;
+
+            String fxml = isTeam ?
+                    "/org/tcp/grupo01/teamManager.fxml" :
+                    "/org/tcp/grupo01/playerManager.fxml";
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
             Parent root = loader.load();
+
+            if (isTeam) {
+                TeamManagerController controller = loader.getController();
+                controller.setupEditMode(tournament);
+            } else {
+                PlayerManagerController controller = loader.getController();
+                controller.setupEditMode((Tournament<Person>) tournament);
+            }
+
             Stage modal = new Stage();
             modal.setTitle("Editar Participantes");
             modal.setScene(new Scene(root));
             modal.initOwner(lblTournamentName.getScene().getWindow());
             modal.initModality(Modality.WINDOW_MODAL);
             modal.showAndWait();
+
             updateSidebar();
+
         } catch (Exception e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Erro ao abrir editor: " + e.getMessage()).showAndWait();
